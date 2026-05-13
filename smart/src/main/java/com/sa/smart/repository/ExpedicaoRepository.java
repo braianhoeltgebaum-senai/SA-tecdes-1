@@ -1,5 +1,9 @@
 package com.sa.smart.repository;
 
-public interface ExpedicaoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sa.smart.model.Expedicao;
+
+public interface ExpedicaoRepository extends JpaRepository<Expedicao, Long> {
 
 }
