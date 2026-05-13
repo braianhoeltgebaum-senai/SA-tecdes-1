@@ -1,5 +1,5 @@
 package com.sa.smart.model;
 
-public class pedido {
+public class Pedido {
 
 }
