@@ -1,5 +1,8 @@
 package com.sa.smart.repository;
 
-public interface BlocoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.sa.smart.model.Bloco;
+
+public interface BlocoRepository extends JpaRepository<Bloco, Long>{
 
 }
