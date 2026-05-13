@@ -1,10 +1,10 @@
 package com.sa.smart.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,67 +22,102 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class BlocoController {
-    
+
     private final BlocoService blocoService;
-    
+
     @GetMapping("/pedidos")
-    public ResponseEntity<List<BlocoDTO>> listarPedidos() {
+    public ResponseEntity<?> listarPedidos() {
 
-        List<Bloco> blocos = blocoService.listarTodos();
-        List<BlocoDTO> blocosDTO = blocos.stream()
-            .map(BlocoDTO::fromEntity)
-            .collect(Collectors.toList());
+        try {
 
-        return ResponseEntity.ok(blocosDTO);
+            List<Bloco> blocos = blocoService.listarTodos();
+            List<BlocoDTO> blocosDTO = new ArrayList<>();
 
+            for (Bloco bloco : blocos) {
+
+                blocosDTO.add(BlocoDTO.fromEntity(bloco));
+
+            }
+
+            return ResponseEntity.ok(blocosDTO);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        }
     }
-    
+
     @PostMapping("/pedidos")
-    public ResponseEntity<BlocoDTO> criarPedido(@RequestBody BlocoDTO blocoDTO) {
+    public ResponseEntity<?> criarPedido(@RequestBody BlocoDTO blocoDTO) {
 
-        Bloco bloco = new Bloco();
-        
-        if (blocoDTO.getPedidoOrdemProducao() != null) {
+        try {
 
-            Pedido pedido = new Pedido();
-            pedido.setOrdemProducao(blocoDTO.getPedidoOrdemProducao());
-            bloco.setPedido(pedido);
+            Bloco bloco = new Bloco();
+
+            if (blocoDTO.getPedidoOrdemProducao() != null) {
+
+                Pedido pedido = new Pedido();
+                pedido.setOrdemProducao(blocoDTO.getPedidoOrdemProducao());
+                bloco.setPedido(pedido);
+
+            }
+
+            if (blocoDTO.getEstoquePosicao() != null) {
+
+                Estoque estoque = new Estoque();
+                estoque.setPosicao(blocoDTO.getEstoquePosicao());
+                bloco.setEstoque(estoque);
+
+            }
+
+            bloco.setCorBloco(blocoDTO.getCorBloco());
+
+            Bloco blocoSalvo = blocoService.salvarBloco(bloco);
+            return ResponseEntity.status(HttpStatus.CREATED).body(BlocoDTO.fromEntity(blocoSalvo));
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 
         }
-        
-        if (blocoDTO.getEstoquePosicao() != null) {
-
-            Estoque estoque = new Estoque();
-            estoque.setPosicao(blocoDTO.getEstoquePosicao());
-            bloco.setEstoque(estoque);
-
-        }
-        
-        bloco.setCorBloco(blocoDTO.getCorBloco());
-        
-        Bloco blocoSalvo = blocoService.salvarBloco(bloco);
-        return ResponseEntity.status(HttpStatus.CREATED).body(BlocoDTO.fromEntity(blocoSalvo));
-
     }
 
     @GetMapping("/estoque/disponivel")
-    public ResponseEntity<List<BlocoDTO>> listarEstoqueDisponivel() {
+    public ResponseEntity<?> listarEstoqueDisponivel() {
 
-        List<Bloco> blocosDisponiveis = blocoService.listarBlocosDisponiveis();
-        List<BlocoDTO> blocosDTO = blocosDisponiveis.stream()
-            .map(BlocoDTO::fromEntity)
-            .collect(Collectors.toList());
+        try {
 
-        return ResponseEntity.ok(blocosDTO);
+            List<Bloco> blocosDisponiveis = blocoService.listarBlocosDisponiveis();
+            List<BlocoDTO> blocosDTO = new ArrayList<>();
 
+            for (Bloco bloco : blocosDisponiveis) {
+
+                blocosDTO.add(BlocoDTO.fromEntity(bloco));
+
+            }
+
+            return ResponseEntity.ok(blocosDTO);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        }
     }
-    
+
     @PutMapping("/pedidos/{id}/status")
-    public ResponseEntity<Void> atualizarStatus(@PathVariable Integer id) {
+    public ResponseEntity<?> atualizarStatus(@PathVariable Long id) {
 
-        blocoService.atualizarStatusConcluido(id);
-        return ResponseEntity.ok().build();
+        try {
 
+            blocoService.atualizarStatusConcluido(id);
+            return ResponseEntity.ok().build();
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        }
     }
-    
 }
