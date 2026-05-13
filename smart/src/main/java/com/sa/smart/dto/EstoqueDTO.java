@@ -1,5 +1,5 @@
 package com.sa.smart.dto;
 
-public record EstoqueDTO() {
+public record EstoqueDTO(Long id, Integer posicao, Integer cor) {
 
 }
