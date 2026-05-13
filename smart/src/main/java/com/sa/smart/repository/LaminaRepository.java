@@ -1,5 +1,9 @@
 package com.sa.smart.repository;
 
-public class LaminaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sa.smart.model.Lamina;
+
+public interface LaminaRepository extends JpaRepository<Lamina, Long> {
 
 }
