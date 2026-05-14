@@ -21,48 +21,54 @@ public class EstoqueController {
     private final EstoqueService service;
 
     public EstoqueController(EstoqueService service){
+
         this.service = service;
+
     }
 
-    // CREATE
     @PostMapping("/salvar")
     public ResponseEntity<EstoqueDTO> criar(@RequestBody EstoqueDTO dto) {
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(service.criar(dto));
+
     }
 
-    // READ ALL
     @GetMapping("/listar")
     public ResponseEntity<List<EstoqueDTO>> listar() {
+
         List<EstoqueDTO> lista = service.listar();
         if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
+
     }
 
-    // READ BY ID
     @GetMapping("/listarId/{id}")
     public ResponseEntity<EstoqueDTO> buscar(@PathVariable Long id) {
+
         return ResponseEntity.ok(service.buscar(id));
+
     }
 
-    // PUT
     @PutMapping("/put/{id}")
-    public ResponseEntity<EstoqueDTO> put(@PathVariable Long id, @RequestBody EstoqueDTO dto) {
+    public ResponseEntity<EstoqueDTO> atualizarTotal(@PathVariable Long id, @RequestBody EstoqueDTO dto) {
+
         return ResponseEntity.ok(service.put(id, dto));
+
     }
 
-    // PATCH
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<EstoqueDTO> patch(@PathVariable Long id, @RequestBody EstoqueDTO dto) {
+    public ResponseEntity<EstoqueDTO> atualizarParcial(@PathVariable Long id, @RequestBody EstoqueDTO dto) {
+
         return ResponseEntity.ok(service.patch(id, dto));
+
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
+
         service.deletar(id);
         return ResponseEntity.noContent().build();
+        
     }
 }
-
-

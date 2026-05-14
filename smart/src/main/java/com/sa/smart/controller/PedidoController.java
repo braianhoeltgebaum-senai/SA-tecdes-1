@@ -32,28 +32,34 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
+    public ResponseEntity<Pedido> criar(@RequestBody Pedido pedido) {
+
         Pedido novoPedido = pedidoService.criarPedido(pedido);
         return ResponseEntity.ok(novoPedido);
+
     }
 
     @PutMapping("/{id}/status")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id) {
+
         pedidoService.atualizarStatusParaConcluido(id);
         return ResponseEntity.noContent().build();
+        
     }
 
-    // PATCH: Atualização parcial de dados do pedido (ex: cor da tampa ou descrição)
     @PatchMapping("/{id}")
     public ResponseEntity<Pedido> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+
         Pedido pedidoAtualizado = pedidoService.atualizarParcial(id, campos);
         return ResponseEntity.ok(pedidoAtualizado);
+
     }
 
-    // DELETE: Remove um pedido do sistema
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirPedido(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+
         pedidoService.excluir(id);
         return ResponseEntity.noContent().build();
+        
     }
 }
