@@ -14,6 +14,7 @@ import com.sa.smart.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+
 @Service
 @RequiredArgsConstructor
 public class BlocoService {
@@ -217,7 +218,7 @@ public class BlocoService {
 
             Pedido pedido = bloco.getPedido();
 
-            if (pedido.getTipo() == 3) {
+            if (pedido.getTipoPedido() == 3) {
 
                 long quantidadeBlocos = contarBlocosPorPedido(pedido);
 
@@ -229,7 +230,7 @@ public class BlocoService {
                 }
             }
 
-            pedido.setStatus(3);
+            pedido.setStatusPedido(3);
             pedido.setConcluidoEm(LocalDateTime.now());
 
         }
@@ -360,7 +361,7 @@ public class BlocoService {
 
     public void validarPedidoTriplo(Pedido pedido, List<Bloco> blocos) {
 
-        if (pedido.getTipo() == 3 && blocos.size() != 3) {
+        if (pedido.getTipoPedido() == 3 && blocos.size() != 3) {
 
             throw new RuntimeException("Pedidos triplos exigem exatamente 3 blocos.");
 

@@ -26,7 +26,7 @@ public class LaminaService {
 
     public LaminaDTO criar(LaminaDTO dto) {
 
-        Bloco bloco = blocoRepository.findById(dto.bloco_id_bloco())
+        Bloco bloco = blocoRepository.findById(dto.blocoId())
         .orElseThrow(() ->
                 new RuntimeException("Bloco não encontrado"));
 
@@ -41,7 +41,7 @@ public class LaminaService {
 
         l.setCor(dto.cor());
         l.setPadrao(dto.padrao());
-        l.setPosicao_no_bloco(dto.posicao_no_bloco());
+        l.setPosicaoNoBloco(dto.posicaoNoBloco());
         l.setBloco(bloco);
 
         Lamina saved = repository.save(l);
@@ -50,7 +50,7 @@ public class LaminaService {
                 saved.getId(),
                 saved.getCor(),
                 saved.getPadrao(),
-                saved.getPosicao_no_bloco(),
+                saved.getPosicaoNoBloco(),
                 saved.getBloco().getId()
         );
     }
@@ -62,7 +62,7 @@ public class LaminaService {
                         l.getId(),
                         l.getCor(),
                         l.getPadrao(),
-                        l.getPosicao_no_bloco(),
+                        l.getPosicaoNoBloco(),
                         l.getBloco().getId()
                 ))
                 .toList();
@@ -78,7 +78,7 @@ public class LaminaService {
                 l.getId(),
                 l.getCor(),
                 l.getPadrao(),
-                l.getPosicao_no_bloco(),
+                l.getPosicaoNoBloco(),
                 l.getBloco().getId()
         );
     }
@@ -106,7 +106,7 @@ public class LaminaService {
 
         l.setCor(dto.cor());
         l.setPadrao(dto.padrao());
-        l.setPosicao_no_bloco(dto.posicao_no_bloco());
+        l.setPosicaoNoBloco(dto.posicaoNoBloco());
         l.setBloco(bloco);
 
         Lamina updated = repository.save(l);
@@ -115,7 +115,7 @@ public class LaminaService {
                 updated.getId(),
                 updated.getCor(),
                 updated.getPadrao(),
-                updated.getPosicao_no_bloco(),
+                updated.getPosicaoNoBloco(),
                 updated.getBloco().getId()
         );
     }
@@ -134,8 +134,8 @@ public class LaminaService {
             l.setPadrao(dto.padrao());
         }
 
-        if (dto.posicao_no_bloco() != null) {
-            l.setPosicao_no_bloco(dto.posicao_no_bloco());
+        if (dto.posicaoNoBloco() != null) {
+            l.setPosicaoNoBloco(dto.posicaoNoBloco());
         }
 
         Lamina updated = repository.save(l);
@@ -144,7 +144,7 @@ public class LaminaService {
                 updated.getId(),
                 updated.getCor(),
                 updated.getPadrao(),
-                updated.getPosicao_no_bloco(),
+                updated.getPosicaoNoBloco(),
                 updated.getBloco().getId()
         );
     }

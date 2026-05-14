@@ -28,25 +28,25 @@ public class ExpedicaoService {
     public ExpedicaoDTO criar(ExpedicaoDTO dto) {
 
         Pedido pedido = pedidoRepository
-                .findByOrdemProducao(dto.ordem_producao())
+                .findByOrdemProducao(dto.ordemProducao())
                 .orElseThrow(() ->
                         new RuntimeException("Pedido não encontrado"));
 
         Expedicao e = new Expedicao();
 
-        e.setPosicao_expedicao(dto.posicao_expedicao());
-        e.setEntrada_em(dto.entrada_em());
-        e.setSaida_em(dto.saida_em());
+        e.setPosicaoExpedicao(dto.posicaoExpedicao());
+        e.setEntradaEm(dto.entradaEm());
+        e.setSaidaEm(dto.saidaEm());
         e.setPedido(pedido);
 
         Expedicao saved = repository.save(e);
 
         return new ExpedicaoDTO(
                 saved.getId(),
-                saved.getPosicao_expedicao(),
-                saved.getEntrada_em(),
-                saved.getSaida_em(),
-                saved.getPedido().getOrdem_producao()
+                saved.getPosicaoExpedicao(),
+                saved.getEntradaEm(),
+                saved.getSaidaEm(),
+                saved.getPedido().getOrdemProducao()
         );
     }
 
@@ -56,10 +56,10 @@ public class ExpedicaoService {
         return repository.findAll().stream()
                 .map(e -> new ExpedicaoDTO(
                         e.getId(),
-                        e.getPosicao_expedicao(),
-                        e.getEntrada_em(),
-                        e.getSaida_em(),
-                        e.getPedido().getOrdem_producao()
+                        e.getPosicaoExpedicao(),
+                        e.getEntradaEm(),
+                        e.getSaidaEm(),
+                        e.getPedido().getOrdemProducao()
                 ))
                 .toList();
     }
@@ -73,10 +73,10 @@ public class ExpedicaoService {
 
         return new ExpedicaoDTO(
                 e.getId(),
-                e.getPosicao_expedicao(),
-                e.getEntrada_em(),
-                e.getSaida_em(),
-                e.getPedido().getOrdem_producao()
+                e.getPosicaoExpedicao(),
+                e.getEntradaEm(),
+                e.getSaidaEm(),
+                e.getPedido().getOrdemProducao()
         );
     }
 
@@ -88,23 +88,23 @@ public class ExpedicaoService {
                         new RuntimeException("Expedição não encontrada"));
 
         Pedido pedido = pedidoRepository
-                .findByOrdemProducao(dto.ordem_producao())
+                .findByOrdemProducao(dto.ordemProducao())
                 .orElseThrow(() ->
                         new RuntimeException("Pedido não encontrado"));
 
-        e.setPosicao_expedicao(dto.posicao_expedicao());
-        e.setEntrada_em(dto.entrada_em());
-        e.setSaida_em(dto.saida_em());
+        e.setPosicaoExpedicao(dto.posicaoExpedicao());
+        e.setEntradaEm(dto.entradaEm());
+        e.setSaidaEm(dto.saidaEm());
         e.setPedido(pedido);
 
         Expedicao updated = repository.save(e);
 
         return new ExpedicaoDTO(
                 updated.getId(),
-                updated.getPosicao_expedicao(),
-                updated.getEntrada_em(),
-                updated.getSaida_em(),
-                updated.getPedido().getOrdem_producao()
+                updated.getPosicaoExpedicao(),
+                updated.getEntradaEm(),
+                updated.getSaidaEm(),
+                updated.getPedido().getOrdemProducao()
         );
     }
 
@@ -115,22 +115,22 @@ public class ExpedicaoService {
                 .orElseThrow(() ->
                         new RuntimeException("Expedição não encontrada"));
 
-        if (dto.posicao_expedicao() != null) {
-            e.setPosicao_expedicao(dto.posicao_expedicao());
+        if (dto.posicaoExpedicao() != null) {
+            e.setPosicaoExpedicao(dto.posicaoExpedicao());
         }
 
-        if (dto.entrada_em() != null) {
-            e.setEntrada_em(dto.entrada_em());
+        if (dto.entradaEm() != null) {
+            e.setEntradaEm(dto.entradaEm());
         }
 
-        if (dto.saida_em() != null) {
-            e.setSaida_em(dto.saida_em());
+        if (dto.saidaEm() != null) {
+            e.setSaidaEm(dto.saidaEm());
         }
 
-        if (dto.ordem_producao() != null) {
+        if (dto.ordemProducao() != null) {
 
             Pedido pedido = pedidoRepository
-                    .findByOrdemProducao(dto.ordem_producao())
+                    .findByOrdemProducao(dto.ordemProducao())
                     .orElseThrow(() ->
                             new RuntimeException("Pedido não encontrado"));
 
@@ -141,10 +141,10 @@ public class ExpedicaoService {
 
         return new ExpedicaoDTO(
                 updated.getId(),
-                updated.getPosicao_expedicao(),
-                updated.getEntrada_em(),
-                updated.getSaida_em(),
-                updated.getPedido().getOrdem_producao()
+                updated.getPosicaoExpedicao(),
+                updated.getEntradaEm(),
+                updated.getSaidaEm(),
+                updated.getPedido().getOrdemProducao()
         );
     }
 
