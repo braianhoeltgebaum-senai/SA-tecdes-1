@@ -1,58 +1,58 @@
-package com.sa.smart.controller;
+// package com.sa.smart.controller;
 
-import java.util.List;
-import java.util.Map;
+// import java.util.List;
+// import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.DeleteMapping;
+// import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.web.bind.annotation.PatchMapping;
+// import org.springframework.web.bind.annotation.PathVariable;
+// import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.web.bind.annotation.PutMapping;
+// import org.springframework.web.bind.annotation.RequestBody;
+// import org.springframework.web.bind.annotation.RequestMapping;
+// import org.springframework.web.bind.annotation.RestController;
 
-import com.sa.smart.model.Pedido;
-import com.sa.smart.service.PedidoService;
+// import com.sa.smart.model.Pedido;
+// import com.sa.smart.service.PedidoService;
 
-@RestController
-@RequestMapping("/api/pedidos")
-public class PedidoController {
+// @RestController
+// @RequestMapping("/api/pedidos")
+// public class PedidoController {
 
-    @Autowired
-    private PedidoService pedidoService;
+//     @Autowired
+//     private PedidoService pedidoService;
 
-    @GetMapping
-    public List<Pedido> listar() {
-        return pedidoService.listarTodos();
-    }
+//     @GetMapping
+//     public List<Pedido> listar() {
+//         return pedidoService.listarTodos();
+//     }
 
-    @PostMapping
-    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
-        Pedido novoPedido = pedidoService.criarPedido(pedido);
-        return ResponseEntity.ok(novoPedido);
-    }
+//     @PostMapping
+//     public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
+//         Pedido novoPedido = pedidoService.criarPedido(pedido);
+//         return ResponseEntity.ok(novoPedido);
+//     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<Void> atualizarStatus(@PathVariable Long id) {
-        pedidoService.atualizarStatusParaConcluido(id);
-        return ResponseEntity.noContent().build();
-    }
+//     @PutMapping("/{id}/status")
+//     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id) {
+//         pedidoService.atualizarStatusParaConcluido(id);
+//         return ResponseEntity.noContent().build();
+//     }
 
-    // PATCH: Atualização parcial de dados do pedido (ex: cor da tampa ou descrição)
-    @PatchMapping("/{id}")
-    public ResponseEntity<Pedido> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
-        Pedido pedidoAtualizado = pedidoService.atualizarParcial(id, campos);
-        return ResponseEntity.ok(pedidoAtualizado);
-    }
+//     // PATCH: Atualização parcial de dados do pedido (ex: cor da tampa ou descrição)
+//     @PatchMapping("/{id}")
+//     public ResponseEntity<Pedido> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+//         Pedido pedidoAtualizado = pedidoService.atualizarParcial(id, campos);
+//         return ResponseEntity.ok(pedidoAtualizado);
+//     }
 
-    // DELETE: Remove um pedido do sistema
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirPedido(@PathVariable Long id) {
-        pedidoService.excluir(id);
-        return ResponseEntity.noContent().build();
-    }
-}
+//     // DELETE: Remove um pedido do sistema
+//     @DeleteMapping("/{id}")
+//     public ResponseEntity<Void> excluirPedido(@PathVariable Long id) {
+//         pedidoService.excluir(id);
+//         return ResponseEntity.noContent().build();
+//     }
+// }

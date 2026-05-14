@@ -1,4 +1,4 @@
-package com.sa.smart.model;
+/*package com.sa.smart.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,4 +61,4 @@ public class Pedido {
         this.blocos.add(bloco);
         bloco.setPedido(this);
     }
-}
+}*/

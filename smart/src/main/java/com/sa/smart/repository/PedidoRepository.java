@@ -1,14 +1,12 @@
-package com.sa.smart.repository;
+// package com.sa.smart.repository;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+// import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sa.smart.model.Pedido;
+// import com.sa.smart.model.Pedido;
 
-@Repository
-public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+// public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
    
 
-}
+// }

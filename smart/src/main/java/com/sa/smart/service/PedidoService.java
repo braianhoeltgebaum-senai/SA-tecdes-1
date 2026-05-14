@@ -1,4 +1,4 @@
-package com.sa.smart.service;
+/*package com.sa.smart.service;
 
 import java.util.List;
 import java.util.Map;
@@ -82,4 +82,4 @@ public class PedidoService {
    
         System.out.println("Gerando registro de expedição para a OP: " + pedido.getOrdem_producao());
     }
-}
+}*/
