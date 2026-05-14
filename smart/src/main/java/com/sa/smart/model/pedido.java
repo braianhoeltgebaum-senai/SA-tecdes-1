@@ -56,6 +56,7 @@ public class Pedido {
             this.status_pedido = 1; }
     }
 
+
     public void adicionarBloco(Bloco bloco) {
         this.blocos.add(bloco);
         bloco.setPedido(this);
