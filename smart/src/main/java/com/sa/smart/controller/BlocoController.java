@@ -49,14 +49,14 @@ public class BlocoController {
     }
 
     @PutMapping("/put/{id}")
-    public ResponseEntity<BlocoDTO> put(@PathVariable Long id, @RequestBody BlocoDTO dto) {
+    public ResponseEntity<BlocoDTO> atualizarTotal(@PathVariable Long id, @RequestBody BlocoDTO dto) {
 
         return ResponseEntity.ok(blocoService.put(id, dto));
 
     }
 
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<BlocoDTO> patch(@PathVariable Long id, @RequestBody BlocoDTO dto) {
+    public ResponseEntity<BlocoDTO> atualizarParcial(@PathVariable Long id, @RequestBody BlocoDTO dto) {
 
         return ResponseEntity.ok(blocoService.patch(id, dto));
 
