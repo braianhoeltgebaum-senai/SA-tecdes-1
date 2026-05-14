@@ -11,150 +11,149 @@ import com.sa.smart.repository.BlocoRepository;
 import com.sa.smart.repository.LaminaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class LaminaService {
 
     private final LaminaRepository repository;
     private final BlocoRepository blocoRepository;
 
-    public LaminaService(LaminaRepository repository,
-                         BlocoRepository blocoRepository) {
-        this.repository = repository;
-        this.blocoRepository = blocoRepository;
-    }
-
     public LaminaDTO criar(LaminaDTO dto) {
 
-        Bloco bloco = blocoRepository.findById(dto.bloco_id_bloco())
-        .orElseThrow(() ->
-                new RuntimeException("Bloco não encontrado"));
+        Bloco bloco = buscarBloco(dto.blocoId());
 
-        long quantidade = repository.countByBlocoId(bloco.getId());
+        validarQuantidadeLaminas(bloco);
 
-        if (quantidade >= 3) {
-            throw new RuntimeException(
-                    "O bloco já possui 3 lâminas");
-        }
+        Lamina lamina = new Lamina();
 
-        Lamina l = new Lamina();
+        lamina.setCor(dto.cor());
+        lamina.setPadrao(dto.padrao());
+        lamina.setPosicaoNoBloco(dto.posicaoNoBloco());
+        lamina.setBloco(bloco);
 
-        l.setCor(dto.cor());
-        l.setPadrao(dto.padrao());
-        l.setPosicao_no_bloco(dto.posicao_no_bloco());
-        l.setBloco(bloco);
+        Lamina salva = repository.save(lamina);
 
-        Lamina saved = repository.save(l);
-
-        return new LaminaDTO(
-                saved.getId(),
-                saved.getCor(),
-                saved.getPadrao(),
-                saved.getPosicao_no_bloco(),
-                saved.getBloco().getId()
-        );
+        return converterParaDTO(salva);
     }
-    
+
     public List<LaminaDTO> listar() {
 
-        return repository.findAll().stream()
-                .map(l -> new LaminaDTO(
-                        l.getId(),
-                        l.getCor(),
-                        l.getPadrao(),
-                        l.getPosicao_no_bloco(),
-                        l.getBloco().getId()
-                ))
+        return repository.findAll()
+                .stream()
+                .map(this::converterParaDTO)
                 .toList();
     }
 
     public LaminaDTO buscar(Long id) {
 
-        Lamina l = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Lâmina não encontrada"));
+        Lamina lamina = buscarLamina(id);
 
-        return new LaminaDTO(
-                l.getId(),
-                l.getCor(),
-                l.getPadrao(),
-                l.getPosicao_no_bloco(),
-                l.getBloco().getId()
-        );
+        return converterParaDTO(lamina);
     }
 
     public LaminaDTO put(Long id, LaminaDTO dto) {
 
-        Lamina l = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Lâmina não encontrada"));
+        Lamina lamina = buscarLamina(id);
 
-        Bloco bloco = blocoRepository.findById(dto.blocoId())
-                .orElseThrow(() ->
-                        new RuntimeException("Bloco não encontrado"));
+        Bloco bloco = buscarBloco(dto.blocoId());
 
-        // valida limite de 3 ao trocar de bloco
-        if (!l.getBloco().getId().equals(bloco.getId())) {
+        if (!lamina.getBloco().getIdBloco().equals(bloco.getIdBloco())) {
 
-            long quantidade = repository.countByBlocoId(bloco.getId());
-
-            if (quantidade >= 3) {
-                throw new RuntimeException(
-                        "O bloco já possui 3 lâminas");
-            }
+            validarQuantidadeLaminas(bloco);
         }
 
-        l.setCor(dto.cor());
-        l.setPadrao(dto.padrao());
-        l.setPosicao_no_bloco(dto.posicao_no_bloco());
-        l.setBloco(bloco);
+        lamina.setCor(dto.cor());
+        lamina.setPadrao(dto.padrao());
+        lamina.setPosicaoNoBloco(dto.posicaoNoBloco());
+        lamina.setBloco(bloco);
 
-        Lamina updated = repository.save(l);
+        Lamina atualizada = repository.save(lamina);
 
-        return new LaminaDTO(
-                updated.getId(),
-                updated.getCor(),
-                updated.getPadrao(),
-                updated.getPosicao_no_bloco(),
-                updated.getBloco().getId()
-        );
+        return converterParaDTO(atualizada);
     }
 
     public LaminaDTO patch(Long id, LaminaDTO dto) {
 
-        Lamina l = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Lâmina não encontrada"));
+        Lamina lamina = buscarLamina(id);
 
         if (dto.cor() != null) {
-            l.setCor(dto.cor());
+            lamina.setCor(dto.cor());
         }
 
         if (dto.padrao() != null) {
-            l.setPadrao(dto.padrao());
+            lamina.setPadrao(dto.padrao());
         }
 
-        if (dto.posicao_no_bloco() != null) {
-            l.setPosicao_no_bloco(dto.posicao_no_bloco());
+        if (dto.posicaoNoBloco() != null) {
+            lamina.setPosicaoNoBloco(dto.posicaoNoBloco());
         }
 
-        Lamina updated = repository.save(l);
+        if (dto.blocoId() != null) {
 
-        return new LaminaDTO(
-                updated.getId(),
-                updated.getCor(),
-                updated.getPadrao(),
-                updated.getPosicao_no_bloco(),
-                updated.getBloco().getId()
-        );
+            Bloco bloco = buscarBloco(dto.blocoId());
+
+            if (!lamina.getBloco().getIdBloco().equals(bloco.getIdBloco())) {
+
+                validarQuantidadeLaminas(bloco);
+            }
+
+            lamina.setBloco(bloco);
+        }
+
+        Lamina atualizada = repository.save(lamina);
+
+        return converterParaDTO(atualizada);
     }
 
     public void deletar(Long id) {
 
         if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Lâmina não encontrada");
+
+            throw new EntityNotFoundException(
+                    "Lâmina não encontrada");
         }
 
         repository.deleteById(id);
+    }
+
+    private Lamina buscarLamina(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Lâmina não encontrada"));
+    }
+
+    private Bloco buscarBloco(Long id) {
+
+        return blocoRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Bloco não encontrado"));
+    }
+
+    private void validarQuantidadeLaminas(Bloco bloco) {
+
+        long quantidade =
+                repository.countByBlocoId(bloco.getIdBloco());
+
+        if (quantidade >= 3) {
+
+            throw new IllegalArgumentException(
+                    "O bloco já possui 3 lâminas");
+        }
+    }
+
+    private LaminaDTO converterParaDTO(Lamina lamina) {
+
+        return new LaminaDTO(
+                lamina.getId(),
+                lamina.getCor(),
+                lamina.getPadrao(),
+                lamina.getPosicaoNoBloco(),
+                lamina.getBloco().getIdBloco()
+        );
     }
 }
