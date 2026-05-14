@@ -1,4 +1,4 @@
-// package com.sa.smart.dto;
+package com.sa.smart.dto;
 
 // import java.util.List;
 

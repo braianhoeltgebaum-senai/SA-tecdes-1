@@ -1,4 +1,4 @@
-// package com.sa.smart.repository;
+ package com.sa.smart.repository;
 
 
 // import org.springframework.data.jpa.repository.JpaRepository;
