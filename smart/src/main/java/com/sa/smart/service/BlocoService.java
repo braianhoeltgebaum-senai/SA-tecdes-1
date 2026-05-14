@@ -1,9 +1,10 @@
 package com.sa.smart.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import com.sa.smart.dto.BlocoDTO;
 import com.sa.smart.model.Bloco;
 import com.sa.smart.model.Estoque;
 import com.sa.smart.repository.BlocoRepository;
@@ -19,6 +20,210 @@ public class BlocoService {
     private final BlocoRepository blocoRepository;
     private final PedidoRepository pedidoRepository;
     private final EstoqueRepository estoqueRepository;
+
+    @Transactional
+    public BlocoDTO criar(BlocoDTO dto) {
+
+        Bloco bloco = new Bloco();
+
+        if (dto.getPedidoOrdemProducao() != null) {
+
+            Pedido pedido = pedidoRepository.findByOrdemProducao(dto.getPedidoOrdemProducao())
+                    .orElseThrow(() -> new RuntimeException("Pedido de produção não encontrado: " + dto.getPedidoOrdemProducao()));
+            bloco.setPedido(pedido);
+
+        } else {
+
+            throw new RuntimeException("Pedido não informado.");
+
+        }
+
+        if (dto.getEstoquePosicao() != null) {
+
+            Estoque estoque = estoqueRepository.findByPosicao(dto.getEstoquePosicao())
+                    .orElseThrow(() -> new RuntimeException("Posição de estoque não encontrada: " + dto.getEstoquePosicao()));
+
+            if (estoque.getCor() == 0) {
+
+                throw new RuntimeException("Posição de estoque vazia. Não é possível adicionar bloco.");
+
+            }
+
+            bloco.setEstoque(estoque);
+
+        } else {
+
+            throw new RuntimeException("Posição de estoque não informada.");
+
+        }
+
+        if (dto.getCorBloco() == null || dto.getCorBloco() == 0) {
+
+            throw new RuntimeException("Cor do bloco inválida.");
+
+        }
+
+        bloco.setCorBloco(dto.getCorBloco());
+        bloco.setCriadoEm(LocalDateTime.now());
+
+        Bloco salvo = blocoRepository.save(bloco);
+        return BlocoDTO.fromEntity(salvo);
+
+    }
+
+    public List<BlocoDTO> listar() {
+
+        List<Bloco> blocos = blocoRepository.findAll();
+        List<BlocoDTO> listaDTO = new ArrayList<>();
+
+        for (Bloco bloco : blocos) {
+
+            listaDTO.add(BlocoDTO.fromEntity(bloco));
+
+        }
+
+        return listaDTO;
+
+    }
+
+    public BlocoDTO buscar(Long id) {
+
+        Bloco bloco = blocoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
+
+        return BlocoDTO.fromEntity(bloco);
+
+    }
+
+    @Transactional
+    public BlocoDTO put(Long id, BlocoDTO dto) {
+
+        Bloco blocoExistente = blocoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
+
+        if (dto.getPedidoOrdemProducao() != null) {
+
+            Pedido pedido = pedidoRepository.findByOrdemProducao(dto.getPedidoOrdemProducao())
+                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado: " + dto.getPedidoOrdemProducao()));
+
+            blocoExistente.setPedido(pedido);
+
+        }
+
+        if (dto.getEstoquePosicao() != null) {
+
+            Estoque estoque = estoqueRepository.findByPosicao(dto.getEstoquePosicao())
+                    .orElseThrow(() -> new RuntimeException("Posição de estoque não encontrada: " + dto.getEstoquePosicao()));
+
+            blocoExistente.setEstoque(estoque);
+
+        }
+
+        if (dto.getCorBloco() != null) {
+
+            blocoExistente.setCorBloco(dto.getCorBloco());
+
+        }
+
+        Bloco atualizado = blocoRepository.save(blocoExistente);
+        return BlocoDTO.fromEntity(atualizado);
+
+    }
+
+    @Transactional
+    public BlocoDTO patch(Long id, BlocoDTO dto) {
+
+        Bloco blocoExistente = blocoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
+
+        if (dto.getPedidoOrdemProducao() != null) {
+
+            Pedido pedido = pedidoRepository.findByOrdemProducao(dto.getPedidoOrdemProducao())
+                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado: " + dto.getPedidoOrdemProducao()));
+
+            blocoExistente.setPedido(pedido);
+
+        }
+
+        if (dto.getEstoquePosicao() != null) {
+
+            Estoque estoque = estoqueRepository.findByPosicao(dto.getEstoquePosicao())
+                    .orElseThrow(() -> new RuntimeException("Posição de estoque não encontrada: " + dto.getEstoquePosicao()));
+
+            blocoExistente.setEstoque(estoque);
+
+        }
+
+        if (dto.getCorBloco() != null && dto.getCorBloco() != 0) {
+
+            blocoExistente.setCorBloco(dto.getCorBloco());
+
+        }
+
+        Bloco atualizado = blocoRepository.save(blocoExistente);
+        return BlocoDTO.fromEntity(atualizado);
+
+    }
+
+    @Transactional
+    public void deletar(Long id) {
+
+        Bloco bloco = blocoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
+
+        blocoRepository.delete(bloco);
+
+    }
+
+    public List<BlocoDTO> listarBlocosDisponiveis() {
+
+        List<Bloco> blocos = blocoRepository.findAll();
+        List<BlocoDTO> listaDTO = new ArrayList<>();
+
+        for (Bloco bloco : blocos) {
+
+            if (bloco.getEstoque() != null && bloco.getEstoque().getCor() != 0) {
+
+                listaDTO.add(BlocoDTO.fromEntity(bloco));
+
+            }
+
+        }
+
+        return listaDTO;
+
+    }
+
+    @Transactional
+    public void atualizarStatusConcluido(Long id) {
+
+        Bloco bloco = blocoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
+
+        if (bloco.getPedido() != null) {
+
+            Pedido pedido = bloco.getPedido();
+
+            if (pedido.getTipo() == 3) {
+
+                long quantidadeBlocos = contarBlocosPorPedido(pedido);
+
+                if (quantidadeBlocos != 3) {
+
+                    throw new RuntimeException(
+                            "Pedidos triplos exigem exatamente 3 blocos. Atualmente: " + quantidadeBlocos);
+
+                }
+            }
+
+            pedido.setStatus(3);
+            pedido.setConcluidoEm(LocalDateTime.now());
+
+        }
+
+        blocoRepository.save(bloco);
+
+    }
 
     public List<Bloco> listarTodos() {
 
@@ -137,48 +342,10 @@ public class BlocoService {
 
     }
 
-    public List<Bloco> listarBlocosDisponiveis() {
-
-        return blocoRepository.findAll().stream()
-                .filter(bloco -> bloco.getEstoque() != null && bloco.getEstoque().getCor() != 0)
-                .collect(Collectors.toList());
-
-    }
-
-    @Transactional
-    public void atualizarStatusConcluido(Long id) {
-
-        Bloco bloco = buscarPorId(id);
-
-        if (bloco.getPedido() != null) {
-
-            Pedido pedido = bloco.getPedido();
-
-            if (pedido.getTipo() == 3) {
-
-                long quantidadeBlocos = contarBlocosPorPedido(pedido);
-
-                if (quantidadeBlocos != 3) {
-
-                    throw new RuntimeException(
-                            "Pedidos triplos exigem exatamente 3 blocos. Atualmente: " + quantidadeBlocos);
-
-                }
-            }
-
-            pedido.setStatus(3);
-            pedido.setConcluidoEm(LocalDateTime.now());
-
-        }
-
-        blocoRepository.save(bloco);
-
-    }
-
     public void validarPedidoTriplo(Pedido pedido, List<Bloco> blocos) {
 
         if (pedido.getTipo() == 3 && blocos.size() != 3) {
-            
+
             throw new RuntimeException("Pedidos triplos exigem exatamente 3 blocos.");
 
         }
