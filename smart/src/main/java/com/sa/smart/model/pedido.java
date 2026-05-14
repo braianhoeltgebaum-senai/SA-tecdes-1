@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sa.smart.enums.EnumCorTampa;
+import com.sa.smart.enums.EnumStatusPedido;
+import com.sa.smart.enums.EnumTipoPedido;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,13 +38,13 @@ public class Pedido {
     private String ordem_producao; 
 
     @Column(nullable = false)
-    private Integer status_pedido; 
+    private EnumStatusPedido status_pedido; 
 
     @Column(nullable = false)
-    private Integer tipo_pedido; 
+    private EnumTipoPedido tipo_pedido; 
 
     @Column(nullable = false)
-    private Integer cor_tampa; 
+    private EnumCorTampa cor_tampa; 
 
     private Integer posicao_expedicao; 
     private LocalDateTime timestamp; 
@@ -53,7 +57,7 @@ public class Pedido {
     protected void onCreate() {
         this.timestamp = LocalDateTime.now();
         if (this.status_pedido == null) {
-            this.status_pedido = 1; }
+            this.status_pedido = EnumStatusPedido.PENDENTE;}
     }
 
 
