@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.sa.smart.dto.EstoqueDTO;
 import com.sa.smart.service.EstoqueService;
-import com.sa.smart.service.LaminaService;
+
 
 public class EstoqueController {
 

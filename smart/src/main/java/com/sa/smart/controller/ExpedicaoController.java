@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.sa.smart.dto.ExpedicaoDTO;
 import com.sa.smart.service.ExpedicaoService;
-import com.sa.smart.service.LaminaService;
+
 
 public class ExpedicaoController {
 
