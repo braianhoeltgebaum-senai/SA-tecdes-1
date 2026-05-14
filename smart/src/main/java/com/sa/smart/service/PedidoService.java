@@ -2,7 +2,6 @@ package com.sa.smart.service;
 
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
@@ -13,7 +12,7 @@ import com.sa.smart.repository.PedidoRepository;
 @Service
 public class PedidoService {
 
-    @Autowired
+
     private PedidoRepository pedidoRepository;
 
 
