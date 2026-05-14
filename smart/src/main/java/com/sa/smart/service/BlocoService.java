@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.sa.smart.dto.BlocoDTO;
 import com.sa.smart.model.Bloco;
 import com.sa.smart.model.Estoque;
+import com.sa.smart.model.Pedido;
 import com.sa.smart.repository.BlocoRepository;
 import com.sa.smart.repository.EstoqueRepository;
 import com.sa.smart.repository.PedidoRepository;
@@ -25,6 +26,12 @@ public class BlocoService {
     public BlocoDTO criar(BlocoDTO dto) {
 
         Bloco bloco = new Bloco();
+
+        if (dto.getCorBloco() == null || !CorBloco.isValid(dto.getCorBloco())) {
+
+            throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
+
+        }
 
         if (dto.getPedidoOrdemProducao() != null) {
 
@@ -54,12 +61,6 @@ public class BlocoService {
         } else {
 
             throw new RuntimeException("Posição de estoque não informada.");
-
-        }
-
-        if (dto.getCorBloco() == null || dto.getCorBloco() == 0) {
-
-            throw new RuntimeException("Cor do bloco inválida.");
 
         }
 
@@ -101,6 +102,12 @@ public class BlocoService {
         Bloco blocoExistente = blocoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
 
+        if (dto.getCorBloco() != null && !CorBloco.isValid(dto.getCorBloco())) {
+
+            throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
+
+        }
+
         if (dto.getPedidoOrdemProducao() != null) {
 
             Pedido pedido = pedidoRepository.findByOrdemProducao(dto.getPedidoOrdemProducao())
@@ -135,6 +142,12 @@ public class BlocoService {
 
         Bloco blocoExistente = blocoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
+
+        if (dto.getCorBloco() != null && dto.getCorBloco() != 0 && !CorBloco.isValid(dto.getCorBloco())) {
+
+            throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
+
+        }
 
         if (dto.getPedidoOrdemProducao() != null) {
 
@@ -241,6 +254,12 @@ public class BlocoService {
     @Transactional
     public Bloco salvarBloco(Bloco bloco) {
 
+        if (bloco.getCorBloco() == null || !CorBloco.isValid(bloco.getCorBloco())) {
+
+            throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
+
+        }
+
         if (bloco.getPedido() == null || bloco.getPedido().getOrdemProducao() == null) {
 
             throw new RuntimeException("Pedido não informado.");
@@ -270,12 +289,6 @@ public class BlocoService {
         }
 
         bloco.setEstoque(estoque);
-
-        if (bloco.getCorBloco() == null || bloco.getCorBloco() == 0) {
-
-            throw new RuntimeException("Cor do bloco inválida.");
-
-        }
 
         if (bloco.getLaminas() != null && bloco.getLaminas().size() > 3) {
 
@@ -314,6 +327,9 @@ public class BlocoService {
 
         if (blocoAtualizado.getCorBloco() != null) {
 
+            if (!CorBloco.isValid(blocoAtualizado.getCorBloco())) {
+                throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
+            }
             blocoExistente.setCorBloco(blocoAtualizado.getCorBloco());
 
         }
