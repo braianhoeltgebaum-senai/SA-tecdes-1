@@ -25,7 +25,7 @@ public class Bloco {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idBloco;
+    private Long idBloco;
 
     @ManyToOne
     @JoinColumn(name = "pedido_ordem_producao", nullable = false)
@@ -35,9 +35,13 @@ public class Bloco {
     @JoinColumn(name = "estoque_posicao", nullable = false)
     private Estoque estoque;
 
-    @Enumerated(EnumType.STRING) 
+
     @Column(name = "cor_bloco", nullable = false)
-    private EnumCorBloco corBloco; 
+    private Integer corBloco;   // sem @Enumerated
+
+    /*@Enumerated(EnumType.STRING) 
+    @Column(name = "cor_bloco", nullable = false)
+    private Integer corBloco; */
 
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;

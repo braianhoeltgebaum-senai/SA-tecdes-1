@@ -31,14 +31,9 @@ public class Lamina {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.ORDINAL)
-    private EnumCorLamina cor;
-
-    @Enumerated(EnumType.ORDINAL)
-    private EnumPadraoLamina padrao;
-
-    @Enumerated(EnumType.ORDINAL)
-    private EnumPosicaoLamina posicao_no_bloco;
+    private Integer cor;
+    private Integer padrao;
+    private Integer posicaoNoBloco;
 
     @ManyToOne
     @JoinColumn(name = "bloco_id_bloco", nullable = false)

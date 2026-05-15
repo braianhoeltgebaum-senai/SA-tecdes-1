@@ -26,12 +26,12 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<Pedido> listar() {
         return pedidoService.listarTodos();
     }
 
-    @PostMapping
+    @PostMapping("/salvar")
     public ResponseEntity<Pedido> criar(@RequestBody Pedido pedido) {
 
         Pedido novoPedido = pedidoService.criarPedido(pedido);
@@ -60,6 +60,6 @@ public class PedidoController {
 
         pedidoService.excluir(id);
         return ResponseEntity.noContent().build();
-        
+
     }
 }
