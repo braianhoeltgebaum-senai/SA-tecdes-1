@@ -1,10 +1,11 @@
 package com.sa.smart.service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
-import java.lang.reflect.Field;
 
 import com.sa.smart.model.Pedido;
 import com.sa.smart.repository.PedidoRepository;
@@ -30,13 +31,13 @@ public class PedidoService {
         }
 
         // Regra da Lâmina: Cada bloco pode ter no máximo 3 lâminas [cite: 27, 61]
-        if (pedido.getBlocos() != null) {
+       /*  if (pedido.getBlocos() != null) {
             pedido.getBlocos().forEach(bloco -> {
                 if (bloco.getLaminas() != null && bloco.getLaminas().size() > 3) {
                     throw new RuntimeException("Cada bloco pode ter no máximo 3 lâminas.");
                 }
             });
-        }
+        }*/
 
         pedido.setStatusPedido(1); // 1 - Pendente [cite: 20]
         return pedidoRepository.save(pedido);

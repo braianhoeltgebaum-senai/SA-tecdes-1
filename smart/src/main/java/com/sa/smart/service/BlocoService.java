@@ -32,11 +32,11 @@ public class BlocoService {
             throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
         }
 
-        if (dto.pedidoId() == null) {
+        if (dto.idPedido() == null) {
             throw new RuntimeException("Pedido não informado.");
         }
-        Pedido pedido = pedidoRepository.findById(dto.pedidoId())
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado com ID: " + dto.pedidoId()));
+        Pedido pedido = pedidoRepository.findById(dto.idPedido())
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado com ID: " + dto.idPedido()));
 
         if (dto.estoqueId() == null) {
             throw new RuntimeException("Posição de estoque não informada.");
@@ -60,7 +60,7 @@ public class BlocoService {
             EnumCorBloco.fromCodigo(salvo.getCorBloco()), // converte Integer -> Enum
             salvo.getCriadoEm(),
             salvo.getEstoque() != null ? salvo.getEstoque().getId() : null,
-            salvo.getPedido() != null ? salvo.getPedido().getId_pedido() : null
+            salvo.getPedido() != null ? salvo.getPedido().getIdPedido() : null
         );
     }
 
@@ -73,7 +73,7 @@ public class BlocoService {
                 EnumCorBloco.fromCodigo(b.getCorBloco()),
                 b.getCriadoEm(),
                 b.getEstoque() != null ? b.getEstoque().getId() : null,
-                b.getPedido() != null ? b.getPedido().getId_pedido() : null
+                b.getPedido() != null ? b.getPedido().getIdPedido() : null
             ));
         }
         return lista;
@@ -87,7 +87,7 @@ public class BlocoService {
             EnumCorBloco.fromCodigo(b.getCorBloco()),
             b.getCriadoEm(),
             b.getEstoque() != null ? b.getEstoque().getId() : null,
-            b.getPedido() != null ? b.getPedido().getId_pedido() : null
+            b.getPedido() != null ? b.getPedido().getIdPedido() : null
         );
     }
 
@@ -102,9 +102,9 @@ public class BlocoService {
             }
             existente.setCorBloco(dto.corBloco().getCodigo());
         }
-        if (dto.pedidoId() != null) {
-            Pedido p = pedidoRepository.findById(dto.pedidoId())
-                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado: " + dto.pedidoId()));
+        if (dto.idPedido() != null) {
+            Pedido p = pedidoRepository.findById(dto.idPedido())
+                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado: " + dto.idPedido()));
             existente.setPedido(p);
         }
         if (dto.estoqueId() != null) {
@@ -119,7 +119,7 @@ public class BlocoService {
             EnumCorBloco.fromCodigo(atualizado.getCorBloco()),
             atualizado.getCriadoEm(),
             atualizado.getEstoque() != null ? atualizado.getEstoque().getId() : null,
-            atualizado.getPedido() != null ? atualizado.getPedido().getId_pedido() : null
+            atualizado.getPedido() != null ? atualizado.getPedido().getIdPedido() : null
         );
     }
 
@@ -134,9 +134,9 @@ public class BlocoService {
             }
             existente.setCorBloco(dto.corBloco().getCodigo());
         }
-        if (dto.pedidoId() != null) {
-            Pedido p = pedidoRepository.findById(dto.pedidoId())
-                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado: " + dto.pedidoId()));
+        if (dto.idPedido() != null) {
+            Pedido p = pedidoRepository.findById(dto.idPedido())
+                    .orElseThrow(() -> new RuntimeException("Pedido não encontrado: " + dto.idPedido()));
             existente.setPedido(p);
         }
         if (dto.estoqueId() != null) {
@@ -151,7 +151,7 @@ public class BlocoService {
             EnumCorBloco.fromCodigo(atualizado.getCorBloco()),
             atualizado.getCriadoEm(),
             atualizado.getEstoque() != null ? atualizado.getEstoque().getId() : null,
-            atualizado.getPedido() != null ? atualizado.getPedido().getId_pedido() : null
+            atualizado.getPedido() != null ? atualizado.getPedido().getIdPedido() : null
         );
     }
 
@@ -172,7 +172,7 @@ public class BlocoService {
                     EnumCorBloco.fromCodigo(b.getCorBloco()),
                     b.getCriadoEm(),
                     b.getEstoque() != null ? b.getEstoque().getId() : null,
-                    b.getPedido() != null ? b.getPedido().getId_pedido() : null
+                    b.getPedido() != null ? b.getPedido().getIdPedido() : null
                 ));
             }
         }
@@ -185,15 +185,15 @@ public class BlocoService {
                 .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
         if (b.getPedido() != null) {
             Pedido p = b.getPedido();
-            if (p.getTipoPedido() != null && p.getTipoPedido().getCodigo() == EnumTipoPedido.TRIPLO.getCodigo()) {
+            if (p.getTipoPedido() != null && p.getTipoPedido() == EnumTipoPedido.TRIPLO.getCodigo()) {
                 long qtd = blocoRepository.findAll().stream()
-                        .filter(bl -> bl.getPedido() != null && bl.getPedido().getId_pedido().equals(p.getId_pedido()))
+                        .filter(bl -> bl.getPedido() != null && bl.getPedido().getIdPedido().equals(p.getIdPedido()))
                         .count();
                 if (qtd != 3) {
                     throw new RuntimeException("Pedidos triplos exigem 3 blocos. Atualmente: " + qtd);
                 }
             }
-            p.setStatusPedido(EnumStatusPedido.CONCLUIDO);
+            p.setStatusPedido(EnumStatusPedido.CONCLUIDO.getCodigo());
             pedidoRepository.save(p);
         }
         blocoRepository.save(b);

@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sa.smart.dto.EstoqueDTO;
 import com.sa.smart.service.EstoqueService;
 
-
+@RequestMapping("/api/estoque")
 public class EstoqueController {
 
     private final EstoqueService service;
@@ -43,7 +44,7 @@ public class EstoqueController {
 
     }
 
-    @GetMapping("/listarId/{id}")
+    @GetMapping("/listar/disponivel")
     public ResponseEntity<EstoqueDTO> buscar(@PathVariable Long id) {
 
         return ResponseEntity.ok(service.buscar(id));

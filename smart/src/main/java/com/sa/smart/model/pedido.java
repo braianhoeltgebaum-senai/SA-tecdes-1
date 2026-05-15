@@ -11,6 +11,8 @@ import com.sa.smart.enums.EnumTipoPedido;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,33 +34,26 @@ public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_pedido;
+    private Long idPedido;
 
     @Column(nullable = false, unique = true)
-    private String ordem_producao; 
+    private String ordemProducao; 
+
+    @Column(name = "status_pedido", nullable = false)
+    private Integer statusPedido; 
 
     @Column(nullable = false)
-    private EnumStatusPedido status_pedido; 
+    private Integer tipoPedido; 
 
     @Column(nullable = false)
-    private EnumTipoPedido tipo_pedido; 
+    private Integer corTampa; 
 
-    @Column(nullable = false)
-    private EnumCorTampa cor_tampa; 
-
-    private Integer posicao_expedicao; 
+    private Integer posicaoExpedicao; 
     private LocalDateTime timestamp; 
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bloco> blocos = new ArrayList<>();
 
-
-    @PrePersist
-    protected void onCreate() {
-        this.timestamp = LocalDateTime.now();
-        if (this.status_pedido == null) {
-            this.status_pedido = EnumStatusPedido.PENDENTE;}
-    }
 
 
     public void adicionarBloco(Bloco bloco) {

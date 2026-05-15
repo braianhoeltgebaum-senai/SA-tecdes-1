@@ -26,9 +26,9 @@ public class Expedicao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer posicao_expedicao;
-    private LocalDateTime entrada_em;
-    private LocalDateTime saida_em;
+    private Integer posicaoExpedicao;
+    private LocalDateTime entradaEm;
+    private LocalDateTime saidaEm;
 
     @ManyToOne
     @JoinColumn(name = "pedido_ordem_producao", nullable = false)

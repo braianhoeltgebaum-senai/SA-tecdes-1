@@ -3,6 +3,7 @@ package com.sa.smart.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sa.smart.dto.LaminaDTO;
 import com.sa.smart.model.Bloco;
@@ -10,151 +11,151 @@ import com.sa.smart.model.Lamina;
 import com.sa.smart.repository.BlocoRepository;
 import com.sa.smart.repository.LaminaRepository;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 public class LaminaService {
 
-    private final LaminaRepository repository;
+    private final LaminaRepository laminaRepository;
     private final BlocoRepository blocoRepository;
 
-    public LaminaService(LaminaRepository repository,
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public LaminaService(LaminaRepository laminaRepository,
                          BlocoRepository blocoRepository) {
-        this.repository = repository;
+        this.laminaRepository = laminaRepository;
         this.blocoRepository = blocoRepository;
     }
 
+    @Transactional
     public LaminaDTO criar(LaminaDTO dto) {
+        Bloco bloco = blocoRepository.findById(dto.blocoIdBloco())
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado"));
 
-        Bloco bloco = blocoRepository.findById(dto.blocoId())
-        .orElseThrow(() ->
-                new RuntimeException("Bloco não encontrado"));
-
-        long quantidade = repository.countByBlocoId(bloco.getId());
+        // Conta as lâminas do bloco usando EntityManager (sem mexer no repository)
+        long quantidade = contarLaminasPorBloco(bloco.getIdBloco());
 
         if (quantidade >= 3) {
-            throw new RuntimeException(
-                    "O bloco já possui 3 lâminas");
+            throw new RuntimeException("O bloco já possui 3 lâminas");
         }
 
         Lamina l = new Lamina();
-
         l.setCor(dto.cor());
         l.setPadrao(dto.padrao());
         l.setPosicaoNoBloco(dto.posicaoNoBloco());
         l.setBloco(bloco);
 
-        Lamina saved = repository.save(l);
+        Lamina saved = laminaRepository.save(l);
 
         return new LaminaDTO(
                 saved.getId(),
                 saved.getCor(),
                 saved.getPadrao(),
                 saved.getPosicaoNoBloco(),
-                saved.getBloco().getId()
+                saved.getBloco().getIdBloco()
         );
     }
-    
-    public List<LaminaDTO> listar() {
 
-        return repository.findAll().stream()
+    @Transactional(readOnly = true)
+    public List<LaminaDTO> listar() {
+        return laminaRepository.findAll().stream()
                 .map(l -> new LaminaDTO(
                         l.getId(),
                         l.getCor(),
                         l.getPadrao(),
                         l.getPosicaoNoBloco(),
-                        l.getBloco().getId()
+                        l.getBloco().getIdBloco()
                 ))
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public LaminaDTO buscar(Long id) {
-
-        Lamina l = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Lâmina não encontrada"));
-
+        Lamina l = laminaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lâmina não encontrada"));
         return new LaminaDTO(
                 l.getId(),
                 l.getCor(),
                 l.getPadrao(),
                 l.getPosicaoNoBloco(),
-                l.getBloco().getId()
+                l.getBloco().getIdBloco()
         );
     }
 
+    @Transactional
     public LaminaDTO put(Long id, LaminaDTO dto) {
+        Lamina l = laminaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lâmina não encontrada"));
 
-        Lamina l = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Lâmina não encontrada"));
-
-        Bloco bloco = blocoRepository.findById(dto.blocoId())
-                .orElseThrow(() ->
-                        new RuntimeException("Bloco não encontrado"));
+        Bloco novoBloco = blocoRepository.findById(dto.id())
+                .orElseThrow(() -> new RuntimeException("Bloco não encontrado"));
 
         // valida limite de 3 ao trocar de bloco
-        if (!l.getBloco().getId().equals(bloco.getId())) {
-
-            long quantidade = repository.countByBlocoId(bloco.getId());
-
+        if (!l.getBloco().getIdBloco().equals(novoBloco.getIdBloco())) {
+            long quantidade = contarLaminasPorBloco(novoBloco.getIdBloco());
             if (quantidade >= 3) {
-                throw new RuntimeException(
-                        "O bloco já possui 3 lâminas");
+                throw new RuntimeException("O bloco já possui 3 lâminas");
             }
         }
 
         l.setCor(dto.cor());
         l.setPadrao(dto.padrao());
         l.setPosicaoNoBloco(dto.posicaoNoBloco());
-        l.setBloco(bloco);
+        l.setBloco(novoBloco);
 
-        Lamina updated = repository.save(l);
+        Lamina updated = laminaRepository.save(l);
 
         return new LaminaDTO(
                 updated.getId(),
                 updated.getCor(),
                 updated.getPadrao(),
                 updated.getPosicaoNoBloco(),
-                updated.getBloco().getId()
+                updated.getBloco().getIdBloco()
         );
     }
 
+    @Transactional
     public LaminaDTO patch(Long id, LaminaDTO dto) {
-
-        Lamina l = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Lâmina não encontrada"));
+        Lamina l = laminaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lâmina não encontrada"));
 
         if (dto.cor() != null) {
             l.setCor(dto.cor());
         }
-
         if (dto.padrao() != null) {
             l.setPadrao(dto.padrao());
         }
-
         if (dto.posicaoNoBloco() != null) {
             l.setPosicaoNoBloco(dto.posicaoNoBloco());
         }
 
-        Lamina updated = repository.save(l);
+        Lamina updated = laminaRepository.save(l);
 
         return new LaminaDTO(
                 updated.getId(),
                 updated.getCor(),
                 updated.getPadrao(),
                 updated.getPosicaoNoBloco(),
-                updated.getBloco().getId()
+                updated.getBloco().getIdBloco()
         );
     }
 
+    @Transactional
     public void deletar(Long id) {
-
-        if (!repository.existsById(id)) {
+        if (!laminaRepository.existsById(id)) {
             throw new EntityNotFoundException("Lâmina não encontrada");
         }
+        laminaRepository.deleteById(id);
+    }
 
-        repository.deleteById(id);
+    // Método privado que usa EntityManager para contar lâminas por bloco
+    private long contarLaminasPorBloco(Long idBloco) {
+        String jpql = "SELECT COUNT(l) FROM Lamina l WHERE l.bloco.idBloco = :idBloco";
+        return entityManager.createQuery(jpql, Long.class)
+                .setParameter("idBloco", idBloco)
+                .getSingleResult();
     }
 }
