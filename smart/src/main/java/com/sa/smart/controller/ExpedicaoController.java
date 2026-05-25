@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.sa.smart.dto.ExpedicaoDTO;
 import com.sa.smart.service.ExpedicaoService;
 
-
+@RestController
+@RequestMapping("/api/expedicao")
 public class ExpedicaoController {
 
     private final ExpedicaoService service;
