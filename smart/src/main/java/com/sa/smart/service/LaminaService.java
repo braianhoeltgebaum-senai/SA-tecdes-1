@@ -94,8 +94,9 @@ public class LaminaService {
                 .orElseThrow(() -> new RuntimeException("Bloco não encontrado"));
 
         // valida limite de 3 ao trocar de bloco
+        //LEMBRAR DE BOTAR UMA VALIDACAO PARA QUE A POSICAO_NO_BLOCO NAO EXCEDA 3 POSICOES, OS BLOCOS SÓ TEM 3 POSICOES
         if (!l.getBloco().getIdBloco().equals(novoBloco.getIdBloco())) {
-            long quantidade = contarLaminasPorBloco(novoBloco.getIdBloco());
+            long quantidade = contarLaminasPorBloco(novoBloco.getIdBloco()); 
             if (quantidade >= 3) {
                 throw new RuntimeException("O bloco já possui 3 lâminas");
             }
@@ -144,7 +145,7 @@ public class LaminaService {
     }
 
     @Transactional
-    public void deletar(Long id) {
+    public void deletar(Long id) {  
         if (!laminaRepository.existsById(id)) {
             throw new EntityNotFoundException("Lâmina não encontrada");
         }
