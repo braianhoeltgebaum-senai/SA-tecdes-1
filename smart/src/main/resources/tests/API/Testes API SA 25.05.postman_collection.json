@@ -1,0 +1,559 @@
+{
+  "info": {
+    "_postman_id": "798b51a3-61ac-4bc9-bbed-af3178a5c8aa",
+    "name": "Testes API SA 25.05",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53159561",
+    "_collection_link": "https://go.postman.co/collection/53159561-798b51a3-61ac-4bc9-bbed-af3178a5c8aa?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "1-Criar pedido",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"ordemProducao\": \"OP001\",\r\n  \"tipoPedido\": 1,\r\n  \"corTampa\": 1,\r\n  \"blocos\": []\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/pedidos/salvar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "pedidos",
+            "salvar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2-Criar estoque",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"posicao\": 10,\n  \"cor\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/estoque/salvar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "estoque",
+            "salvar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3-Criar bloco",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"corBloco\": \"1\",\r\n  \"estoqueId\": 1,\r\n  \"idPedido\": 3\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/salvar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "salvar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4-Listar blocos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/listar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "listar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5-Buscar bloco por id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/listarId/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "listarId",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6-Atualizacao bloco",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"corBloco\": \"2\",\r\n  \"estoqueId\": 1,\r\n  \"idPedido\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/put/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "put",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7-Atualizacao bloco",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"corBloco\": \"0\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/patch/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "patch",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8-Listar blocos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/disponiveis",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "disponiveis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9-Criar bloco invalido",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"corBloco\": \"3\",\r\n  \"estoqueId\": 1,\r\n  \"idPedido\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/salvar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "salvar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10-Atualizar bloco concluido",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/1/status-concluido",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "1",
+            "status-concluido"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11-Criar lamina associada bloco",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"cor\": 1,\r\n  \"padrao\": 5,\r\n  \"posicaoNoBloco\": 1,\r\n  \"blocoIdBloco\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/lamina/salvar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "lamina",
+            "salvar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12-Tentar criar 4 lamina",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"cor\": 1,\r\n  \"padrao\": 2,\r\n  \"posicaoNoBloco\": 2,\r\n  \"blocoIdBloco\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/lamina/salvar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "lamina",
+            "salvar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "13-Listar laminas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/api/lamina/listar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "lamina",
+            "listar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "14-Atualizar lamina",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"cor\": 3,\r\n  \"padrao\": 7\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/lamina/patch/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "lamina",
+            "patch",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "15-Criar expedicao pra pedido",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"posicaoExpedicao\": 1,\r\n  \"entradaEm\": \"2025-06-01T10:00:00\",\r\n  \"saidaEm\": null,\r\n  \"ordemProducao\": \"OP001\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/expedicao/salvar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "expedicao",
+            "salvar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "16-Listar expedicoes",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/api/expedicao/listar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "expedicao",
+            "listar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "17-Atualizar expedicao",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"saidaEm\": \"2025-06-01T18:00:00\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/expedicao/patch/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "expedicao",
+            "patch",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "18-Deletar expedicao",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/expedicao/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "expedicao",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "19-Deletar bloco",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/api/bloco/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "bloco",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "20-Deletar pedido",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/api/pedidos/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "pedidos",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
