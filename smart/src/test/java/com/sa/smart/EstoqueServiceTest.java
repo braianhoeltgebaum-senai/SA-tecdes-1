@@ -1,5 +1,6 @@
 package com.sa.smart;
 
+<<<<<<< Updated upstream
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -16,6 +17,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+=======
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+>>>>>>> Stashed changes
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sa.smart.dto.EstoqueDTO;
@@ -23,10 +39,16 @@ import com.sa.smart.model.Estoque;
 import com.sa.smart.repository.EstoqueRepository;
 import com.sa.smart.service.EstoqueService;
 
+<<<<<<< Updated upstream
+=======
+import jakarta.persistence.EntityNotFoundException;
+
+>>>>>>> Stashed changes
 @ExtendWith(MockitoExtension.class)
 class EstoqueServiceTest {
 
     @Mock
+<<<<<<< Updated upstream
     private EstoqueRepository repository;
 
     @InjectMocks
@@ -173,4 +195,153 @@ class EstoqueServiceTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Estoque não encontrado");
     }
+=======
+private EstoqueRepository repository;
+
+@InjectMocks
+private EstoqueService estoqueService;
+
+@Test
+void deveCriarEstoque() {
+
+    Estoque estoque = new Estoque();
+    estoque.setId(1L);
+    estoque.setPosicao(10);
+    estoque.setCor(1);
+
+    EstoqueDTO dto = new EstoqueDTO(
+            null,
+            10,
+            1
+    );
+
+    when(repository.save(any(Estoque.class)))
+            .thenReturn(estoque);
+
+    EstoqueDTO resultado = estoqueService.criar(dto);
+
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.id());
+}
+
+@Test
+void deveListarEstoques() {
+
+    Estoque estoque = new Estoque();
+    estoque.setId(1L);
+    estoque.setPosicao(10);
+    estoque.setCor(1);
+
+    when(repository.findAll())
+            .thenReturn(List.of(estoque));
+
+    List<EstoqueDTO> resultado =
+            estoqueService.listar();
+
+    assertEquals(1, resultado.size());
+}
+
+@Test
+void deveBuscarEstoquePorId() {
+
+    Estoque estoque = new Estoque();
+    estoque.setId(1L);
+    estoque.setPosicao(10);
+    estoque.setCor(1);
+
+    when(repository.findById(1L))
+            .thenReturn(Optional.of(estoque));
+
+    EstoqueDTO resultado =
+            estoqueService.buscar(1L);
+
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.id());
+}
+
+@Test
+void deveLancarErroAoBuscarEstoqueInexistente() {
+
+    when(repository.findById(1L))
+            .thenReturn(Optional.empty());
+
+    assertThrows(
+            RuntimeException.class,
+            () -> estoqueService.buscar(1L)
+    );
+}
+
+@Test
+void deveAtualizarEstoqueComPut() {
+
+    Estoque estoque = new Estoque();
+    estoque.setId(1L);
+
+    when(repository.findById(1L))
+            .thenReturn(Optional.of(estoque));
+
+    when(repository.save(any()))
+            .thenReturn(estoque);
+
+    EstoqueDTO dto = new EstoqueDTO(
+            null,
+            20,
+            2
+    );
+
+    EstoqueDTO resultado =
+            estoqueService.put(1L, dto);
+
+    assertNotNull(resultado);
+}
+
+@Test
+void deveAtualizarEstoqueComPatch() {
+
+    Estoque estoque = new Estoque();
+    estoque.setId(1L);
+    estoque.setPosicao(10);
+    estoque.setCor(1);
+
+    when(repository.findById(1L))
+            .thenReturn(Optional.of(estoque));
+
+    when(repository.save(any()))
+            .thenReturn(estoque);
+
+    EstoqueDTO dto = new EstoqueDTO(
+            null,
+            20,
+            null
+    );
+
+    EstoqueDTO resultado =
+            estoqueService.patch(1L, dto);
+
+    assertNotNull(resultado);
+}
+
+@Test
+void deveDeletarEstoque() {
+
+    when(repository.existsById(1L))
+            .thenReturn(true);
+
+    estoqueService.deletar(1L);
+
+    verify(repository).deleteById(1L);
+} 
+
+@Test
+void deveLancarErroAoDeletarEstoqueInexistente() {
+
+    when(repository.existsById(1L))
+            .thenReturn(false);
+
+    assertThrows(
+            EntityNotFoundException.class,
+            () -> estoqueService.deletar(1L)
+    );
+}
+>>>>>>> Stashed changes
 }

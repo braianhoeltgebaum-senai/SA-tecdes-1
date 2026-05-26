@@ -8,6 +8,7 @@ class SmartApplicationTests {
 
 	@Test
 	void contextLoads() {
+	
 	}
 
 }

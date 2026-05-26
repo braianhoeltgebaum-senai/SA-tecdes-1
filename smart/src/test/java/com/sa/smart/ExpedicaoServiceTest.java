@@ -1,5 +1,6 @@
 package com.sa.smart;
 
+<<<<<<< Updated upstream
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,6 +20,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+=======
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+>>>>>>> Stashed changes
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sa.smart.dto.ExpedicaoDTO;
@@ -28,6 +43,11 @@ import com.sa.smart.repository.ExpedicaoRepository;
 import com.sa.smart.repository.PedidoRepository;
 import com.sa.smart.service.ExpedicaoService;
 
+<<<<<<< Updated upstream
+=======
+import jakarta.persistence.EntityNotFoundException;
+
+>>>>>>> Stashed changes
 @ExtendWith(MockitoExtension.class)
 class ExpedicaoServiceTest {
 
@@ -37,6 +57,7 @@ class ExpedicaoServiceTest {
     @Mock
     private PedidoRepository pedidoRepository;
 
+<<<<<<< Updated upstream
     @Mock
     private EntityManager entityManager;
 
@@ -237,3 +258,83 @@ class ExpedicaoServiceTest {
                 .hasMessageContaining("Pedido não encontrado");
     }
 }
+=======
+    @InjectMocks
+    private ExpedicaoService expedicaoService;
+
+    @Test
+void deveListarExpedicoes() {
+
+    Pedido pedido = new Pedido();
+    pedido.setOrdemProducao("OP001");
+
+    Expedicao expedicao = new Expedicao();
+    expedicao.setId(1L);
+    expedicao.setPedido(pedido);
+
+    when(expedicaoRepository.findAll())
+            .thenReturn(List.of(expedicao));
+
+    List<ExpedicaoDTO> resultado =
+            expedicaoService.listar();
+
+    assertEquals(1, resultado.size());
+}
+
+@Test
+void deveBuscarExpedicaoPorId() {
+
+    Pedido pedido = new Pedido();
+    pedido.setOrdemProducao("OP001");
+
+    Expedicao expedicao = new Expedicao();
+    expedicao.setId(1L);
+    expedicao.setPedido(pedido);
+
+    when(expedicaoRepository.findById(1L))
+            .thenReturn(Optional.of(expedicao));
+
+    ExpedicaoDTO resultado =
+            expedicaoService.buscar(1L);
+
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.id());
+}
+
+@Test
+void deveLancarErroAoBuscarExpedicaoInexistente() {
+
+    when(expedicaoRepository.findById(1L))
+            .thenReturn(Optional.empty());
+
+    assertThrows(
+            RuntimeException.class,
+            () -> expedicaoService.buscar(1L)
+    );
+}
+
+@Test
+void deveDeletarExpedicao() {
+
+    when(expedicaoRepository.existsById(1L))
+            .thenReturn(true);
+
+    expedicaoService.deletar(1L);
+
+    verify(expedicaoRepository)
+            .deleteById(1L);
+}
+
+@Test
+void deveLancarErroAoDeletarExpedicaoInexistente() {
+
+    when(expedicaoRepository.existsById(1L))
+            .thenReturn(false);
+
+    assertThrows(
+            EntityNotFoundException.class,
+            () -> expedicaoService.deletar(1L)
+    );
+}
+}
+>>>>>>> Stashed changes

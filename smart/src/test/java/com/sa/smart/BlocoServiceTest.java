@@ -1,5 +1,6 @@
 package com.sa.smart;
 
+<<<<<<< Updated upstream
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,11 +16,30 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+=======
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+>>>>>>> Stashed changes
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sa.smart.dto.BlocoDTO;
 import com.sa.smart.enums.EnumCorBloco;
+<<<<<<< Updated upstream
 import com.sa.smart.enums.EnumTipoPedido;
+=======
+>>>>>>> Stashed changes
 import com.sa.smart.model.Bloco;
 import com.sa.smart.model.Estoque;
 import com.sa.smart.model.Pedido;
@@ -40,6 +60,7 @@ class BlocoServiceTest {
     @Mock
     private EstoqueRepository estoqueRepository;
 
+<<<<<<< Updated upstream
     @InjectMocks
     private BlocoService blocoService;
 
@@ -67,16 +88,44 @@ class BlocoServiceTest {
         bloco.setCriadoEm(LocalDateTime.now());
 
         dto = new BlocoDTO(
+=======
+    /**
+     *
+     */
+    @InjectMocks
+    private BlocoService blocoService;
+
+    @Test
+    void deveCriarBloco() {
+
+        Pedido pedido = new Pedido();
+        pedido.setIdPedido(1L);
+
+        Estoque estoque = new Estoque();
+        estoque.setId(1L);
+        estoque.setCor(1);
+
+        Bloco bloco = new Bloco();
+        bloco.setIdBloco(1L);
+        bloco.setPedido(pedido);
+        bloco.setEstoque(estoque);
+        bloco.setCorBloco(1);
+
+        BlocoDTO dto = new BlocoDTO(
+>>>>>>> Stashed changes
                 null,
                 EnumCorBloco.PRETO,
                 null,
                 1L,
                 1L
         );
+<<<<<<< Updated upstream
     }
 
     @Test
     void deveCriarBloco() {
+=======
+>>>>>>> Stashed changes
 
         when(pedidoRepository.findById(1L))
                 .thenReturn(Optional.of(pedido));
@@ -89,6 +138,7 @@ class BlocoServiceTest {
 
         BlocoDTO resultado = blocoService.criar(dto);
 
+<<<<<<< Updated upstream
         assertThat(resultado).isNotNull();
         assertThat(resultado.corBloco())
                 .isEqualTo(EnumCorBloco.PRETO);
@@ -245,4 +295,174 @@ class BlocoServiceTest {
         verify(pedidoRepository)
                 .save(any(Pedido.class));
     }
+=======
+        assertNotNull(resultado);
+    }
+
+    
+    @Test
+void deveLancarErroQuandoCorForNula() {
+
+    BlocoDTO dto = new BlocoDTO(
+            null,
+            null,
+            null,
+            1L,
+            1L
+    );
+
+    RuntimeException ex = assertThrows(
+            RuntimeException.class,
+            () -> blocoService.criar(dto)
+    );
+
+    assertEquals(
+            "Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul",
+            ex.getMessage()
+    );
+}
+
+@Test
+void deveLancarErroQuandoPedidoNaoExistir() {
+
+    when(pedidoRepository.findById(1L))
+            .thenReturn(Optional.empty());
+
+    BlocoDTO dto = new BlocoDTO(
+            null,
+            EnumCorBloco.PRETO,
+            null,
+            1L,
+            1L
+    );
+
+    RuntimeException exception = assertThrows(
+            RuntimeException.class,
+            () -> blocoService.criar(dto)
+    );
+
+    assertTrue(exception.getMessage()
+            .contains("Pedido não encontrado"));
+}
+
+@Test
+void deveBuscarBlocoPorId() {
+
+    Pedido pedido = new Pedido();
+    pedido.setIdPedido(1L);
+
+    Estoque estoque = new Estoque();
+    estoque.setId(1L);
+
+    Bloco bloco = new Bloco();
+    bloco.setIdBloco(1L);
+    bloco.setPedido(pedido);
+    bloco.setEstoque(estoque);
+    bloco.setCorBloco(1);
+
+    when(blocoRepository.findById(1L))
+            .thenReturn(Optional.of(bloco));
+
+    BlocoDTO resultado = blocoService.buscar(1L);
+
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.id());
+}
+@Test
+void deveDeletarBloco() {
+
+    Bloco bloco = new Bloco();
+    bloco.setIdBloco(1L);
+
+    when(blocoRepository.findById(1L))
+            .thenReturn(Optional.of(bloco));
+
+    blocoService.deletar(1L);
+
+    verify(blocoRepository).delete(bloco);
+}
+
+@Test
+void deveLancarErroQuandoEstoqueNaoExistir() {
+
+    Pedido pedido = new Pedido();
+    pedido.setIdPedido(1L);
+
+    when(pedidoRepository.findById(1L))
+            .thenReturn(Optional.of(pedido));
+
+    when(estoqueRepository.findById(1L))
+            .thenReturn(Optional.empty());
+
+    BlocoDTO dto = new BlocoDTO(
+            null,
+            EnumCorBloco.PRETO,
+            null,
+            1L,
+            1L
+    );
+
+    assertThrows(
+            RuntimeException.class,
+            () -> blocoService.criar(dto)
+    );
+}
+@Test
+
+void deveLancarErroQuandoEstoqueEstiverVazio() {
+
+    Pedido pedido = new Pedido();
+    pedido.setIdPedido(1L);
+
+    Estoque estoque = new Estoque();
+    estoque.setId(1L);
+    estoque.setCor(0);
+
+    when(pedidoRepository.findById(1L))
+            .thenReturn(Optional.of(pedido));
+
+    when(estoqueRepository.findById(1L))
+            .thenReturn(Optional.of(estoque));
+
+    BlocoDTO dto = new BlocoDTO(
+            null,
+            EnumCorBloco.PRETO,
+            null,
+            1L,
+            1L
+    );
+
+    assertThrows(
+            RuntimeException.class,
+            () -> blocoService.criar(dto)
+    );
+}
+
+@Test
+void deveLancarErroAoBuscarBlocoInexistente() {
+
+    when(blocoRepository.findById(1L))
+            .thenReturn(Optional.empty());
+
+    assertThrows(
+            RuntimeException.class,
+            () -> blocoService.buscar(1L)
+    );
+}
+
+@Test
+void deveListarBlocos() {
+
+    Bloco bloco = new Bloco();
+    bloco.setIdBloco(1L);
+    bloco.setCorBloco(1);
+
+    when(blocoRepository.findAll())
+            .thenReturn(List.of(bloco));
+
+    var resultado = blocoService.listar();
+
+    assertEquals(1, resultado.size());
+}
+>>>>>>> Stashed changes
 }

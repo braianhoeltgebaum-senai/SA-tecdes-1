@@ -1,5 +1,6 @@
 package com.sa.smart;
 
+<<<<<<< Updated upstream
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +21,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+=======
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+>>>>>>> Stashed changes
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sa.smart.dto.LaminaDTO;
@@ -29,6 +45,11 @@ import com.sa.smart.repository.BlocoRepository;
 import com.sa.smart.repository.LaminaRepository;
 import com.sa.smart.service.LaminaService;
 
+<<<<<<< Updated upstream
+=======
+import jakarta.persistence.EntityNotFoundException;
+
+>>>>>>> Stashed changes
 @ExtendWith(MockitoExtension.class)
 class LaminaServiceTest {
 
@@ -38,6 +59,7 @@ class LaminaServiceTest {
     @Mock
     private BlocoRepository blocoRepository;
 
+<<<<<<< Updated upstream
     @Mock
     private EntityManager entityManager;
 
@@ -274,4 +296,135 @@ class LaminaServiceTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("entre 1 e 3");
     }
+=======
+    @InjectMocks
+    private LaminaService laminaService;
+    
+
+    /**
+     * 
+     */
+    @Test
+void deveBuscarLaminaPorId() {
+
+    Bloco bloco = new Bloco();
+    bloco.setIdBloco(1L);
+
+    Lamina lamina = new Lamina();
+    lamina.setId(1L);
+    lamina.setCor(1);
+    lamina.setPadrao(5);
+    lamina.setPosicaoNoBloco(1);
+    lamina.setBloco(bloco);
+
+    when(laminaRepository.findById(1L))
+            .thenReturn(Optional.of(lamina));
+
+    LaminaDTO resultado = laminaService.buscar(1L);
+
+    assertNotNull(resultado);
+    assertEquals(1L, resultado.id());
+}
+
+@Test
+void deveLancarErroAoBuscarLaminaInexistente() {
+
+    when(laminaRepository.findById(1L))
+            .thenReturn(Optional.empty());
+
+    assertThrows(
+            RuntimeException.class,
+            () -> laminaService.buscar(1L)
+    );
+}
+@Test
+void deveListarLaminas() {
+
+    Bloco bloco = new Bloco();
+    bloco.setIdBloco(1L);
+
+    Lamina lamina = new Lamina();
+    lamina.setId(1L);
+    lamina.setBloco(bloco);
+
+    when(laminaRepository.findAll())
+            .thenReturn(List.of(lamina));
+
+    List<LaminaDTO> resultado = laminaService.listar();
+
+    assertEquals(1, resultado.size());
+}
+@Test
+void deveAtualizarLaminaComPatch() {
+
+    Bloco bloco = new Bloco();
+    bloco.setIdBloco(1L);
+
+    Lamina lamina = new Lamina();
+    lamina.setId(1L);
+    lamina.setCor(1);
+    lamina.setPadrao(5);
+    lamina.setPosicaoNoBloco(1);
+    lamina.setBloco(bloco);
+
+    when(laminaRepository.findById(1L))
+            .thenReturn(Optional.of(lamina));
+
+    when(laminaRepository.save(any(Lamina.class)))
+            .thenReturn(lamina);
+
+    LaminaDTO dto = new LaminaDTO(
+            null,
+            2,
+            7,
+            null,
+            null
+    );
+
+    LaminaDTO resultado = laminaService.patch(1L, dto);
+
+    assertNotNull(resultado);
+}
+@Test
+void deveLancarErroAoFazerPatchEmLaminaInexistente() {
+
+    when(laminaRepository.findById(1L))
+            .thenReturn(Optional.empty());
+
+    LaminaDTO dto = new LaminaDTO(
+            null,
+            2,
+            7,
+            null,
+            null
+    );
+
+    assertThrows(
+            RuntimeException.class,
+            () -> laminaService.patch(1L, dto)
+    );
+}
+@Test
+void deveDeletarLamina() {
+
+    when(laminaRepository.existsById(1L))
+            .thenReturn(true);
+
+    laminaService.deletar(1L);
+
+    verify(laminaRepository).deleteById(1L);
+}
+@Test
+void deveLancarErroAoDeletarLaminaInexistente() {
+
+    when(laminaRepository.existsById(1L))
+            .thenReturn(false);
+
+    assertThrows(
+            EntityNotFoundException.class,
+            () -> laminaService.deletar(1L)
+    );
+} 
+
+>>>>>>> Stashed changes
 }
