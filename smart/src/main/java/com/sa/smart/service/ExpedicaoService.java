@@ -20,15 +20,19 @@ public class ExpedicaoService {
 
     private final ExpedicaoRepository expedicaoRepository;
     private final PedidoRepository pedidoRepository;
+    private final EntityManager entityManager;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    public ExpedicaoService(
+            ExpedicaoRepository expedicaoRepository,
+            PedidoRepository pedidoRepository,
+            EntityManager entityManager) {
 
-    public ExpedicaoService(ExpedicaoRepository expedicaoRepository,
-                            PedidoRepository pedidoRepository) {
         this.expedicaoRepository = expedicaoRepository;
         this.pedidoRepository = pedidoRepository;
+        this.entityManager = entityManager;
     }
+
+    // métodos...
 
     @Transactional
     public ExpedicaoDTO criar(ExpedicaoDTO dto) {
