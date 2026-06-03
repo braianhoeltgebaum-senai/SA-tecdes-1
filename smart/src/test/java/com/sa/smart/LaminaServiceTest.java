@@ -77,7 +77,7 @@ class LaminaServiceTest {
         lamina.setId(1L);
         lamina.setCor(1);
         lamina.setPadrao(5);
-        lamina.setPosicao(1);
+        lamina.setPosicaoNoBloco(1);
         lamina.setBloco(bloco);
 
 
