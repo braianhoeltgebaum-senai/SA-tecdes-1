@@ -1,5 +1,7 @@
 package com.sa.smart.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,40 +27,11 @@ public class Lamina {
     private Long id;
 
     private Integer cor;
-    private Integer padrao;
+    private Integer padrao; // <-- Garanta que está como Integer aqui!
     private Integer posicaoNoBloco;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "bloco_id_bloco", nullable = false)
     private Bloco bloco;
 }
-/*package com.sa.smart.model;
-
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Lamina {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idLamina;
-
-    @ManyToOne
-    @JoinColumn(name = "bloco_id", nullable = false)
-    private Bloco bloco;
-
-    @Column(nullable = false)
-    private Integer cor;
-
-    @Column(nullable = false)
-    private String desenho;
-
-    @Column(nullable = false)
-    private Integer posicao;
-} */

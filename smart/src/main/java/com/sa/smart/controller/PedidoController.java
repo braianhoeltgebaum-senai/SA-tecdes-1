@@ -2,6 +2,9 @@ package com.sa.smart.controller;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,12 +32,18 @@ public class PedidoController {
     }
 
     @PostMapping
-    public Pedido criar(@RequestBody Pedido pedido) {
-        return pedidoService.criarPedido(pedido);
+    public ResponseEntity<?> criar(@RequestBody Pedido pedido) {
+        try {
+            Pedido novoPedido = pedidoService.criarPedido(pedido);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
+        } catch (DataIntegrityViolationException e) {
+            // Retorna o HTTP 409 (Conflito) junto com um objeto de erro amigável em formato JSON
+            return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body("{\"erro\": \"A Ordem de Produção '" + pedido.getOrdemProducao() + "' já está cadastrada.\"}");
+        }
     }
-
 }
-
 /* 
 package com.sa.smart.controller;
 

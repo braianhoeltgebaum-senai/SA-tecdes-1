@@ -2,269 +2,353 @@
 <html lang="pt-BR">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Factory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Factory</title>
 
-<style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f4f8;
+            padding: 40px 20px;
+            color: #333;
+        }
 
-body{
-    font-family: Arial;
-    background: #f4f4f4;
-    padding: 40px;
-}
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1e293b;
+        }
 
-h1{
-    text-align: center;
-    margin-bottom: 30px;
-}
+        .container {
+            display: flex;
+            justify-content: center;
+        }
 
-.container{
-    display: flex;
-    justify-content: center;
-}
+        .Pedido {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
 
-.Pedido{
-    width: 900px;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-}
+        /* Configuração de Labels e Títulos de seções */
+        .field-group {
+            margin-bottom: 15px;
+        }
 
-input, select{
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
+        .field-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 4px;
+            display: block;
+        }
 
-button{
-    margin-top: 20px;
-    padding: 12px;
-    border: none;
-    background: black;
-    color: white;
-    cursor: pointer;
-    border-radius: 8px;
-}
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
 
-.bloco{
-    margin-top: 25px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background: #fafafa;
-}
+        input:focus, select:focus {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
 
-.lamina{
-    margin-top: 15px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background: white;
-}
+        /* Estilo dos Blocos */
+        .bloco {
+            margin-top: 25px;
+            padding: 5px 0;
+        }
 
-.laminasContainer{
-    margin-top: 10px;
-}
+        .bloco-title {
+            font-size: 1.1rem;
+            color: #1e3a8a;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
 
-</style>
+        /* Seção de Lâminas indicador azul */
+        .laminas-header {
+            color: #2563eb;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
+        .laminasContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .lamina {
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .lamina-title {
+            font-size: 0.9rem;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Botões */
+        .btn-add-lamina {
+            background: transparent;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-add-lamina:hover {
+            background: #eff6ff;
+        }
+
+        .btn-salvar {
+            margin-top: 30px;
+            padding: 12px 24px;
+            border: none;
+            background: #1d3557;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-salvar:hover {
+            background: #15263f;
+        }
+
+        #resultadoPedido {
+            margin-top: 20px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>Criar Pedido</h1>
+    <h1>Criar Pedido</h1>
 
-<div class="container">
+    <div class="container">
+        <div class="Pedido">
+            <form id="formPedido">
+                
+                <div class="field-group">
+                    <label class="field-label" for="ordemProducao">Ordem de Produção</label>
+                    <input type="text" id="ordemProducao">
+                </div>
 
-<div class="Pedido">
+                <div class="field-group">
+                    <label class="field-label" for="tipoPedido">Tipo do Pedido</label>
+                    <select id="tipoPedido">
+                        <option value="1">1 Bloco</option>
+                        <option value="2">2 Blocos</option>
+                        <option value="3">3 Blocos</option>
+                    </select>
+                </div>
 
-<form id="formPedido">
+                <div class="field-group">
+                    <label class="field-label">Cor da Tampa</label>
+                    <select class="corTampa">
+                        <option value="1">Vermelho</option>
+                        <option value="2">Azul</option>
+                        <option value="3">Preto</option>
+                    </select>
+                </div>
 
-<p>Ordem de Produção</p>
-<input type="text" id="ordemProducao">
+                <div id="blocosContainer"></div>
 
-<p>Tipo do Pedido</p>
-<select id="tipoPedido">
-    <option value="1">1 Bloco</option>
-    <option value="2">2 Blocos</option>
-    <option value="3">3 Blocos</option>
-</select>
+                <button type="submit" class="btn-salvar">Salvar Pedido</button>
+            </form>
 
-<p>Cor da Tampa</p>
-<select class="corTampa">
-    <option value="1">Vermelho</option>
-    <option value="2">Azul</option>
-    <option value="3">Preto</option>
-</select>
-
-<div id="blocosContainer"></div>
-
-<button type="submit">Salvar Pedido</button>
-
-</form>
-
-<div id="resultadoPedido"></div>
-
-</div>
-
-</div>
-
-<script>
-
-const API = "http://localhost:8088";
-
-const tipoPedido = document.getElementById("tipoPedido");
-const blocosContainer = document.getElementById("blocosContainer");
-
-criarBlocos(1);
-
-tipoPedido.addEventListener("change", () => {
-    criarBlocos(Number(tipoPedido.value));
-});
-
-function criarBlocos(qtd){
-
-    blocosContainer.innerHTML = "";
-
-    for(let i = 1; i <= qtd; i++){
-
-        blocosContainer.innerHTML += `
-        <div class="bloco">
-
-            <h3>Bloco ${i}</h3>
-
-            <p>Cor do Bloco</p>
-            <select class="corBloco">
-                <option value="1">Preto</option>
-                <option value="2">Vermelho</option>
-                <option value="3">Azul</option>
-            </select>
-
-            <div class="laminasContainer"></div>
-
-            <button type="button" onclick="adicionarLamina(this)">
-                + Lâmina
-            </button>
-
+            <div id="resultadoPedido"></div>
         </div>
-        `;
-
-        // cria 1 lâmina automaticamente
-        const bloco = blocosContainer.querySelectorAll(".bloco")[i - 1];
-        adicionarLamina(bloco.querySelector("button"));
-    }
-}
-
-function adicionarLamina(btn){
-
-    const bloco = btn.closest(".bloco");
-    const container = bloco.querySelector(".laminasContainer");
-
-    const total = container.querySelectorAll(".lamina").length;
-
-    if(total >= 3){
-        alert("Máximo de 3 lâminas por bloco");
-        return;
-    }
-
-    container.innerHTML += `
-    <div class="lamina">
-
-        <h4>Lâmina ${total + 1}</h4>
-
-        <p>Cor</p>
-        <select class="corLamina">
-            <option value="1">Vermelho</option>
-            <option value="2">Azul</option>
-            <option value="3">Amarelo</option>
-            <option value="4">Verde</option>
-            <option value="5">Preto</option>
-            <option value="6">Branco</option>
-        </select>
-
-        <p>Padrão</p>
-        <select class="padraoLamina">
-            <option value="Nenhum">Nenhum</option>
-            <option value="Casa">Casa</option>
-            <option value="Navio">Navio</option>
-            <option value="Estrela">Estrela</option>
-        </select>
-
-        <p>Posição</p>
-        <select class="posicaoLamina">
-            <option value="1">Esquerda</option>
-            <option value="2">Frente</option>
-            <option value="3">Direita</option>
-        </select>
-
     </div>
-    `;
-}
 
-document.getElementById("formPedido")
-.addEventListener("submit", async (e) => {
+    <script>
+        const API = "http://localhost:8088";
 
-    e.preventDefault();
+        const tipoPedido = document.getElementById("tipoPedido");
+        const blocosContainer = document.getElementById("blocosContainer");
 
-    const blocos = [];
+        // Inicializa o primeiro bloco
+        criarBlocos(1);
 
-    document.querySelectorAll(".bloco").forEach(bloco => {
+        tipoPedido.addEventListener("change", () => {
+            criarBlocos(Number(tipoPedido.value));
+        });
 
-        const laminas = [];
+        function criarBlocos(qtd) {
+            blocosContainer.innerHTML = "";
 
-        bloco.querySelectorAll(".lamina").forEach(l => {
+            for (let i = 1; i <= qtd; i++) {
+                blocosContainer.innerHTML += `
+                <div class="bloco">
+                    <div class="bloco-title">Bloco ${i}</div>
 
-            laminas.push({
-                cor: Number(l.querySelector(".corLamina").value),
-                padrao: l.querySelector(".padraoLamina").value,
-                posicaoNoBloco: Number(l.querySelector(".posicaoLamina").value)
+                    <div class="field-group">
+                        <label class="field-label">Cor do Bloco</label>
+                        <select class="corBloco">
+                            <option value="1">Preto</option>
+                            <option value="2">Vermelho</option>
+                            <option value="3">Azul</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">ID do Estoque</label>
+                        <input type="number" class="estoqueId" value="${i}">
+                    </div>
+
+                    <div class="laminas-header">▾ Lâminas (máx. 3)</div>
+
+                    <div class="laminasContainer"></div>
+
+                    <button type="button" class="btn-add-lamina" onclick="adicionarLamina(this)">
+                        + Lâmina
+                    </button>
+                </div>
+                `;
+
+                // Cria 1 lâmina automaticamente por padrão
+                const bloco = blocosContainer.querySelectorAll(".bloco")[i - 1];
+                adicionarLamina(bloco.querySelector(".btn-add-lamina"));
+            }
+        }
+
+        function adicionarLamina(btn) {
+            const bloco = btn.closest(".bloco");
+            const container = bloco.querySelector(".laminasContainer");
+            const total = container.querySelectorAll(".lamina").length;
+
+            if (total >= 3) {
+                alert("Máximo de 3 lâminas por bloco");
+                return;
+            }
+
+            const divLamina = document.createElement("div");
+            divLamina.className = "lamina";
+            divLamina.innerHTML = `
+                <div class="lamina-title">Lâmina ${total + 1}</div>
+
+                <div class="field-group">
+                    <label class="field-label">Cor</label>
+                    <select class="corLamina">
+                        <option value="1">Vermelho</option>
+                        <option value="2">Azul</option>
+                        <option value="3">Amarelo</option>
+                        <option value="4">Verde</option>
+                        <option value="5">Preto</option>
+                        <option value="6">Branco</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Padrão</label>
+                    <select class="padraoLamina">
+                        <option value="0">Nenhum</option>
+                        <option value="1">Casa</option>
+                        <option value="2">Navio</option>
+                        <option value="3">Estrela</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Posição no Bloco</label>
+                    <select class="posicaoLamina">
+                        <option value="1">Esquerda</option>
+                        <option value="2">Frente</option>
+                        <option value="3">Direita</option>
+                    </select>
+                </div>
+            `;
+            container.appendChild(divLamina);
+        }
+
+        document.getElementById("formPedido").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const blocos = [];
+
+            document.querySelectorAll(".bloco").forEach(bloco => {
+                const laminas = [];
+
+                bloco.querySelectorAll(".lamina").forEach(l => {
+                    laminas.push({
+                        cor: Number(l.querySelector(".corLamina").value),
+                        // Convertendo para Number para casar com o tipo Integer da classe Lamina
+                        padrao: Number(l.querySelector(".padraoLamina").value), 
+                        posicaoNoBloco: Number(l.querySelector(".posicaoLamina").value)
+                    });
+                });
+
+                blocos.push({
+                    corBloco: Number(bloco.querySelector(".corBloco").value),
+                    // AJUSTE: Enviando como um objeto estruturado para corresponder à entidade 'Estoque' dentro de Bloco
+                    estoque: {
+                        id: Number(bloco.querySelector(".estoqueId").value)
+                    },
+                    laminas: laminas
+                });
             });
 
+            const pedido = {
+                ordemProducao: document.getElementById("ordemProducao").value,
+                tipoPedido: Number(tipoPedido.value),
+                corTampa: Number(document.querySelector(".corTampa").value),
+                blocos: blocos
+            };
+
+            try {
+                const response = await fetch(API + "/pedidos", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(pedido)
+                });
+
+                const data = await response.json();
+                document.getElementById("resultadoPedido").innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (err) {
+                console.error(err);
+                document.getElementById("resultadoPedido").innerHTML = `<span style="color:red;">Erro ao salvar o pedido.</span>`;
+            }
         });
-
-        blocos.push({
-            corBloco: Number(bloco.querySelector(".corBloco").value),
-            laminas: laminas
-        });
-
-    });
-
-    const pedido = {
-        ordemProducao: document.getElementById("ordemProducao").value,
-        tipoPedido: Number(tipoPedido.value),
-        corTampa: Number(document.querySelector(".corTampa").value),
-        blocos: blocos
-    };
-
-    try{
-
-        const response = await fetch(API + "/pedidos", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(pedido)
-        });
-
-        const data = await response.json();
-
-        document.getElementById("resultadoPedido").innerHTML =
-        `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-
-    }catch(err){
-        console.error(err);
-    }
-
-});
-
-</script>
-
+    </script>
 </body>
+
 </html>
