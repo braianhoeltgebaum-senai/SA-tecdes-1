@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Factory</title>
+
+<style>
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial;
+    background: #f4f4f4;
+    padding: 40px;
+}
+
+h1{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+.Pedido{
+    width: 900px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+input, select{
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+button{
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    background: black;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.bloco{
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.lamina{
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: white;
+}
+
+.laminasContainer{
+    margin-top: 10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Criar Pedido</h1>
+
+<div class="container">
+
+<div class="Pedido">
+
+<form id="formPedido">
+
+<p>Ordem de Produção</p>
+<input type="text" id="ordemProducao">
+
+<p>Tipo do Pedido</p>
+<select id="tipoPedido">
+    <option value="1">1 Bloco</option>
+    <option value="2">2 Blocos</option>
+    <option value="3">3 Blocos</option>
+</select>
+
+<p>Cor da Tampa</p>
+<select class="corTampa">
+    <option value="1">Vermelho</option>
+    <option value="2">Azul</option>
+    <option value="3">Preto</option>
+</select>
+
+<div id="blocosContainer"></div>
+
+<button type="submit">Salvar Pedido</button>
+
+</form>
+
+<div id="resultadoPedido"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const API = "http://localhost:8088";
+
+const tipoPedido = document.getElementById("tipoPedido");
+const blocosContainer = document.getElementById("blocosContainer");
+
+criarBlocos(1);
+
+tipoPedido.addEventListener("change", () => {
+    criarBlocos(Number(tipoPedido.value));
+});
+
+function criarBlocos(qtd){
+
+    blocosContainer.innerHTML = "";
+
+    for(let i = 1; i <= qtd; i++){
+
+        blocosContainer.innerHTML += `
+        <div class="bloco">
+
+            <h3>Bloco ${i}</h3>
+
+            <p>Cor do Bloco</p>
+            <select class="corBloco">
+                <option value="1">Preto</option>
+                <option value="2">Vermelho</option>
+                <option value="3">Azul</option>
+            </select>
+
+            <div class="laminasContainer"></div>
+
+            <button type="button" onclick="adicionarLamina(this)">
+                + Lâmina
+            </button>
+
+        </div>
+        `;
+
+        // cria 1 lâmina automaticamente
+        const bloco = blocosContainer.querySelectorAll(".bloco")[i - 1];
+        adicionarLamina(bloco.querySelector("button"));
+    }
+}
+
+function adicionarLamina(btn){
+
+    const bloco = btn.closest(".bloco");
+    const container = bloco.querySelector(".laminasContainer");
+
+    const total = container.querySelectorAll(".lamina").length;
+
+    if(total >= 3){
+        alert("Máximo de 3 lâminas por bloco");
+        return;
+    }
+
+    container.innerHTML += `
+    <div class="lamina">
+
+        <h4>Lâmina ${total + 1}</h4>
+
+        <p>Cor</p>
+        <select class="corLamina">
+            <option value="1">Vermelho</option>
+            <option value="2">Azul</option>
+            <option value="3">Amarelo</option>
+            <option value="4">Verde</option>
+            <option value="5">Preto</option>
+            <option value="6">Branco</option>
+        </select>
+
+        <p>Padrão</p>
+        <select class="padraoLamina">
+            <option value="Nenhum">Nenhum</option>
+            <option value="Casa">Casa</option>
+            <option value="Navio">Navio</option>
+            <option value="Estrela">Estrela</option>
+        </select>
+
+        <p>Posição</p>
+        <select class="posicaoLamina">
+            <option value="1">Esquerda</option>
+            <option value="2">Frente</option>
+            <option value="3">Direita</option>
+        </select>
+
+    </div>
+    `;
+}
+
+document.getElementById("formPedido")
+.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const blocos = [];
+
+    document.querySelectorAll(".bloco").forEach(bloco => {
+
+        const laminas = [];
+
+        bloco.querySelectorAll(".lamina").forEach(l => {
+
+            laminas.push({
+                cor: Number(l.querySelector(".corLamina").value),
+                padrao: l.querySelector(".padraoLamina").value,
+                posicaoNoBloco: Number(l.querySelector(".posicaoLamina").value)
+            });
+
+        });
+
+        blocos.push({
+            corBloco: Number(bloco.querySelector(".corBloco").value),
+            laminas: laminas
+        });
+
+    });
+
+    const pedido = {
+        ordemProducao: document.getElementById("ordemProducao").value,
+        tipoPedido: Number(tipoPedido.value),
+        corTampa: Number(document.querySelector(".corTampa").value),
+        blocos: blocos
+    };
+
+    try{
+
+        const response = await fetch(API + "/pedidos", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(pedido)
+        });
+
+        const data = await response.json();
+
+        document.getElementById("resultadoPedido").innerHTML =
+        `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+    }catch(err){
+        console.error(err);
+    }
+
+});
+
+</script>
+
+</body>
+</html>
