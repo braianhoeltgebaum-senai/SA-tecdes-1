@@ -25,14 +25,12 @@ public class EstoqueService {
         Estoque e = new Estoque();
 
         e.setPosicao(dto.posicao());
-        e.setCor(dto.cor());
 
         Estoque saved = repository.save(e);
 
         return new EstoqueDTO(
                 saved.getId(),
-                saved.getPosicao(),
-                saved.getCor()
+                saved.getPosicao()
         );
     }
 
@@ -42,8 +40,7 @@ public class EstoqueService {
         return repository.findAll().stream()
                 .map(e -> new EstoqueDTO(
                         e.getId(),
-                        e.getPosicao(),
-                        e.getCor()
+                        e.getPosicao()
                 ))
                 .toList();
     }
@@ -57,8 +54,7 @@ public class EstoqueService {
 
         return new EstoqueDTO(
                 e.getId(),
-                e.getPosicao(),
-                e.getCor()
+                e.getPosicao()
         );
     }
 
@@ -70,14 +66,12 @@ public class EstoqueService {
                         new RuntimeException("Estoque não encontrado"));
 
         e.setPosicao(dto.posicao());
-        e.setCor(dto.cor());
 
         Estoque updated = repository.save(e);
 
         return new EstoqueDTO(
                 updated.getId(),
-                updated.getPosicao(),
-                updated.getCor()
+                updated.getPosicao()
         );
     }
 
@@ -92,16 +86,12 @@ public class EstoqueService {
             e.setPosicao(dto.posicao());
         }
 
-        if (dto.cor() != null) {
-            e.setCor(dto.cor());
-        }
 
         Estoque updated = repository.save(e);
 
         return new EstoqueDTO(
                 updated.getId(),
-                updated.getPosicao(),
-                updated.getCor()
+                updated.getPosicao()
         );
     }
 

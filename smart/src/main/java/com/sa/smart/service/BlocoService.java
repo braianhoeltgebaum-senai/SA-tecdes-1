@@ -43,11 +43,7 @@ public class BlocoService {
         }
         Estoque estoque = estoqueRepository.findById(dto.estoqueId())
                 .orElseThrow(() -> new RuntimeException("Posição de estoque não encontrada com ID: " + dto.estoqueId()));
-
-        if (estoque.getCor() == 0) {
-            throw new RuntimeException("Posição de estoque vazia. Não é possível adicionar bloco.");
-        }
-
+                
         Bloco bloco = new Bloco();
         bloco.setPedido(pedido);
         bloco.setEstoque(estoque);
@@ -166,7 +162,7 @@ public class BlocoService {
         List<Bloco> blocos = blocoRepository.findAll();
         List<BlocoDTO> lista = new ArrayList<>();
         for (Bloco b : blocos) {
-            if (b.getEstoque() != null && b.getEstoque().getCor() != 0) {
+            if (b.getEstoque() != null) {
                 lista.add(new BlocoDTO(
                     b.getIdBloco(),
                     EnumCorBloco.fromCodigo(b.getCorBloco()),

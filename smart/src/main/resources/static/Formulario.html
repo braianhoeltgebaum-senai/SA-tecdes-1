@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Factory - Novo Pedido</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 40px;
+    }
+    h1 { text-align: center; margin-bottom: 30px; }
+    .container { display: flex; justify-content: center; }
+    .pedido-form {
+        width: 1000px;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+    button {
+        padding: 12px 20px;
+        border: none;
+        background: #2c3e50;
+        color: white;
+        cursor: pointer;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+    button:hover { background: #1e2b38; }
+    .bloco {
+        margin-top: 25px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fafafa;
+    }
+    .lamina {
+        margin-top: 15px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: white;
+    }
+    .laminasContainer { margin-top: 10px; }
+    .estoque-info { font-size: 12px; color: #555; margin-top: 5px; }
+    .error-msg { color: #c0392b; background: #f9e6e6; padding: 10px; border-radius: 6px; margin-top: 15px; }
+</style>
+</head>
+<body>
+
+<h1>🔄 Criar Pedido com Estoque</h1>
+<div class="container">
+    <div class="pedido-form">
+        <form id="formPedido">
+            <label>Ordem de Produção</label>
+            <input type="text" id="ordemProducao" required>
+
+            <label>Tipo do Pedido</label>
+            <select id="tipoPedido">
+                <option value="1">1 Bloco (Simples)</option>
+                <option value="2">2 Blocos (Duplo)</option>
+                <option value="3">3 Blocos (Triplo)</option>
+            </select>
+
+            <label>Cor da Tampa</label>
+            <select id="corTampa">
+                <option value="1">Preto</option>
+                <option value="2">Vermelho</option>
+                <option value="3">Azul</option>
+            </select>
+
+            <div id="blocosContainer"></div>
+
+            <button type="submit">📦 Enviar Pedido</button>
+        </form>
+        <div id="resultadoPedido"></div>
+    </div>
+</div>
+
+<script>
+    const API = "http://localhost:8088";
+    let estoqueDisponivel = []; // armazena todas as posições de estoque
+
+    // Carrega todas as posições de estoque (com cor != 0)
+    async function carregarEstoque() {
+        try {
+            const res = await fetch(`${API}/api/estoque/listar`);
+            if (!res.ok) throw new Error("Erro ao carregar estoque");
+            const data = await res.json();
+            // filtra apenas posições ocupadas (cor 1,2,3)
+            estoqueDisponivel = data.filter(item => item.cor > 0);
+            console.log("Estoque disponível:", estoqueDisponivel);
+        } catch (err) {
+            console.error(err);
+            alert("Não foi possível carregar as posições de estoque. O pedido não poderá ser salvo.");
+        }
+    }
+
+    function criarBlocos(qtd) {
+        const container = document.getElementById("blocosContainer");
+        container.innerHTML = "";
+        for (let i = 1; i <= qtd; i++) {
+            const blocoDiv = document.createElement("div");
+            blocoDiv.className = "bloco";
+            blocoDiv.innerHTML = `
+                <h3>Bloco ${i}</h3>
+                <label>Cor do Bloco</label>
+                <select class="corBloco" data-bloco="${i}">
+                    <option value="1">Preto</option>
+                    <option value="2">Vermelho</option>
+                    <option value="3">Azul</option>
+                </select>
+                
+                <label>Posição de Estoque (mesma cor)</label>
+                <select class="estoqueSelect" data-bloco="${i}">
+                    <option value="">Carregando opções...</option>
+                </select>
+                <div class="estoque-info" id="estoqueInfo-${i}"></div>
+
+                <div class="laminasContainer"></div>
+                <button type="button" class="btnAddLamina" data-bloco="${i}">+ Adicionar Lâmina</button>
+            `;
+            container.appendChild(blocoDiv);
+            
+            // Atualiza as opções de estoque com base na cor selecionada
+            const corSelect = blocoDiv.querySelector(".corBloco");
+            const estoqueSelect = blocoDiv.querySelector(".estoqueSelect");
+            const infoDiv = blocoDiv.querySelector(`.estoque-info`);
+            
+            function atualizarOpcoesEstoque() {
+                const corBloco = parseInt(corSelect.value);
+                const opcoes = estoqueDisponivel.filter(e => e.cor === corBloco);
+                estoqueSelect.innerHTML = '<option value="">Selecione uma posição</option>';
+                if (opcoes.length === 0) {
+                    estoqueSelect.disabled = true;
+                    infoDiv.innerHTML = "⚠️ Não há posições de estoque com esta cor disponíveis.";
+                } else {
+                    estoqueSelect.disabled = false;
+                    opcoes.forEach(est => {
+                        const option = document.createElement("option");
+                        option.value = est.id;
+                        option.textContent = `Posição ${est.posicao} (ID ${est.id}) - Cor ${corBloco === 1 ? "Preto" : corBloco === 2 ? "Vermelho" : "Azul"}`;
+                        estoqueSelect.appendChild(option);
+                    });
+                    infoDiv.innerHTML = `✅ ${opcoes.length} posição(ões) disponível(is) para esta cor.`;
+                }
+            }
+            
+            corSelect.addEventListener("change", atualizarOpcoesEstoque);
+            atualizarOpcoesEstoque(); // inicializa
+            
+            // Adiciona uma lâmina vazia automaticamente
+            adicionarLamina(blocoDiv);
+        }
+    }
+
+    function adicionarLamina(blocoDiv) {
+        const laminasContainer = blocoDiv.querySelector(".laminasContainer");
+        const total = laminasContainer.querySelectorAll(".lamina").length;
+        if (total >= 3) {
+            alert("Máximo de 3 lâminas por bloco");
+            return;
+        }
+        const laminaDiv = document.createElement("div");
+        laminaDiv.className = "lamina";
+        laminaDiv.innerHTML = `
+            <h4>Lâmina ${total + 1}</h4>
+            <label>Cor da Lâmina</label>
+            <select class="corLamina">
+                <option value="1">Vermelho</option>
+                <option value="2">Azul</option>
+                <option value="3">Amarelo</option>
+                <option value="4">Verde</option>
+                <option value="5">Preto</option>
+                <option value="6">Branco</option>
+            </select>
+            <label>Padrão</label>
+            <select class="padraoLamina">
+                <option value="0">Nenhum</option>
+                <option value="1">Casa</option>
+                <option value="2">Navio</option>
+                <option value="3">Estrela</option>
+            </select>
+            <label>Posição no Bloco</label>
+            <select class="posicaoLamina">
+                <option value="1">Esquerda</option>
+                <option value="2">Frente</option>
+                <option value="3">Direita</option>
+            </select>
+        `;
+        laminasContainer.appendChild(laminaDiv);
+    }
+
+    // Submissão do formulário
+    document.getElementById("formPedido").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const ordemProducao = document.getElementById("ordemProducao").value.trim();
+        if (!ordemProducao) {
+            alert("Informe a Ordem de Produção");
+            return;
+        }
+
+        const tipoPedido = parseInt(document.getElementById("tipoPedido").value);
+        const corTampa = parseInt(document.getElementById("corTampa").value);
+
+        const blocos = [];
+        const blocosDiv = document.querySelectorAll(".bloco");
+        
+        for (let i = 0; i < blocosDiv.length; i++) {
+            const blocoDiv = blocosDiv[i];
+            const corBloco = parseInt(blocoDiv.querySelector(".corBloco").value);
+            const estoqueSelect = blocoDiv.querySelector(".estoqueSelect");
+            const estoqueId = parseInt(estoqueSelect.value);
+            
+            if (!estoqueId) {
+                alert(`Bloco ${i+1}: selecione uma posição de estoque válida.`);
+                return;
+            }
+            
+            const laminas = [];
+            const laminasDiv = blocoDiv.querySelectorAll(".lamina");
+            for (let lam of laminasDiv) {
+                laminas.push({
+                    cor: parseInt(lam.querySelector(".corLamina").value),
+                    padrao: parseInt(lam.querySelector(".padraoLamina").value),
+                    posicaoNoBloco: parseInt(lam.querySelector(".posicaoLamina").value)
+                });
+            }
+            
+            blocos.push({
+                corBloco: corBloco,
+                estoqueId: estoqueId,
+                laminas: laminas
+            });
+        }
+
+        const pedido = {
+            ordemProducao: ordemProducao,
+            tipoPedido: tipoPedido,
+            corTampa: corTampa,
+            statusPedido: 1,
+            blocos: blocos
+        };
+
+        try {
+            const response = await fetch(`${API}/api/pedidos/salvar`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(pedido)
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || `HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            document.getElementById("resultadoPedido").innerHTML = 
+                `<pre style="background:#e8f5e9; padding:15px; border-radius:8px;">✅ Pedido criado com sucesso!\n${JSON.stringify(data, null, 2)}</pre>`;
+            // Limpa o formulário
+            document.getElementById("formPedido").reset();
+            criarBlocos(1); // recria com 1 bloco
+        } catch (err) {
+            document.getElementById("resultadoPedido").innerHTML = 
+                `<div class="error-msg">❌ Erro: ${err.message}</div>`;
+            console.error(err);
+        }
+    });
+
+    // Inicialização
+    window.addEventListener("DOMContentLoaded", async () => {
+        await carregarEstoque();
+        criarBlocos(1);
+        document.getElementById("tipoPedido").addEventListener("change", (e) => {
+            criarBlocos(parseInt(e.target.value));
+        });
+        // Adicionar eventos dinâmicos para botões "Adicionar Lâmina"
+        document.getElementById("blocosContainer").addEventListener("click", (e) => {
+            if (e.target.classList.contains("btnAddLamina")) {
+                const blocoDiv = e.target.closest(".bloco");
+                if (blocoDiv) adicionarLamina(blocoDiv);
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,17 +1,8 @@
 package com.sa.smart.model;
 
 import java.time.LocalDateTime;
-import com.sa.smart.enums.EnumCorBloco;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,23 +18,28 @@ public class Bloco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBloco;
 
+    @Transient
+    private Long estoqueId;
+
     @ManyToOne
     @JoinColumn(name = "pedido_ordem_producao", nullable = false)
+    @JsonIgnore
     private Pedido pedido;
 
     @ManyToOne
     @JoinColumn(name = "estoque_posicao", nullable = false)
     private Estoque estoque;
 
-
     @Column(name = "cor_bloco", nullable = false)
-    private Integer corBloco;   // sem @Enumerated
-
-    /*@Enumerated(EnumType.STRING) 
-    @Column(name = "cor_bloco", nullable = false)
-    private Integer corBloco; */
+    private Integer corBloco;
 
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
-    
+
+    @PrePersist
+    public void prePersist() {
+        if (criadoEm == null) {
+            criadoEm = LocalDateTime.now();
+        }
+    }
 }
