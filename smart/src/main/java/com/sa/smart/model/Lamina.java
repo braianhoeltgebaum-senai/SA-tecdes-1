@@ -27,7 +27,7 @@ public class Lamina {
     private Long id;
 
     private Integer cor;
-    private Integer padrao; // <-- Garanta que está como Integer aqui!
+    private Integer padrao;
     private Integer posicaoNoBloco;
 
     @JsonBackReference
