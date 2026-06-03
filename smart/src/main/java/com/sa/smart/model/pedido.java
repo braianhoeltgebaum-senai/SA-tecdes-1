@@ -4,31 +4,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sa.smart.enums.EnumCorTampa;
-import com.sa.smart.enums.EnumStatusPedido;
-import com.sa.smart.enums.EnumTipoPedido;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "pedidos") // Nome do banco: dbSmart40 
+@Table(name = "pedidos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 
 public class Pedido {
 
@@ -37,24 +25,25 @@ public class Pedido {
     private Long idPedido;
 
     @Column(nullable = false, unique = true)
-    private String ordemProducao; 
+    private String ordemProducao;
 
     @Column(name = "status_pedido", nullable = false)
-    private Integer statusPedido; 
+    private Integer statusPedido;
 
     @Column(nullable = false)
-    private Integer tipoPedido; 
+    private Integer tipoPedido;
 
     @Column(nullable = false)
-    private Integer corTampa; 
+    private Integer corTampa;
 
-    private Integer posicaoExpedicao; 
-    private LocalDateTime timestamp; 
+    private Integer posicaoExpedicao;
+
+    private LocalDateTime timestamp;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @JsonManagedReference
     private List<Bloco> blocos = new ArrayList<>();
-
-
 
     public void adicionarBloco(Bloco bloco) {
         this.blocos.add(bloco);

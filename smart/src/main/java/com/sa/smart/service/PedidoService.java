@@ -1,22 +1,31 @@
 package com.sa.smart.service;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
+import com.sa.smart.model.Bloco;
+import com.sa.smart.model.Estoque;
 import com.sa.smart.model.Pedido;
+import com.sa.smart.repository.EstoqueRepository;
 import com.sa.smart.repository.PedidoRepository;
 
 @Service
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
+    private final EstoqueRepository estoqueRepository;
 
-    public PedidoService(PedidoRepository pedidoRepository) {
+    public PedidoService(
+            PedidoRepository pedidoRepository,
+            EstoqueRepository estoqueRepository) {
+
         this.pedidoRepository = pedidoRepository;
+        this.estoqueRepository = estoqueRepository;
     }
 
     public List<Pedido> listarTodos() {
@@ -24,47 +33,74 @@ public class PedidoService {
     }
 
     public Pedido criarPedido(Pedido pedido) {
-        // Validação de Tipo: Pedido Triplo (tipo 3) deve ter exatamente 3 blocos [cite:
-        // 21, 59]
-        if (pedido.getTipoPedido() == 3 && (pedido.getBlocos() == null || pedido.getBlocos().size() != 3)) {
-            throw new RuntimeException("Pedidos triplos exigem exatamente 3 blocos.");
+
+        // REGRA PEDIDO TRIPLO
+        if (pedido.getTipoPedido() == 3 &&
+                (pedido.getBlocos() == null ||
+                        pedido.getBlocos().size() != 3)) {
+
+            throw new RuntimeException(
+                    "Pedidos triplos exigem exatamente 3 blocos.");
         }
 
-        // Regra da Lâmina: Cada bloco pode ter no máximo 3 lâminas [cite: 27, 61]
-       /*  if (pedido.getBlocos() != null) {
-            pedido.getBlocos().forEach(bloco -> {
-                if (bloco.getLaminas() != null && bloco.getLaminas().size() > 3) {
-                    throw new RuntimeException("Cada bloco pode ter no máximo 3 lâminas.");
-                }
-            });
-        }*/
+        pedido.setStatusPedido(1);
 
-        pedido.setStatusPedido(1); // 1 - Pendente [cite: 20]
+        // CONFIGURA CADA BLOCO
+        if (pedido.getBlocos() != null) {
+
+            for (Bloco bloco : pedido.getBlocos()) {
+
+                bloco.setPedido(pedido);
+
+                bloco.setCriadoEm(LocalDateTime.now());
+
+                // BUSCA UM ESTOQUE EXISTENTE
+                Estoque estoque = estoqueRepository
+                        .findById(1L)
+                        .orElseThrow(() ->
+                                new RuntimeException("Estoque não encontrado"));
+
+                bloco.setEstoque(estoque);
+            }
+        }
+
         return pedidoRepository.save(pedido);
     }
 
     public void atualizarStatusParaConcluido(Long id) {
-        Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
-        pedido.setStatusPedido(3); // 3 - Concluído [cite: 20, 65]
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Pedido não encontrado"));
+
+        pedido.setStatusPedido(3);
+
         pedidoRepository.save(pedido);
 
-        // Ao ser concluído, o sistema deve registrar a saída na expedição
         registrarNaExpedicao(pedido);
     }
 
-    public Pedido atualizarParcial(Long id, Map<String, Object> campos) {
-        Pedido pedidoAtual = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+    public Pedido atualizarParcial(Long id,
+            Map<String, Object> campos) {
 
-        // Percorre os campos enviados no JSON para atualizar apenas o que foi
-        // solicitado
+        Pedido pedidoAtual = pedidoRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Pedido não encontrado"));
+
         campos.forEach((nomeCampo, valorCampo) -> {
-            Field field = ReflectionUtils.findField(Pedido.class, nomeCampo);
+
+            Field field = ReflectionUtils.findField(
+                    Pedido.class,
+                    nomeCampo);
+
             if (field != null) {
+
                 field.setAccessible(true);
-                ReflectionUtils.setField(field, pedidoAtual, valorCampo);
+
+                ReflectionUtils.setField(
+                        field,
+                        pedidoAtual,
+                        valorCampo);
             }
         });
 
@@ -72,13 +108,15 @@ public class PedidoService {
     }
 
     public void excluir(Long id) {
-        Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
-        // Opcional: Impedir a exclusão de pedidos que já estão em produção ou
-        // concluídos
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Pedido não encontrado"));
+
         if (pedido.getStatusPedido() != 1) {
-            throw new RuntimeException("Apenas pedidos Pendentes podem ser excluídos para garantir a rastreabilidade.");
+
+            throw new RuntimeException(
+                    "Apenas pedidos Pendentes podem ser excluídos.");
         }
 
         pedidoRepository.delete(pedido);
@@ -86,6 +124,8 @@ public class PedidoService {
 
     private void registrarNaExpedicao(Pedido pedido) {
 
-        System.out.println("Gerando registro de expedição para a OP: " + pedido.getOrdemProducao());
+        System.out.println(
+                "Gerando registro de expedição para a OP: "
+                        + pedido.getOrdemProducao());
     }
 }
