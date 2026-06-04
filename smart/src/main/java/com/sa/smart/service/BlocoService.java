@@ -3,7 +3,9 @@ package com.sa.smart.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.sa.smart.dto.BlocoDTO;
 import com.sa.smart.enums.EnumCorBloco;
 import com.sa.smart.enums.EnumStatusPedido;
@@ -14,6 +16,7 @@ import com.sa.smart.model.Pedido;
 import com.sa.smart.repository.BlocoRepository;
 import com.sa.smart.repository.EstoqueRepository;
 import com.sa.smart.repository.PedidoRepository;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +30,7 @@ public class BlocoService {
 
     @Transactional
     public BlocoDTO criar(BlocoDTO dto) {
-        // Validação: dto.corBloco() é EnumCorBloco, então pegamos o código
+        
         if (dto.corBloco() == null || !EnumCorBloco.isValid(dto.corBloco().getCodigo())) {
             throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
         }
@@ -51,13 +54,13 @@ public class BlocoService {
         Bloco bloco = new Bloco();
         bloco.setPedido(pedido);
         bloco.setEstoque(estoque);
-        bloco.setCorBloco(dto.corBloco().getCodigo()); // salva o código (Integer)
+        bloco.setCorBloco(dto.corBloco().getCodigo()); 
         bloco.setCriadoEm(LocalDateTime.now());
 
         Bloco salvo = blocoRepository.save(bloco);
         return new BlocoDTO(
             salvo.getIdBloco(),
-            EnumCorBloco.fromCodigo(salvo.getCorBloco()), // converte Integer -> Enum
+            EnumCorBloco.fromCodigo(salvo.getCorBloco()), 
             salvo.getCriadoEm(),
             salvo.getEstoque() != null ? salvo.getEstoque().getId() : null,
             salvo.getPedido() != null ? salvo.getPedido().getIdPedido() : null

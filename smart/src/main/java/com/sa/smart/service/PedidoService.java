@@ -34,7 +34,7 @@ public class PedidoService {
 
     public Pedido criarPedido(Pedido pedido) {
 
-        // REGRA PEDIDO TRIPLO
+
         if (pedido.getTipoPedido() == 3 &&
                 (pedido.getBlocos() == null ||
                         pedido.getBlocos().size() != 3)) {
@@ -45,7 +45,6 @@ public class PedidoService {
 
         pedido.setStatusPedido(1);
 
-        // CONFIGURA CADA BLOCO
         if (pedido.getBlocos() != null) {
 
             for (Bloco bloco : pedido.getBlocos()) {
@@ -54,7 +53,7 @@ public class PedidoService {
 
                 bloco.setCriadoEm(LocalDateTime.now());
 
-                // BUSCA UM ESTOQUE EXISTENTE
+
                 Estoque estoque = estoqueRepository
                         .findById(1L)
                         .orElseThrow(() ->

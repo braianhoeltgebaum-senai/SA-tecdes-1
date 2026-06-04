@@ -13,7 +13,6 @@ import com.sa.smart.repository.PedidoRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 
 @Service
 public class ExpedicaoService {
@@ -32,11 +31,11 @@ public class ExpedicaoService {
         this.entityManager = entityManager;
     }
 
-    // métodos...
+
 
     @Transactional
     public ExpedicaoDTO criar(ExpedicaoDTO dto) {
-        // Busca o pedido usando EntityManager (JPQL) em vez de método customizado
+     
         Pedido pedido = buscarPedidoPorOrdemProducao(dto.ordemProducao());
 
         Expedicao e = new Expedicao();
@@ -143,7 +142,6 @@ public class ExpedicaoService {
         expedicaoRepository.deleteById(id);
     }
 
-    // Método privado que usa EntityManager para buscar Pedido por ordemProducao
     private Pedido buscarPedidoPorOrdemProducao(String ordemProducao) {
         String jpql = "SELECT p FROM Pedido p WHERE p.ordemProducao = :ordemProducao";
         return entityManager.createQuery(jpql, Pedido.class)

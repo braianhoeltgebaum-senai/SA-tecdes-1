@@ -19,8 +19,7 @@ public class LaminaService {
     private final LaminaRepository laminaRepository;
     private final BlocoRepository blocoRepository;
 
-    // REMOVIDO: EntityManager não é mais necessário aqui
-
+ 
     public LaminaService(
             LaminaRepository laminaRepository,
             BlocoRepository blocoRepository) {
@@ -35,12 +34,10 @@ public class LaminaService {
         Bloco bloco = blocoRepository.findById(dto.blocoIdBloco())
                 .orElseThrow(() -> new RuntimeException("Bloco não encontrado"));
 
-        // valida posição
         if (dto.posicaoNoBloco() < 1 || dto.posicaoNoBloco() > 3) {
             throw new RuntimeException("A posição no bloco deve ser entre 1 e 3");
         }
 
-        // ALTERADO: Usando o método derivado do repositório
         long quantidade = laminaRepository.countByBlocoIdBloco(bloco.getIdBloco());
 
         if (quantidade >= 3) {
@@ -103,9 +100,9 @@ public class LaminaService {
             throw new RuntimeException("A posição no bloco deve ser entre 1 e 3");
         }
 
-        // valida limite de 3 ao trocar bloco
+
         if (!l.getBloco().getIdBloco().equals(novoBloco.getIdBloco())) {
-            // ALTERADO: Usando o método derivado do repositório
+
             long quantidade = laminaRepository.countByBlocoIdBloco(novoBloco.getIdBloco());
 
             if (quantidade >= 3) {

@@ -19,7 +19,6 @@ public class EstoqueService {
         this.repository = repository;
     }
 
-    // CREATE
     public EstoqueDTO criar(EstoqueDTO dto) {
 
         Estoque e = new Estoque();
@@ -36,7 +35,7 @@ public class EstoqueService {
         );
     }
 
-    // READ ALL
+
     public List<EstoqueDTO> listar() {
 
         return repository.findAll().stream()
@@ -48,7 +47,7 @@ public class EstoqueService {
                 .toList();
     }
 
-    // READ BY ID
+
     public EstoqueDTO buscar(Long id) {
 
         Estoque e = repository.findById(id)
@@ -62,7 +61,7 @@ public class EstoqueService {
         );
     }
 
-    // PUT
+
     public EstoqueDTO put(Long id, EstoqueDTO dto) {
 
         Estoque e = repository.findById(id)
@@ -81,7 +80,7 @@ public class EstoqueService {
         );
     }
 
-    // PATCH
+
     public EstoqueDTO patch(Long id, EstoqueDTO dto) {
 
         Estoque e = repository.findById(id)
@@ -105,7 +104,6 @@ public class EstoqueService {
         );
     }
 
-    // DELETE
     public void deletar(Long id) {
 
         if (!repository.existsById(id)) {
