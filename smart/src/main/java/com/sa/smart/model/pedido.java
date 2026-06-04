@@ -3,28 +3,20 @@ package com.sa.smart.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.sa.smart.enums.EnumCorTampa;
-import com.sa.smart.enums.EnumStatusPedido;
-import com.sa.smart.enums.EnumTipoPedido;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "pedidos") // Nome do banco: dbSmart40 
+@Table(name = "pedidos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -21,87 +21,97 @@ public class EstoqueService {
 
     // CREATE
     public EstoqueDTO criar(EstoqueDTO dto) {
+        validarCor(dto.cor());
 
         Estoque e = new Estoque();
-
         e.setPosicao(dto.posicao());
+        e.setCor(dto.cor());
 
         Estoque saved = repository.save(e);
 
         return new EstoqueDTO(
                 saved.getId(),
-                saved.getPosicao()
+                saved.getPosicao(),
+                saved.getCor()
         );
     }
 
     // READ ALL
     public List<EstoqueDTO> listar() {
-
         return repository.findAll().stream()
                 .map(e -> new EstoqueDTO(
                         e.getId(),
-                        e.getPosicao()
+                        e.getPosicao(),
+                        e.getCor()
                 ))
                 .toList();
     }
 
     // READ BY ID
     public EstoqueDTO buscar(Long id) {
-
         Estoque e = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Estoque não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
         return new EstoqueDTO(
                 e.getId(),
-                e.getPosicao()
+                e.getPosicao(),
+                e.getCor()
         );
     }
 
-    // PUT
+    // PUT (substituição total)
     public EstoqueDTO put(Long id, EstoqueDTO dto) {
+        validarCor(dto.cor());
 
         Estoque e = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Estoque não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
         e.setPosicao(dto.posicao());
+        e.setCor(dto.cor());
 
         Estoque updated = repository.save(e);
 
         return new EstoqueDTO(
                 updated.getId(),
-                updated.getPosicao()
+                updated.getPosicao(),
+                updated.getCor()
         );
     }
 
-    // PATCH
+    // PATCH (atualização parcial)
     public EstoqueDTO patch(Long id, EstoqueDTO dto) {
-
         Estoque e = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Estoque não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
         if (dto.posicao() != null) {
             e.setPosicao(dto.posicao());
         }
-
+        if (dto.cor() != null) {
+            validarCor(dto.cor());
+            e.setCor(dto.cor());
+        }
 
         Estoque updated = repository.save(e);
 
         return new EstoqueDTO(
                 updated.getId(),
-                updated.getPosicao()
+                updated.getPosicao(),
+                updated.getCor()
         );
     }
 
     // DELETE
     public void deletar(Long id) {
-
         if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Estoque não encontrado");
         }
-
         repository.deleteById(id);
+    }
+
+    // Validação da cor (0=vazio, 1=preto, 2=vermelho, 3=azul)
+    private void validarCor(Integer cor) {
+        if (cor == null || cor < 0 || cor > 3) {
+            throw new IllegalArgumentException("Cor inválida. Use: 0=vazio, 1=preto, 2=vermelho, 3=azul");
+        }
     }
 }
