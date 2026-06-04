@@ -350,7 +350,6 @@
 
 </html> -->
 
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -473,7 +472,7 @@
         }
         .btn-submit:hover { background: #15263f; }
 
-        /* --- PALCO DA REPRODUÇÃO REALISTA --- */
+        /* --- PALCO DA REPRODUÇÃO EM CAMADAS --- */
         .palco-visual {
             position: relative;
             width: 350px;
@@ -485,7 +484,7 @@
             border-radius: 8px;
         }
 
-        /* Camadas ocupam o espaço inteiro do container para não distorcer os PNGs */
+        /* Mantém a proporção real e original das fotos sem esticar ou cortar */
         .camada-foto {
             position: absolute;
             top: 0;
@@ -498,12 +497,12 @@
             pointer-events: none;
         }
 
-        /* Definição exata de quem fica na frente de quem */
-        #visualBloco  { z-index: 1; } 
-        #visualLamina1 { z-index: 2; } /* Camada Lâmina Posição 1 */
-        #visualLamina2 { z-index: 3; } /* Camada Lâmina Posição 2 */
-        #visualLamina3 { z-index: 4; } /* Camada Lâmina Posição 3 */
-        #visualTampa  { z-index: 5; } /* Tampa por cima de absolutamente tudo */
+        /* Ordem exata das transparências do seu produto real */
+        #visualBloco    { z-index: 1; } /* Fundo do Bloco Base */
+        #visualLamina1  { z-index: 2; } /* Lâmina na Posição Esquerda */
+        #visualLamina2  { z-index: 3; } /* Lâmina na Posição Frente */
+        #visualLamina3  { z-index: 4; } /* Lâmina na Posição Direita */
+        #visualTampa    { z-index: 5; } /* Tampa por cima de tudo */
 
     </style>
 </head>
@@ -566,7 +565,7 @@
                 <div id="visualTampa" class="camada-foto"></div>
             </div>
             <p style="font-size: 12px; color: #8a99ad; margin-top: 20px; text-align: center; max-width: 280px;">
-                As lâminas agora são processadas como sobreposições de tamanho real.
+                Visualização integrada puxando os arquivos das pastas bloco e padroes.
             </p>
         </div>
     </div>
@@ -585,15 +584,17 @@
             '3': 'url("../assets/bloco/rBlocoCor3.png")'
         };
 
+        // Atualiza a tampa
         document.getElementById('corTampa').addEventListener('change', (e) => {
             document.getElementById('visualTampa').style.backgroundImage = imagensTampaMap[e.target.value] || 'none';
         });
 
+        // Atualiza o bloco base de fundo
         document.getElementById('corBloco').addEventListener('change', (e) => {
             document.getElementById('visualBloco').style.backgroundImage = imagensBlocoMap[e.target.value] || 'none';
         });
 
-        // Inicialização padrão do Bloco Base
+        // Configuração inicial padrão ao carregar a tela
         document.getElementById('visualBloco').style.backgroundImage = imagensBlocoMap['1'];
 
         function adicionarLaminaField() {
@@ -608,23 +609,19 @@
                     </div>
                     <div style="display: flex; gap: 10px;">
                         <div class="form-group" style="flex: 1;">
-                            <label>Padrão (1-3):</label>
+                            <label>Padrão/Tipo (0-3):</label>
                             <select class="lamina-padrao" onchange="atualizarComposicaoVisual()" required>
+                                <option value="0">Padrão 0</option>
                                 <option value="1">Padrão 1</option>
                                 <option value="2">Padrão 2</option>
                                 <option value="3">Padrão 3</option>
                             </select>
                         </div>
                         <div class="form-group" style="flex: 1;">
-                            <label>Cor (0-6):</label>
+                            <label>Cor (1-2):</label>
                             <select class="lamina-cor" onchange="atualizarComposicaoVisual()" required>
-                                <option value="0">Cor 0</option>
                                 <option value="1">Cor 1</option>
                                 <option value="2">Cor 2</option>
-                                <option value="3">Cor 3</option>
-                                <option value="4">Cor 4</option>
-                                <option value="5">Cor 5</option>
-                                <option value="6">Cor 6</option>
                             </select>
                         </div>
                         <div class="form-group" style="flex: 1;">
@@ -647,8 +644,9 @@
             atualizarComposicaoVisual();
         }
 
-        // Aplica o arquivo inteiro ocupando 100% da camada correta
+        // Lógica definitiva: Carrega os arquivos da pasta padroes (Ex: padrao1-1.png)
         function atualizarComposicaoVisual() {
+            // Limpa as 3 camadas antes de rodar o loop
             document.getElementById('visualLamina1').style.backgroundImage = 'none';
             document.getElementById('visualLamina2').style.backgroundImage = 'none';
             document.getElementById('visualLamina3').style.backgroundImage = 'none';
@@ -658,17 +656,18 @@
                 const corVal = card.querySelector('.lamina-cor').value;
                 const posicaoVal = card.querySelector('.lamina-posicao').value;
 
-                if (padraoVal && corVal && posicaoVal) {
-                    // Carrega a imagem inteira correspondente na camada da sua posição
-                    const nomeArquivo = `lamina${padraoVal}-${corVal}.png`;
-                    const caminhoImagem = `url("../assets/laminas/${nomeArquivo}")`;
+                if (padraoVal !== "" && corVal !== "" && posicaoVal !== "") {
+                    // Busca o arquivo correspondente na sua nova pasta: padrao{X}-{Y}.png
+                    const nomeArquivo = `padrao${padraoVal}-${corVal}.png`;
+                    const caminhoImagem = `url("../assets/padroes/${nomeArquivo}")`;
 
+                    // Encaixa na camada da respectiva posição mantendo as dimensões transparentes alinhadas
                     document.getElementById(`visualLamina${posicaoVal}`).style.backgroundImage = caminhoImagem;
                 }
             });
         }
 
-        // AJAX para envio ao Spring Boot
+        // Envio do payload via AJAX para o Spring Boot
         document.getElementById('formPedido').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -706,7 +705,7 @@
                 if (response.ok) {
                     alert('Pedido enviado com sucesso!');
                 } else {
-                    alert('Erro no processamento da API.');
+                    alert('Erro ao processar requisição na API.');
                 }
             } catch (error) {
                 alert('Erro ao conectar ao backend (Porta 8088).');
