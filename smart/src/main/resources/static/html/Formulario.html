@@ -1,4 +1,7 @@
-<!-- <!DOCTYPE html>
+
+
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -14,10 +17,9 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f0f4f8;
-            padding: 40px 20px;
-            color: #333;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f5f9;
+            padding: 30px;
         }
 
         h1 {
@@ -26,153 +28,167 @@
             color: #1e293b;
         }
 
-        .container {
+        .layout {
             display: flex;
-            justify-content: center;
+            gap: 30px;
+            align-items: flex-start;
         }
 
-        .Pedido {
-            width: 100%;
-            max-width: 700px;
+        .formulario {
+            flex: 1;
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 25px;
+            border-radius: 10px;
         }
 
-        .field-group {
+        .preview {
+            width: 450px;
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            position: sticky;
+            top: 20px;
+        }
+
+        .campo {
             margin-bottom: 15px;
         }
 
-        .field-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            font-weight: 500;
-            margin-bottom: 4px;
+        label {
             display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
+            padding: 10px;
             border-radius: 6px;
-            background-color: #f1f5f9;
-            color: #1e293b;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
+            border: 1px solid #cbd5e1;
         }
 
-        input:focus, select:focus {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-        }
-
-
-        .bloco {
+        .bloco-card {
             margin-top: 25px;
-            padding: 5px 0;
+            border: 1px solid #dbeafe;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8fafc;
         }
 
         .bloco-title {
-            font-size: 1.1rem;
-            color: #1e3a8a;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: bold;
             margin-bottom: 15px;
+            color: #1d4ed8;
         }
 
-        .laminas-header {
-            color: #2563eb;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin: 20px 0 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .lamina-card {
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 15px;
+            background: white;
         }
 
-        .laminasContainer {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .lamina {
-            padding-top: 10px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .lamina-title {
-            font-size: 0.9rem;
-            color: #475569;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        /* Botões */
-        .btn-add-lamina {
-            background: transparent;
-            color: #2563eb;
-            border: 1px solid #bfdbfe;
-            padding: 6px 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
+        .btn {
+            padding: 10px 15px;
+            border: none;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
+            font-weight: bold;
         }
 
-        .btn-add-lamina:hover {
-            background: #eff6ff;
+        .btn-add {
+            background: #2563eb;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-remove {
+            background: #ef4444;
+            color: white;
+            margin-top: 10px;
         }
 
         .btn-salvar {
-            margin-top: 30px;
-            padding: 12px 24px;
-            border: none;
-            background: #1d3557;
+            background: #111827;
             color: white;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: background 0.2s;
+            width: 100%;
+            margin-top: 25px;
         }
 
-        .btn-salvar:hover {
-            background: #15263f;
+        .palco {
+            position: relative;
+            width: 350px;
+            height: 600px;
+            margin: auto;
         }
 
-        #resultadoPedido {
-            margin-top: 20px;
-            background: #f8fafc;
+        .camada {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+        }
+
+        .bloco-preview {
+            position: absolute;
+            width: 100%;
+            height: 180px;
+        }
+
+        #bloco1 {
+            top: 0px;
+        }
+
+        #bloco2 {
+            top: 140px;
+        }
+
+        #bloco3 {
+            top: 280px;
+        }
+
+        .tampa {
+            z-index: 999;
+            top: -20px !important;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e2e8f0;
             padding: 15px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: auto;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Criar Pedido</h1>
+    <h1>Smart Factory</h1>
 
-    <div class="container">
-        <div class="Pedido">
+    <div class="layout">
+
+        <div class="formulario">
+
             <form id="formPedido">
-                
-                <div class="field-group">
-                    <label class="field-label" for="ordemProducao">Ordem de Produção</label>
+
+                <div class="campo">
+                    <label>Ordem Produção</label>
                     <input type="text" id="ordemProducao">
                 </div>
 
-                <div class="field-group">
-                    <label class="field-label" for="tipoPedido">Tipo do Pedido</label>
+                <div class="campo">
+                    <label>Tipo Pedido</label>
+
                     <select id="tipoPedido">
                         <option value="1">1 Bloco</option>
                         <option value="2">2 Blocos</option>
@@ -180,29 +196,43 @@
                     </select>
                 </div>
 
-                <div class="field-group">
-                    <label class="field-label">Cor da Tampa</label>
-                    <select class="corTampa">
-                        <option value="1">Vermelho</option>
-                        <option value="2">Azul</option>
-                        <option value="3">Preto</option>
+                <div class="campo">
+                    <label>Cor Tampa</label>
+
+                    <select id="corTampa">
+                        <option value="1">Preto</option>
+                        <option value="2">Vermelho</option>
+                        <option value="3">Azul</option>
                     </select>
                 </div>
 
                 <div id="blocosContainer"></div>
 
-                <button type="submit" class="btn-salvar">Salvar Pedido</button>
+                <button class="btn btn-salvar" type="submit">
+                    Salvar Pedido
+                </button>
+
             </form>
 
-            <div id="resultadoPedido"></div>
+            <pre id="resultado"></pre>
+
         </div>
+
+        <div class="preview">
+
+            <h2 style="margin-bottom:20px;">Prévia</h2>
+
+            <div class="palco" id="palcoPreview"></div>
+
+        </div>
+
     </div>
 
     <script>
-        const API = "http://localhost:8088";
 
         const tipoPedido = document.getElementById("tipoPedido");
         const blocosContainer = document.getElementById("blocosContainer");
+        const palcoPreview = document.getElementById("palcoPreview");
 
         criarBlocos(1);
 
@@ -210,699 +240,375 @@
             criarBlocos(Number(tipoPedido.value));
         });
 
+        document.getElementById("corTampa")
+            .addEventListener("change", atualizarPreview);
+
         function criarBlocos(qtd) {
+
             blocosContainer.innerHTML = "";
 
             for (let i = 1; i <= qtd; i++) {
-                blocosContainer.innerHTML += `
-                <div class="bloco">
-                    <div class="bloco-title">Bloco ${i}</div>
 
-                    <div class="field-group">
-                        <label class="field-label">Cor do Bloco</label>
-                        <select class="corBloco">
+                blocosContainer.innerHTML += `
+
+                <div class="bloco-card">
+
+                    <div class="bloco-title">
+                        Bloco ${i}
+                    </div>
+
+                    <div class="campo">
+                        <label>Cor Bloco</label>
+
+                        <select class="corBloco"
+                            onchange="atualizarPreview()">
+
                             <option value="1">Preto</option>
                             <option value="2">Vermelho</option>
                             <option value="3">Azul</option>
+
                         </select>
                     </div>
 
-                    <div class="field-group">
-                        <label class="field-label">ID do Estoque</label>
-                        <input type="number" class="estoqueId" value="${i}">
-                    </div>
+                    <div class="campo">
+                        <label>ID Estoque</label>
 
-                    <div class="laminas-header">▾ Lâminas (máx. 3)</div>
+                        <input type="number"
+                            class="estoqueId"
+                            value="${i}">
+                    </div>
 
                     <div class="laminasContainer"></div>
 
-                    <button type="button" class="btn-add-lamina" onclick="adicionarLamina(this)">
+                    <button
+                        type="button"
+                        class="btn btn-add"
+                        onclick="adicionarLamina(this)">
+
                         + Lâmina
+
                     </button>
+
                 </div>
                 `;
 
+                const bloco =
+                    blocosContainer.querySelectorAll(".bloco-card")[i - 1];
 
-                const bloco = blocosContainer.querySelectorAll(".bloco")[i - 1];
-                adicionarLamina(bloco.querySelector(".btn-add-lamina"));
+                adicionarLamina(
+                    bloco.querySelector(".btn-add")
+                );
             }
+
+            atualizarPreview();
         }
 
         function adicionarLamina(btn) {
-            const bloco = btn.closest(".bloco");
-            const container = bloco.querySelector(".laminasContainer");
-            const total = container.querySelectorAll(".lamina").length;
+
+            const bloco =
+                btn.closest(".bloco-card");
+
+            const container =
+                bloco.querySelector(".laminasContainer");
+
+            const total =
+                container.querySelectorAll(".lamina-card").length;
 
             if (total >= 3) {
-                alert("Máximo de 3 lâminas por bloco");
+                alert("Máximo 3 lâminas");
                 return;
             }
 
-            const divLamina = document.createElement("div");
-            divLamina.className = "lamina";
-            divLamina.innerHTML = `
-                <div class="lamina-title">Lâmina ${total + 1}</div>
+            const div = document.createElement("div");
 
-                <div class="field-group">
-                    <label class="field-label">Cor</label>
-                    <select class="corLamina">
-                        <option value="1">Vermelho</option>
-                        <option value="2">Azul</option>
-                        <option value="3">Amarelo</option>
-                        <option value="4">Verde</option>
-                        <option value="5">Preto</option>
-                        <option value="6">Branco</option>
-                    </select>
-                </div>
+            div.className = "lamina-card";
 
-                <div class="field-group">
-                    <label class="field-label">Padrão</label>
-                    <select class="padraoLamina">
-                        <option value="0">Nenhum</option>
-                        <option value="1">Casa</option>
-                        <option value="2">Navio</option>
-                        <option value="3">Estrela</option>
-                    </select>
-                </div>
+            div.innerHTML = `
 
-                <div class="field-group">
-                    <label class="field-label">Posição no Bloco</label>
-                    <select class="posicaoLamina">
-                        <option value="1">Esquerda</option>
-                        <option value="2">Frente</option>
-                        <option value="3">Direita</option>
-                    </select>
-                </div>
+            <div class="campo">
+
+                <label>Cor Lâmina</label>
+
+                <select class="corLamina"
+                    onchange="atualizarPreview()">
+
+                    <option value="1">Vermelho</option>
+                    <option value="2">Azul</option>
+                    <option value="3">Amarelo</option>
+                    <option value="4">Verde</option>
+                    <option value="5">Preto</option>
+                    <option value="6">Branco</option>
+
+                </select>
+
+            </div>
+
+            <div class="campo">
+
+                <label>Padrão</label>
+
+                <select class="padraoLamina"
+                    onchange="atualizarPreview()">
+
+                    <option value="1">Casa</option>
+                    <option value="2">Navio</option>
+                    <option value="3">Estrela</option>
+
+                </select>
+
+            </div>
+
+            <div class="campo">
+
+                <label>Posição</label>
+
+                <select class="posicaoLamina"
+                    onchange="atualizarPreview()">
+
+                    <option value="1">Esquerda</option>
+                    <option value="2">Frente</option>
+                    <option value="3">Direita</option>
+
+                </select>
+
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-remove"
+                onclick="removerLamina(this)">
+
+                Remover
+
+            </button>
             `;
-            container.appendChild(divLamina);
+
+            container.appendChild(div);
+
+            atualizarPreview();
         }
 
-        document.getElementById("formPedido").addEventListener("submit", async (e) => {
-            e.preventDefault();
+        function removerLamina(btn) {
 
-            const blocos = [];
+            btn.closest(".lamina-card").remove();
 
-            document.querySelectorAll(".bloco").forEach(bloco => {
-                const laminas = [];
+            atualizarPreview();
+        }
 
-                bloco.querySelectorAll(".lamina").forEach(l => {
-                    laminas.push({
-                        cor: Number(l.querySelector(".corLamina").value),
-                      
-                        padrao: Number(l.querySelector(".padraoLamina").value), 
-                        posicaoNoBloco: Number(l.querySelector(".posicaoLamina").value)
+        function atualizarPreview() {
+
+            palcoPreview.innerHTML = "";
+
+            const qtdBlocos =
+                Number(tipoPedido.value);
+
+            const corTampa =
+                document.getElementById("corTampa").value;
+
+            const blocos =
+                document.querySelectorAll(".bloco-card");
+
+            blocos.forEach((bloco, index) => {
+
+                const numeroBloco = index + 1;
+
+                const blocoContainer =
+                    document.createElement("div");
+
+                blocoContainer.className =
+                    "bloco-preview";
+
+                blocoContainer.id =
+                    `bloco${numeroBloco}`;
+
+                // BLOCO BASE
+
+                const corBloco =
+                    bloco.querySelector(".corBloco").value;
+
+                blocoContainer.innerHTML += `
+                <div class="camada"
+                    style="
+                        z-index:1;
+                        background-image:url('../assets/bloco/rBlocoCor${corBloco}.png');
+                    ">
+                </div>
+                `;
+
+                // LÂMINAS
+
+                bloco.querySelectorAll(".lamina-card")
+                    .forEach(lamina => {
+
+                        const cor =
+                            lamina.querySelector(".corLamina").value;
+
+                        const padrao =
+                            lamina.querySelector(".padraoLamina").value;
+
+                        const posicao =
+                            lamina.querySelector(".posicaoLamina").value;
+
+                        // LÂMINA
+
+                        blocoContainer.innerHTML += `
+                        <div class="camada"
+                            style="
+                                z-index:${10 + Number(posicao)};
+                                background-image:url('../assets/laminas/lamina${posicao}-${cor}.png');
+                            ">
+                        </div>
+                        `;
+
+                        // PADRÃO
+
+                        blocoContainer.innerHTML += `
+                        <div class="camada"
+                            style="
+                                z-index:${20 + Number(posicao)};
+                                background-image:url('../assets/padroes/padrao${posicao}-${padrao}.png');
+                            ">
+                        </div>
+                        `;
                     });
-                });
 
-                blocos.push({
-                    corBloco: Number(bloco.querySelector(".corBloco").value),
-                    
-                    estoque: {
-                        id: Number(bloco.querySelector(".estoqueId").value)
-                    },
-                    laminas: laminas
-                });
+                // TAMPA APENAS NO PRIMEIRO BLOCO
+
+                if (index === 0) {
+
+                    blocoContainer.innerHTML += `
+                    <div class="camada tampa"
+                        style="
+                            background-image:url('../assets/bloco/rTampa${corTampa}.png');
+                        ">
+                    </div>
+                    `;
+                }
+
+                palcoPreview.appendChild(blocoContainer);
+
             });
 
-            const pedido = {
-                ordemProducao: document.getElementById("ordemProducao").value,
-                tipoPedido: Number(tipoPedido.value),
-                corTampa: Number(document.querySelector(".corTampa").value),
-                blocos: blocos
-            };
-
-            try {
-                const response = await fetch(API + "/pedidos", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(pedido)
-                });
-
-                const data = await response.json();
-                document.getElementById("resultadoPedido").innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-            } catch (err) {
-                console.error(err);
-                document.getElementById("resultadoPedido").innerHTML = `<span style="color:red;">Erro ao salvar o pedido.</span>`;
-            }
-        });
-    </script>
-</body>
-
-</html> -->
-
-
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Factory</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f0f4f8;
-    padding:40px;
-}
-
-.main-container{
-    display:flex;
-    gap:30px;
-}
-
-.container-form{
-    width:420px;
-    background:white;
-    padding:25px;
-    border-radius:10px;
-}
-
-.container-preview{
-    flex:1;
-    background:#1f2937;
-    border-radius:10px;
-    padding:30px;
-    color:white;
-}
-
-.form-group{
-    margin-bottom:15px;
-}
-
-label{
-    display:block;
-    margin-bottom:5px;
-    font-size:14px;
-}
-
-input,select{
-    width:100%;
-    padding:10px;
-    border-radius:6px;
-    border:1px solid #ccc;
-}
-
-.btn-add{
-    margin-top:10px;
-    padding:10px;
-    border:none;
-    background:#2563eb;
-    color:white;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.btn-submit{
-    width:100%;
-    margin-top:20px;
-    padding:12px;
-    border:none;
-    background:#111827;
-    color:white;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.lamina-card{
-    margin-top:15px;
-    padding:15px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    background:#f8fafc;
-}
-
-.btn-remove{
-    background:red;
-    color:white;
-    border:none;
-    padding:5px 10px;
-    border-radius:5px;
-    cursor:pointer;
-    margin-bottom:10px;
-}
-
-.palco-visual{
-    position:relative;
-    width:500px;
-    height:500px;
-    margin:auto;
-}
-
-.camada-foto{
-    position:absolute;
-    width:100%;
-    height:100%;
-    background-size:contain;
-    background-repeat:no-repeat;
-    background-position:center;
-}
-
-#visualBloco{ z-index:1; }
-
-#visualLamina1{ z-index:2; }
-#visualLamina2{ z-index:3; }
-#visualLamina3{ z-index:4; }
-
-#visualPadrao1{ z-index:5; }
-#visualPadrao2{ z-index:6; }
-#visualPadrao3{ z-index:7; }
-
-#visualTampa{
-    z-index:8;
-    top:-20px;
-    height:95%;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="main-container">
-
-<div class="container-form">
-
-<h2>Novo Pedido</h2>
-
-<form id="formPedido">
-
-<div class="form-group">
-<label>Ordem Produção</label>
-<input type="text" id="ordemProducao">
-</div>
-
-<div class="form-group">
-<label>Cor Tampa</label>
-
-<select id="corTampa">
-
-<option value="1">Preto</option>
-<option value="2">Vermelho</option>
-<option value="3">Azul</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-<label>Cor Bloco</label>
-
-<select id="corBloco">
-
-<option value="1">Preto</option>
-<option value="2">Vermelho</option>
-<option value="3">Azul</option>
-
-</select>
-
-</div>
-
-<button
-type="button"
-class="btn-add"
-onclick="adicionarLaminaField()">
-
-Adicionar Lâmina
-
-</button>
-
-<div id="laminasContainer"></div>
-
-<button
-type="submit"
-class="btn-submit">
-
-Salvar Pedido
-
-</button>
-
-</form>
-
-</div>
-
-<div class="container-preview">
-
-<h2>Prévia</h2>
-
-<div class="palco-visual">
-
-<div id="visualBloco" class="camada-foto"></div>
-
-<div id="visualLamina1" class="camada-foto"></div>
-<div id="visualLamina2" class="camada-foto"></div>
-<div id="visualLamina3" class="camada-foto"></div>
-
-<div id="visualPadrao1" class="camada-foto"></div>
-<div id="visualPadrao2" class="camada-foto"></div>
-<div id="visualPadrao3" class="camada-foto"></div>
-
-<div id="visualTampa" class="camada-foto"></div>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-// ======================================
-// MAPAS
-// ======================================
-
-const imagensTampaMap = {
-
-    '1':'url("../assets/bloco/rTampa1.png")',
-    '2':'url("../assets/bloco/rTampa2.png")',
-    '3':'url("../assets/bloco/rTampa3.png")'
-
-};
-
-const imagensBlocoMap = {
-
-    '1':'url("../assets/bloco/rBlocoCor1.png")',
-    '2':'url("../assets/bloco/rBlocoCor2.png")',
-    '3':'url("../assets/bloco/rBlocoCor3.png")'
-
-};
-
-// ======================================
-// INICIAL
-// ======================================
-
-document.getElementById('visualBloco')
-.style.backgroundImage =
-imagensBlocoMap['1'];
-
-document.getElementById('visualTampa')
-.style.backgroundImage =
-imagensTampaMap['1'];
-
-// ======================================
-// EVENTOS
-// ======================================
-
-document.getElementById('corTampa')
-.addEventListener('change',(e)=>{
-
-    document.getElementById('visualTampa')
-    .style.backgroundImage =
-    imagensTampaMap[e.target.value];
-
-});
-
-document.getElementById('corBloco')
-.addEventListener('change',(e)=>{
-
-    document.getElementById('visualBloco')
-    .style.backgroundImage =
-    imagensBlocoMap[e.target.value];
-
-});
-
-// ======================================
-// ADD LÂMINA
-// ======================================
-
-function adicionarLaminaField(){
-
-    const container =
-    document.getElementById('laminasContainer');
-
-    const id = Date.now();
-
-    const html = `
-
-    <div class="lamina-card" id="card-${id}">
-
-        <button
-        type="button"
-        class="btn-remove"
-        onclick="removerLaminaField('${id}')">
-
-        Remover
-
-        </button>
-
-        <div class="form-group">
-
-            <label>Padrão</label>
-
-            <select
-            class="padraoLamina"
-            onchange="atualizarComposicaoVisual()">
-
-                <option value="1">Casa</option>
-                <option value="2">Navio</option>
-                <option value="3">Estrela</option>
-
-            </select>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Cor</label>
-
-            <select
-            class="corLamina"
-            onchange="atualizarComposicaoVisual()">
-
-                <option value="1">Vermelho</option>
-                <option value="2">Azul</option>
-                <option value="3">Amarelo</option>
-                <option value="4">Verde</option>
-                <option value="5">Preto</option>
-                <option value="6">Branco</option>
-
-            </select>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Posição</label>
-
-            <select
-            class="posicaoLamina"
-            onchange="atualizarComposicaoVisual()">
-
-                <option value="1">Esquerda</option>
-                <option value="2">Frente</option>
-                <option value="3">Direita</option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-    `;
-
-    container.insertAdjacentHTML(
-        'beforeend',
-        html
-    );
-
-    atualizarComposicaoVisual();
-
-}
-
-// ======================================
-// REMOVE
-// ======================================
-
-function removerLaminaField(id){
-
-    document
-    .getElementById(`card-${id}`)
-    .remove();
-
-    atualizarComposicaoVisual();
-
-}
-
-// ======================================
-// VISUAL
-// ======================================
-
-function atualizarComposicaoVisual(){
-
-    // LIMPA
-
-    document.getElementById('visualLamina1')
-    .style.backgroundImage='none';
-
-    document.getElementById('visualLamina2')
-    .style.backgroundImage='none';
-
-    document.getElementById('visualLamina3')
-    .style.backgroundImage='none';
-
-    document.getElementById('visualPadrao1')
-    .style.backgroundImage='none';
-
-    document.getElementById('visualPadrao2')
-    .style.backgroundImage='none';
-
-    document.getElementById('visualPadrao3')
-    .style.backgroundImage='none';
-
-    // MONTA
-
-    document.querySelectorAll('.lamina-card')
-    .forEach(card=>{
-
-        const padraoVal =
-        card.querySelector('.padraoLamina').value;
-
-        const corVal =
-        card.querySelector('.corLamina').value;
-
-        const posicaoVal =
-        card.querySelector('.posicaoLamina').value;
-
-        // =========================
-        // LÂMINA
-        // =========================
-
-        const arquivoLamina =
-        `lamina${posicaoVal}-${corVal}.png`;
-
-        const caminhoLamina =
-        `url("../assets/laminas/${arquivoLamina}")`;
-
-        document.getElementById(
-            `visualLamina${posicaoVal}`
-        ).style.backgroundImage =
-        caminhoLamina;
-
-        // =========================
-        // PADRÃO
-        // =========================
-
-        const arquivoPadrao =
-        `padrao${padraoVal}-${posicaoVal}.png`;
-
-        const caminhoPadrao =
-        `url("../assets/padroes/${arquivoPadrao}")`;
-
-        document.getElementById(
-            `visualPadrao${posicaoVal}`
-        ).style.backgroundImage =
-        caminhoPadrao;
-
-    });
-
-}
-
-// ======================================
-// BACKEND
-// ======================================
-
-document.getElementById('formPedido')
-.addEventListener('submit',async(e)=>{
-
-    e.preventDefault();
-
-    const laminas = [];
-
-    document.querySelectorAll('.lamina-card')
-    .forEach(card=>{
-
-        laminas.push({
-
-            cor:parseInt(
-                card.querySelector('.corLamina').value
-            ),
-
-            padrao:parseInt(
-                card.querySelector('.padraoLamina').value
-            ),
-
-            posicaoNoBloco:parseInt(
-                card.querySelector('.posicaoLamina').value
-            )
-
-        });
-
-    });
-
-    const payload = {
-
-        ordemProducao:
-        document.getElementById('ordemProducao').value,
-
-        corTampa:parseInt(
-            document.getElementById('corTampa').value
-        ),
-
-        tipoPedido:1,
-
-        statusPedido:1,
-
-        posicaoExpedicao:1,
-
-        blocos:[
-            {
-
-                corBloco:parseInt(
-                    document.getElementById('corBloco').value
-                ),
-
-                estoque:{
-                    id:1
-                },
-
-                laminas:laminas
-
-            }
-        ]
-    };
-
-    try{
-
-        const response =
-        await fetch(
-            'http://localhost:8088/pedidos',
-            {
-                method:'POST',
-
-                headers:{
-                    'Content-Type':'application/json'
-                },
-
-                body:JSON.stringify(payload)
-            }
-        );
-
-        if(response.ok){
-
-            alert('Pedido salvo');
-
-        }else{
-
-            alert('Erro backend');
-
         }
 
-    }catch(error){
+        atualizarPreview();
 
-        alert('Erro conexão');
+        // ENVIO BACKEND
 
-    }
+        document.getElementById("formPedido")
+            .addEventListener("submit", async (e) => {
 
-});
+                e.preventDefault();
 
-</script>
+                const blocos = [];
+
+                document.querySelectorAll(".bloco-card")
+                    .forEach(bloco => {
+
+                        const laminas = [];
+
+                        bloco.querySelectorAll(".lamina-card")
+                            .forEach(l => {
+
+                                laminas.push({
+
+                                    cor: Number(
+                                        l.querySelector(".corLamina").value
+                                    ),
+
+                                    padrao: Number(
+                                        l.querySelector(".padraoLamina").value
+                                    ),
+
+                                    posicaoNoBloco: Number(
+                                        l.querySelector(".posicaoLamina").value
+                                    )
+
+                                });
+
+                            });
+
+                        blocos.push({
+
+                            corBloco: Number(
+                                bloco.querySelector(".corBloco").value
+                            ),
+
+                            estoque: {
+                                id: Number(
+                                    bloco.querySelector(".estoqueId").value
+                                )
+                            },
+
+                            laminas: laminas
+
+                        });
+
+                    });
+
+                const pedido = {
+
+                    ordemProducao:
+                        document.getElementById("ordemProducao").value,
+
+                    tipoPedido:
+                        Number(tipoPedido.value),
+
+                    corTampa:
+                        Number(
+                            document.getElementById("corTampa").value
+                        ),
+
+                    statusPedido: 1,
+
+                    posicaoExpedicao: 1,
+
+                    blocos: blocos
+                };
+
+                document.getElementById("resultado")
+                    .textContent =
+                    JSON.stringify(pedido, null, 2);
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:8088/pedidos",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+
+                                body: JSON.stringify(pedido)
+                            }
+                        );
+
+                    if (response.ok) {
+
+                        alert("Pedido salvo!");
+
+                    } else {
+
+                        alert("Erro backend");
+
+                    }
+
+                } catch {
+
+                    alert("Erro conexão backend");
+
+                }
+
+            });
+
+    </script>
 
 </body>
+
 </html>
+
+
+
