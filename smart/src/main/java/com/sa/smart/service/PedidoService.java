@@ -143,7 +143,7 @@ public class PedidoService {
 
     // REGISTRO DE EXPEDIÇÃO
     private void registrarNaExpedicao(Pedido pedido) {
-        System.out.println("📦 Expedição gerada para OP: " + pedido.getOrdemProducao());
+        System.out.println("Expedição gerada para OP: " + pedido.getOrdemProducao());
     }
 
     public PedidoConfigDTO gerarConfig(Long id) {
@@ -170,7 +170,7 @@ public class PedidoService {
                                 pedido.getIdPedido()))
                         .toList());
 
-        dto.setIpClp("192.168.0.10");
+        dto.setIpClp("10.74.241.10");
 
         return dto;
     }
