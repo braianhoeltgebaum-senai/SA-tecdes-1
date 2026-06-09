@@ -9,15 +9,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import com.sa.smart.model.Pedido;
+import com.sa.smart.repository.BlocoRepository;
+import com.sa.smart.repository.EstoqueRepository;
+import com.sa.smart.repository.LaminaRepository;
 import com.sa.smart.repository.PedidoRepository;
 
 @Service
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
+    private final BlocoRepository blocoRepository;
+    private final LaminaRepository laminaRepository;
+    private final EstoqueRepository estoqueRepository;
 
-    public PedidoService(PedidoRepository pedidoRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, BlocoRepository blocoRepository, LaminaRepository laminaRepository, EstoqueRepository estoqueRepository) {
         this.pedidoRepository = pedidoRepository;
+        this.blocoRepository = blocoRepository;
+        this.laminaRepository = laminaRepository;
+        this.estoqueRepository = estoqueRepository;
     }
 
     // 📋 LISTAR TODOS
