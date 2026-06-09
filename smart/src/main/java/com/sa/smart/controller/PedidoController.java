@@ -2,12 +2,15 @@ package com.sa.smart.controller;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import com.sa.smart.model.Pedido;
 import com.sa.smart.service.PedidoService;
+
 
 @RestController
 @RequestMapping("/api/pedidos")
@@ -58,8 +61,8 @@ public class PedidoController {
             @RequestBody Map<String, Object> campos) {
 
         return ResponseEntity.ok(
-            pedidoService.atualizarParcial(id, campos)
-        );
+                pedidoService.atualizarParcial(id, campos)
+            );
     }
 
     // ❌ DELETAR (somente pendentes)
@@ -74,4 +77,5 @@ public class PedidoController {
     public List<Pedido> tabela() {
         return pedidoService.ultimosPedidos();
     }
+
 }
