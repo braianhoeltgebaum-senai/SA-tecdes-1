@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -17,15 +14,21 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f1f5f9;
-            padding: 30px;
+            font-family: "Inter", Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, #1e293b 0%, #0f172a 40%),
+                #020617;
+            min-height: 100vh;
+            padding: 40px;
+            color: white;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 30px;
-            color: #1e293b;
+            margin-bottom: 35px;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: 1px;
         }
 
         .layout {
@@ -34,176 +37,295 @@
             align-items: flex-start;
         }
 
-        .formulario {
+        /* =========================
+           FORM
+        ========================== */
+
+        .painel-form {
             flex: 1;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.4),
+                inset 0 0 0 1px rgba(255,255,255,0.03);
         }
 
-        .preview {
-            width: 450px;
-            background: #1e293b;
-            border-radius: 10px;
-            padding: 20px;
-            color: white;
-            position: sticky;
-            top: 20px;
+        .top-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 25px;
         }
 
-        .campo {
-            margin-bottom: 15px;
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            font-weight: bold;
+        .field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
         }
 
         input,
         select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #cbd5e1;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 15px;
+            transition: 0.2s;
         }
 
-        .bloco-card {
-            margin-top: 25px;
-            border: 1px solid #dbeafe;
-            padding: 15px;
-            border-radius: 10px;
-            background: #f8fafc;
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 4px rgba(56,189,248,0.15);
         }
 
-        .bloco-title {
+        .bloco {
+            margin-top: 28px;
+            border-radius: 22px;
+            overflow: hidden;
+            background: linear-gradient(
+                180deg,
+                rgba(30,41,59,0.95),
+                rgba(15,23,42,0.95)
+            );
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .bloco-header {
+            padding: 18px 22px;
+            background: rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bloco-header h2 {
             font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .bloco-content {
+            padding: 22px;
+        }
+
+        .laminasContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
 
         .lamina-card {
-            border: 1px solid #dbeafe;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 15px;
-            background: white;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .lamina-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .lamina-topo span {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .lamina-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
         }
 
         .btn {
-            padding: 10px 15px;
             border: none;
-            border-radius: 6px;
+            border-radius: 14px;
+            padding: 13px 18px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: bold;
+            transition: 0.2s;
         }
 
         .btn-add {
-            background: #2563eb;
+            width: 100%;
+            margin-top: 18px;
+            background: linear-gradient(135deg,#06b6d4,#3b82f6);
             color: white;
-            margin-top: 10px;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59,130,246,0.35);
         }
 
         .btn-remove {
-            background: #ef4444;
-            color: white;
-            margin-top: 10px;
+            background: rgba(239,68,68,0.18);
+            color: #fca5a5;
+            padding: 8px 14px;
+        }
+
+        .btn-remove:hover {
+            background: rgba(239,68,68,0.3);
         }
 
         .btn-salvar {
-            background: #111827;
-            color: white;
             width: 100%;
-            margin-top: 25px;
+            margin-top: 30px;
+            padding: 18px;
+            font-size: 16px;
+            background: linear-gradient(135deg,#0ea5e9,#2563eb);
+            color: white;
         }
 
-        .palco {
+        .btn-salvar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(37,99,235,0.4);
+        }
+
+        /* =========================
+           PREVIEW
+        ========================== */
+
+        .painel-preview {
+            width: 500px;
+            position: sticky;
+            top: 40px;
+        }
+
+        .preview-card {
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.4),
+                inset 0 0 0 1px rgba(255,255,255,0.03);
+        }
+
+        .preview-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .bloco-preview {
             position: relative;
-            width: 350px;
-            height: 600px;
-            margin: auto;
+            width: 340px;
+            height: 170px;
         }
 
         .camada {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             pointer-events: none;
         }
 
-        .bloco-preview {
-            position: absolute;
-            width: 100%;
-            height: 180px;
-        }
-
-        #bloco1 {
-            top: 0px;
-        }
-
-        #bloco2 {
-            top: 140px;
-        }
-
-        #bloco3 {
-            top: 280px;
-        }
-
-        .tampa {
+        .tampa-global {
+            width: 340px;
+            height: 220px;
+            margin-bottom: -35px;
             z-index: 999;
-            top: -20px !important;
+            position: relative;
         }
 
-        pre {
-            background: #0f172a;
-            color: #e2e8f0;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: auto;
+        @media(max-width:1200px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .painel-preview {
+                width: 100%;
+                position: relative;
+                top: 0;
+            }
         }
+
+        @media(max-width:700px) {
+
+            body {
+                padding: 20px;
+            }
+
+            .top-grid,
+            .lamina-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bloco-preview,
+            .tampa-global {
+                width: 100%;
+            }
+        }
+
     </style>
 </head>
 
 <body>
 
-    <h1>Smart Factory</h1>
+    <h1>SMART FACTORY</h1>
 
     <div class="layout">
 
-        <div class="formulario">
+        <!-- =========================
+             FORM
+        ========================== -->
+
+        <div class="painel-form">
 
             <form id="formPedido">
 
-                <div class="campo">
-                    <label>Ordem Produção</label>
-                    <input type="text" id="ordemProducao">
-                </div>
+                <div class="top-grid">
 
-                <div class="campo">
-                    <label>Tipo Pedido</label>
+                    <div class="field">
+                        <label>Ordem de Produção</label>
+                        <input type="text" id="ordemProducao">
+                    </div>
 
-                    <select id="tipoPedido">
-                        <option value="1">1 Bloco</option>
-                        <option value="2">2 Blocos</option>
-                        <option value="3">3 Blocos</option>
-                    </select>
-                </div>
+                    <div class="field">
+                        <label>Tipo do Pedido</label>
+                        <select id="tipoPedido">
+                            <option value="1">1 Bloco</option>
+                            <option value="2">2 Blocos</option>
+                            <option value="3">3 Blocos</option>
+                        </select>
+                    </div>
 
-                <div class="campo">
-                    <label>Cor Tampa</label>
+                    <div class="field">
+                        <label>Cor da Tampa</label>
+                        <select id="corTampa">
+                            <option value="1">Preto</option>
+                            <option value="2">Vermelho</option>
+                            <option value="3">Azul</option>
+                        </select>
+                    </div>
 
-                    <select id="corTampa">
-                        <option value="1">Preto</option>
-                        <option value="2">Vermelho</option>
-                        <option value="3">Azul</option>
-                    </select>
                 </div>
 
                 <div id="blocosContainer"></div>
@@ -214,53 +336,85 @@
 
             </form>
 
-            <pre id="resultado"></pre>
-
         </div>
 
-        <div class="preview">
+        <!-- =========================
+             PREVIEW
+        ========================== -->
 
-            <h2 style="margin-bottom:20px;">Prévia</h2>
+        <div class="painel-preview">
 
-            <div class="palco" id="palcoPreview"></div>
+            <div class="preview-card">
+
+                <div class="preview-title">
+                    Visualização do Produto
+                </div>
+
+                <div class="stack">
+
+                    <div class="tampa-global">
+                        <div id="previewTampa" class="camada"></div>
+                    </div>
+
+                    <div id="previewStack"></div>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
+<script>
 
-    <script>
+const tipoPedido =
+document.getElementById("tipoPedido");
 
-        const tipoPedido = document.getElementById("tipoPedido");
-        const blocosContainer = document.getElementById("blocosContainer");
-        const palcoPreview = document.getElementById("palcoPreview");
+const blocosContainer =
+document.getElementById("blocosContainer");
 
-        criarBlocos(1);
 
-        tipoPedido.addEventListener("change", () => {
-            criarBlocos(Number(tipoPedido.value));
-        });
+// ==========================
+// CRIAR BLOCOS
+// ==========================
 
-        document.getElementById("corTampa")
-            .addEventListener("change", atualizarPreview);
+criarBlocos(1);
 
-        function criarBlocos(qtd) {
+tipoPedido.addEventListener("change", () => {
 
-            blocosContainer.innerHTML = "";
+    criarBlocos(
+        Number(tipoPedido.value)
+    );
 
-            for (let i = 1; i <= qtd; i++) {
+});
 
-                blocosContainer.innerHTML += `
+function criarBlocos(qtd) {
 
-                <div class="bloco-card">
+    // MÁXIMO 3 BLOCOS
+    if(qtd > 3) qtd = 3;
 
-                    <div class="bloco-title">
-                        Bloco ${i}
-                    </div>
+    blocosContainer.innerHTML = "";
 
-                    <div class="campo">
-                        <label>Cor Bloco</label>
+    for(let i = 1; i <= qtd; i++) {
 
-                        <select class="corBloco"
+        blocosContainer.innerHTML += `
+
+            <div class="bloco">
+
+                <div class="bloco-header">
+
+                    <h2>Bloco ${i}</h2>
+
+                </div>
+
+                <div class="bloco-content">
+
+                    <div class="field">
+
+                        <label>Cor do Bloco</label>
+
+                        <select
+                            class="corBloco"
                             onchange="atualizarPreview()">
 
                             <option value="1">Preto</option>
@@ -268,14 +422,7 @@
                             <option value="3">Azul</option>
 
                         </select>
-                    </div>
 
-                    <div class="campo">
-                        <label>ID Estoque</label>
-
-                        <input type="number"
-                            class="estoqueId"
-                            value="${i}">
                     </div>
 
                     <div class="laminasContainer"></div>
@@ -285,330 +432,460 @@
                         class="btn btn-add"
                         onclick="adicionarLamina(this)">
 
-                        + Lâmina
+                        + Adicionar Lâmina
 
                     </button>
 
                 </div>
-                `;
-
-                const bloco =
-                    blocosContainer.querySelectorAll(".bloco-card")[i - 1];
-
-                adicionarLamina(
-                    bloco.querySelector(".btn-add")
-                );
-            }
-
-            atualizarPreview();
-        }
-
-        function adicionarLamina(btn) {
-
-            const bloco =
-                btn.closest(".bloco-card");
-
-            const container =
-                bloco.querySelector(".laminasContainer");
-
-            const total =
-                container.querySelectorAll(".lamina-card").length;
-
-            if (total >= 3) {
-                alert("Máximo 3 lâminas");
-                return;
-            }
-
-            const div = document.createElement("div");
-
-            div.className = "lamina-card";
-
-            div.innerHTML = `
-
-            <div class="campo">
-
-                <label>Cor Lâmina</label>
-
-                <select class="corLamina"
-                    onchange="atualizarPreview()">
-
-                    <option value="1">Vermelho</option>
-                    <option value="2">Azul</option>
-                    <option value="3">Amarelo</option>
-                    <option value="4">Verde</option>
-                    <option value="5">Preto</option>
-                    <option value="6">Branco</option>
-
-                </select>
 
             </div>
 
-            <div class="campo">
+        `;
 
-                <label>Padrão</label>
+    }
 
-                <select class="padraoLamina"
-                    onchange="atualizarPreview()">
+    atualizarPreview();
 
-                    <option value="1">Casa</option>
-                    <option value="2">Navio</option>
-                    <option value="3">Estrela</option>
+}
 
-                </select>
+
+
+// ==========================
+// ADICIONAR LÂMINA
+// ==========================
+
+function adicionarLamina(btn) {
+
+    const bloco =
+    btn.closest(".bloco");
+
+    const container =
+    bloco.querySelector(".laminasContainer");
+
+    const total =
+    container.querySelectorAll(".lamina-card").length;
+
+    // MÁXIMO 3 LÂMINAS
+    if(total >= 3) {
+
+        alert("Máximo de 3 lâminas por bloco");
+        return;
+
+    }
+
+    const id = Date.now();
+
+    const html = `
+
+        <div class="lamina-card" id="lamina-${id}">
+
+            <div class="lamina-topo">
+
+                <span>Lâmina ${total + 1}</span>
+
+                <button
+                    type="button"
+                    class="btn btn-remove"
+                    onclick="removerLamina('${id}')">
+
+                    Remover
+
+                </button>
 
             </div>
 
-            <div class="campo">
+            <div class="lamina-grid">
 
-                <label>Posição</label>
+                <!-- COR -->
 
-                <select class="posicaoLamina"
-                    onchange="atualizarPreview()">
+                <div class="field">
 
-                    <option value="1">Esquerda</option>
-                    <option value="2">Frente</option>
-                    <option value="3">Direita</option>
+                    <label>Cor</label>
 
-                </select>
+                    <select
+                        class="corLamina"
+                        onchange="atualizarPreview()">
 
-            </div>
+                        <option value="1">Vermelho</option>
+                        <option value="2">Azul</option>
+                        <option value="3">Amarelo</option>
+                        <option value="4">Verde</option>
+                        <option value="5">Preto</option>
+                        <option value="6">Branco</option>
 
-            <button
-                type="button"
-                class="btn btn-remove"
-                onclick="removerLamina(this)">
+                    </select>
 
-                Remover
-
-            </button>
-            `;
-
-            container.appendChild(div);
-
-            atualizarPreview();
-        }
-
-        function removerLamina(btn) {
-
-            btn.closest(".lamina-card").remove();
-
-            atualizarPreview();
-        }
-
-        function atualizarPreview() {
-
-            palcoPreview.innerHTML = "";
-
-            const qtdBlocos =
-                Number(tipoPedido.value);
-
-            const corTampa =
-                document.getElementById("corTampa").value;
-
-            const blocos =
-                document.querySelectorAll(".bloco-card");
-
-            blocos.forEach((bloco, index) => {
-
-                const numeroBloco = index + 1;
-
-                const blocoContainer =
-                    document.createElement("div");
-
-                blocoContainer.className =
-                    "bloco-preview";
-
-                blocoContainer.id =
-                    `bloco${numeroBloco}`;
-
-                // BLOCO BASE
-
-                const corBloco =
-                    bloco.querySelector(".corBloco").value;
-
-                blocoContainer.innerHTML += `
-                <div class="camada"
-                    style="
-                        z-index:1;
-                        background-image:url('../assets/bloco/rBlocoCor${corBloco}.png');
-                    ">
                 </div>
-                `;
 
-                // LÂMINAS
 
-                bloco.querySelectorAll(".lamina-card")
-                    .forEach(lamina => {
+                <!-- PADRÃO -->
 
-                        const cor =
-                            lamina.querySelector(".corLamina").value;
+                <div class="field">
 
-                        const padrao =
-                            lamina.querySelector(".padraoLamina").value;
+                    <label>Padrão</label>
 
-                        const posicao =
-                            lamina.querySelector(".posicaoLamina").value;
+                    <select
+                        class="padraoLamina"
+                        onchange="atualizarPreview()">
 
-                        // LÂMINA
+                        <option value="0">Nenhum</option>
+                        <option value="1">Casa</option>
+                        <option value="2">Navio</option>
+                        <option value="3">Estrela</option>
 
-                        blocoContainer.innerHTML += `
-                        <div class="camada"
-                            style="
-                                z-index:${10 + Number(posicao)};
-                                background-image:url('../assets/laminas/lamina${posicao}-${cor}.png');
-                            ">
-                        </div>
-                        `;
+                    </select>
 
-                        // PADRÃO
+                </div>
 
-                        blocoContainer.innerHTML += `
-                        <div class="camada"
-                            style="
-                                z-index:${20 + Number(posicao)};
-                                background-image:url('../assets/padroes/padrao${posicao}-${padrao}.png');
-                            ">
-                        </div>
-                        `;
-                    });
 
-                // TAMPA APENAS NO PRIMEIRO BLOCO
+                <!-- POSIÇÃO -->
 
-                if (index === 0) {
+                <div class="field">
 
-                    blocoContainer.innerHTML += `
-                    <div class="camada tampa"
-                        style="
-                            background-image:url('../assets/bloco/rTampa${corTampa}.png');
-                        ">
-                    </div>
-                    `;
-                }
+                    <label>Posição</label>
 
-                palcoPreview.appendChild(blocoContainer);
+                    <select
+                        class="posicaoLamina"
+                        onchange="atualizarPreview()">
+
+                        <option value="1">Esquerda</option>
+                        <option value="2">Frente</option>
+                        <option value="3">Direita</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    container.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+
+    atualizarPreview();
+
+}
+
+
+
+// ==========================
+// REMOVER
+// ==========================
+
+function removerLamina(id) {
+
+    document
+    .getElementById(`lamina-${id}`)
+    .remove();
+
+    atualizarPreview();
+
+}
+
+
+
+// ==========================
+// PREVIEW
+// ==========================
+
+function atualizarPreview() {
+
+    const previewStack =
+    document.getElementById("previewStack");
+
+    previewStack.innerHTML = "";
+
+
+
+    // ======================
+    // TAMPA
+    // ======================
+
+    const corTampa =
+    document.getElementById("corTampa").value;
+
+    document.getElementById("previewTampa")
+    .style.backgroundImage =
+    `url('../assets/bloco/rTampa${corTampa}.png')`;
+
+
+
+    // ======================
+    // CADA BLOCO
+    // ======================
+
+    document.querySelectorAll(".bloco")
+    .forEach((bloco, index) => {
+
+        const corBloco =
+        bloco.querySelector(".corBloco").value;
+
+        const blocoPreview =
+        document.createElement("div");
+
+        blocoPreview.className =
+        "bloco-preview";
+
+
+
+        // ======================
+        // CAMADAS
+        // ======================
+
+        blocoPreview.innerHTML = `
+
+            <!-- BLOCO -->
+            <div
+                class="camada"
+                style="
+                    z-index:1;
+                    background-image:
+                    url('../assets/bloco/rBlocoCor${corBloco}.png');
+                ">
+            </div>
+
+
+            <!-- LÂMINAS -->
+            <div class="camada" id="lamina-esquerda-${index}"></div>
+            <div class="camada" id="lamina-frente-${index}"></div>
+            <div class="camada" id="lamina-direita-${index}"></div>
+
+
+            <!-- PADRÕES -->
+            <div class="camada" id="padrao-esquerda-${index}"></div>
+            <div class="camada" id="padrao-frente-${index}"></div>
+            <div class="camada" id="padrao-direita-${index}"></div>
+
+        `;
+
+        previewStack.appendChild(
+            blocoPreview
+        );
+
+
+
+        // ======================
+        // LIMPA CAMADAS
+        // ======================
+
+        document.getElementById(
+            `lamina-esquerda-${index}`
+        ).style.backgroundImage = "none";
+
+        document.getElementById(
+            `lamina-frente-${index}`
+        ).style.backgroundImage = "none";
+
+        document.getElementById(
+            `lamina-direita-${index}`
+        ).style.backgroundImage = "none";
+
+        document.getElementById(
+            `padrao-esquerda-${index}`
+        ).style.backgroundImage = "none";
+
+        document.getElementById(
+            `padrao-frente-${index}`
+        ).style.backgroundImage = "none";
+
+        document.getElementById(
+            `padrao-direita-${index}`
+        ).style.backgroundImage = "none";
+
+
+
+        // ======================
+        // LÂMINAS DO BLOCO
+        // ======================
+
+        bloco.querySelectorAll(".lamina-card")
+        .forEach(card => {
+
+            const cor =
+            card.querySelector(".corLamina").value;
+
+            const padrao =
+            card.querySelector(".padraoLamina").value;
+
+            const posicao =
+            card.querySelector(".posicaoLamina").value;
+
+
+
+            // ======================
+            // DEFINE POSIÇÃO
+            // ======================
+
+            let nomePosicao = "";
+
+            if(posicao == 1) {
+
+                nomePosicao = "esquerda";
+
+            }
+
+            if(posicao == 2) {
+
+                nomePosicao = "frente";
+
+            }
+
+            if(posicao == 3) {
+
+                nomePosicao = "direita";
+
+            }
+
+
+
+            // ======================
+            // LÂMINA
+            // ======================
+
+            const camadaLamina =
+            document.getElementById(
+                `lamina-${nomePosicao}-${index}`
+            );
+
+            camadaLamina.style.zIndex = 2;
+
+            camadaLamina.style.backgroundImage =
+            `url('../assets/laminas/lamina${posicao}-${cor}.png')`;
+
+
+
+            // ======================
+            // PADRÃO
+            // ======================
+
+            const camadaPadrao =
+            document.getElementById(
+                `padrao-${nomePosicao}-${index}`
+            );
+
+            camadaPadrao.style.zIndex = 3;
+
+
+
+            // SEM DESENHO
+            if(padrao == 0) {
+
+                camadaPadrao.style.backgroundImage =
+                "none";
+
+            }
+
+            // COM DESENHO
+            else {
+
+                camadaPadrao.style.backgroundImage =
+                `url('../assets/padroes/padrao${posicao}-${padrao}.png')`;
+
+            }
+
+        });
+
+    });
+
+}
+
+
+
+// ==========================
+// INICIAL
+// ==========================
+
+atualizarPreview();
+
+
+
+// ==========================
+// ENVIO
+// ==========================
+
+document.getElementById("formPedido")
+.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const blocos = [];
+
+    document.querySelectorAll(".bloco")
+    .forEach(bloco => {
+
+        const laminas = [];
+
+        bloco.querySelectorAll(".lamina-card")
+        .forEach(card => {
+
+            laminas.push({
+
+                cor:
+                Number(
+                    card.querySelector(".corLamina").value
+                ),
+
+                padrao:
+                Number(
+                    card.querySelector(".padraoLamina").value
+                ),
+
+                posicaoNoBloco:
+                Number(
+                    card.querySelector(".posicaoLamina").value
+                )
 
             });
 
-        }
+        });
 
-        atualizarPreview();
+        blocos.push({
 
-        // ENVIO BACKEND
+            corBloco:
+            Number(
+                bloco.querySelector(".corBloco").value
+            ),
 
-        document.getElementById("formPedido")
-            .addEventListener("submit", async (e) => {
+            estoque: {
+                id: 1
+            },
 
-                e.preventDefault();
+            laminas: laminas
 
-                const blocos = [];
+        });
 
-                document.querySelectorAll(".bloco-card")
-                    .forEach(bloco => {
+    });
 
-                        const laminas = [];
+    const pedido = {
 
-                        bloco.querySelectorAll(".lamina-card")
-                            .forEach(l => {
+        ordemProducao:
+        document.getElementById("ordemProducao").value,
 
-                                laminas.push({
+        tipoPedido:
+        Number(tipoPedido.value),
 
-                                    cor: Number(
-                                        l.querySelector(".corLamina").value
-                                    ),
+        corTampa:
+        Number(
+            document.getElementById("corTampa").value
+        ),
 
-                                    padrao: Number(
-                                        l.querySelector(".padraoLamina").value
-                                    ),
+        blocos: blocos
 
-                                    posicaoNoBloco: Number(
-                                        l.querySelector(".posicaoLamina").value
-                                    )
+    };
 
-                                });
+    console.log(pedido);
 
-                            });
+    alert("Pedido salvo!");
 
-                        blocos.push({
+});
 
-                            corBloco: Number(
-                                bloco.querySelector(".corBloco").value
-                            ),
-
-                            estoque: {
-                                id: Number(
-                                    bloco.querySelector(".estoqueId").value
-                                )
-                            },
-
-                            laminas: laminas
-
-                        });
-
-                    });
-
-                const pedido = {
-
-                    ordemProducao:
-                        document.getElementById("ordemProducao").value,
-
-                    tipoPedido:
-                        Number(tipoPedido.value),
-
-                    corTampa:
-                        Number(
-                            document.getElementById("corTampa").value
-                        ),
-
-                    statusPedido: 1,
-
-                    posicaoExpedicao: 1,
-
-                    blocos: blocos
-                };
-
-                document.getElementById("resultado")
-                    .textContent =
-                    JSON.stringify(pedido, null, 2);
-
-                try {
-
-                    const response =
-                        await fetch(
-                            "http://localhost:8088/pedidos",
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-
-                                body: JSON.stringify(pedido)
-                            }
-                        );
-
-                    if (response.ok) {
-
-                        alert("Pedido salvo!");
-
-                    } else {
-
-                        alert("Erro backend");
-
-                    }
-
-                } catch {
-
-                    alert("Erro conexão backend");
-
-                }
-
-            });
-
-    </script>
+</script>
 
 </body>
 
 </html>
-
-
-
