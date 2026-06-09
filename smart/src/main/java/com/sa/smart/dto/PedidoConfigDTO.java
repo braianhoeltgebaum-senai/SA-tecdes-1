@@ -17,7 +17,7 @@ public class PedidoConfigDTO {
     private int corTampa;
     @JsonProperty("Status_Pedido")
     private int statusPedido;
-    @JsonProperty("Status_Pedido")
+    @JsonProperty("Blocos")
     private List<BlocoDTO> blocos;
     @JsonProperty("Ip_CLP")
     private String ipClp;
