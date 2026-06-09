@@ -1,505 +1,597 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SMART 4.0 · Dashboard</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART 4.0 · Dashboard de Monitoramento</title>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      body {
-        background: #0a0f1a;
-        font-family: "Segoe UI", system-ui, sans-serif;
-        padding: 32px;
-        color: #eef2ff;
-      }
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #0a0f1a;
+            color: #eef2ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-      .container {
-        max-width: 1400px;
-        margin: 0 auto;
-      }
+        /* --- BARRA DE NAVEGAÇÃO (mesmo modelo do gestor) --- */
+        nav {
+            width: 100%;
+            background: #111c30;
+            border-bottom: 1px solid #1e293b;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    /* CABEÇALHO */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    h1 {
-      font-weight: 600;
-      font-size: 1.8rem;
-      letter-spacing: -0.3px;
-      background: linear-gradient(135deg, #c0e0ff, #60a5fa);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-    .sub {
-      color: #94a3b8;
-      font-size: 0.85rem;
-      margin-top: 6px;
-    }
-    .refresh-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
-      padding: 8px 20px;
-      border-radius: 40px;
-      color: #cbd5e6;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .refresh-btn:hover {
-      background: #2d3a4e;
-      border-color: #5b7a9a;
-      color: white;
-    }
+        .nav-logo {
+            display: flex;
+            flex-direction: column;
+        }
 
-    /* CARDS ESTATÍSTICAS */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 32px;
-    }
-    .stat-card {
-      background: #111827;
-      border-radius: 20px;
-      padding: 20px;
-      border: 1px solid #1f2a3e;
-      transition: 0.2s;
-    }
-    .stat-card .label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #7e8ba3;
-      margin-bottom: 8px;
-    }
-    .stat-card .value {
-      font-size: 2.7rem;
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-    .stat-card .trend {
-      font-size: 0.75rem;
-      color: #5b6e8c;
-    }
-    .stat-card.total .value { color: #60a5fa; }
-    .stat-card.pendente .value { color: #facc15; }
-    .stat-card.producao .value { color: #38bdf8; }
-    .stat-card.concluido .value { color: #4ade80; }
+        .nav-logo h1 {
+            font-size: 1.2rem;
+            color: #38bdf8;
+            font-weight: 700;
+        }
 
-    /* LAYOUT DOS PAINÉIS (ESTOQUE + EXPEDIÇÃO) */
-    .panels {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 28px;
-      margin-bottom: 20px;
-    }
-    .panel {
-      background: #0f172a;
-      border-radius: 24px;
-      border: 1px solid #1e293b;
-      overflow: hidden;
-      flex: 1;
-      min-width: 280px;
-    }
-    .panel-header {
-      padding: 16px 20px;
-      background: #0b1120;
-      border-bottom: 1px solid #1e293b;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-    .panel-header h3 {
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-    .badge-pos {
-      background: #1e293b;
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      color: #a0b3d9;
-    }
-    .panel-body {
-      padding: 20px;
-    }
+        .nav-logo span {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
 
-    /* GRID DE ESTOQUE (7x4) */
-    .stock-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-    }
-    .stock-cell {
-      aspect-ratio: 1 / 1;
-      background: #111827;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 500;
-      border: 1px solid #283548;
-      transition: 0.1s;
-      cursor: default;
-    }
-    .stock-cell.vazio {
-      background: #0f172a;
-      border: 1px dashed #334155;
-      color: #5b6e8c;
-    }
-    .stock-cell.preto {
-      background: #1e1e2f;
-      border-color: #3b3b5c;
-      color: #cbd5e6;
-      box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-    }
-    .stock-cell.vermelho {
-      background: #7f1a1a;
-      border-color: #c24141;
-      color: #fecaca;
-      box-shadow: 0 0 6px rgba(180, 50, 50, 0.3);
-    }
-    .stock-cell.azul {
-      background: #1e3a6b;
-      border-color: #3b82f6;
-      color: #bfdbfe;
-      box-shadow: 0 0 6px rgba(59,130,246,0.3);
-    }
-    .cell-number {
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-    .cell-label {
-      font-size: 0.6rem;
-      opacity: 0.7;
-      margin-top: 4px;
-    }
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
 
-    /* GRID EXPEDIÇÃO (3x4) */
-    .exp-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .exp-cell {
-      background: #111827;
-      border-radius: 14px;
-      border: 1px solid #283548;
-      padding: 12px 6px;
-      text-align: center;
-      transition: 0.1s;
-      min-height: 75px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .exp-cell.empty {
-      background: #0f172a;
-      border-style: dashed;
-      color: #6b7a99;
-    }
-    .exp-cell.occupied {
-      background: linear-gradient(145deg, #0b2e26, #064e3b);
-      border-color: #2dd4bf;
-      box-shadow: 0 0 8px rgba(45,212,191,0.2);
-    }
-    .exp-pos {
-      font-weight: 700;
-      font-size: 0.8rem;
-    }
-    .exp-op {
-      font-size: 0.65rem;
-      margin-top: 6px;
-      font-family: monospace;
-      color: #9efff0;
-      word-break: break-all;
-    }
+        .nav-menu a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
 
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 18px;
-      padding-top: 12px;
-      border-top: 1px solid #1e293b;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.7rem;
-      color: #94a3b8;
-    }
-    .legend-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 4px;
-    }
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #38bdf8;
+        }
 
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 0.7rem;
-      color: #334155;
-    }
-    button {
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .error-msg {
-      background: #2c1a1e;
-      border: 1px solid #ef4444;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 20px;
-      font-size: 0.8rem;
-      color: #f9acac;
-    }
-  </style>
+        /* --- CONTEÚNO DO DASHBOARD (original adaptado) --- */
+        .container {
+            max-width: 1400px;
+            margin: 32px auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        /* cabeçalho interno (sem redundância com o nav) */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .dashboard-header h2 {
+            font-weight: 600;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #c0e0ff, #60a5fa);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .sub {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+
+        .refresh-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: #cbd5e6;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .refresh-btn:hover {
+            background: #2d3a4e;
+            border-color: #5b7a9a;
+            color: white;
+        }
+
+        /* CARDS ESTATÍSTICAS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #111827;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #1f2a3e;
+            transition: 0.2s;
+        }
+
+        .stat-card .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7e8ba3;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 2.7rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-card .trend {
+            font-size: 0.75rem;
+            color: #5b6e8c;
+        }
+
+        .stat-card.total .value {
+            color: #60a5fa;
+        }
+
+        .stat-card.pendente .value {
+            color: #facc15;
+        }
+
+        .stat-card.producao .value {
+            color: #38bdf8;
+        }
+
+        .stat-card.concluido .value {
+            color: #4ade80;
+        }
+
+        /* LAYOUT DOS PAINÉIS (ESTOQUE + EXPEDIÇÃO) */
+        .panels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: #0f172a;
+            border-radius: 24px;
+            border: 1px solid #1e293b;
+            overflow: hidden;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            background: #0b1120;
+            border-bottom: 1px solid #1e293b;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .panel-header h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .badge-pos {
+            background: #1e293b;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #a0b3d9;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        /* GRID DE ESTOQUE (7x4) */
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .stock-cell {
+            aspect-ratio: 1 / 1;
+            background: #111827;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: 1px solid #283548;
+            transition: 0.1s;
+            cursor: default;
+        }
+
+        .stock-cell.vazio {
+            background: #0f172a;
+            border: 1px dashed #334155;
+            color: #5b6e8c;
+        }
+
+        .stock-cell.preto {
+            background: #1e1e2f;
+            border-color: #3b3b5c;
+            color: #cbd5e6;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .stock-cell.vermelho {
+            background: #7f1a1a;
+            border-color: #c24141;
+            color: #fecaca;
+            box-shadow: 0 0 6px rgba(180, 50, 50, 0.3);
+        }
+
+        .stock-cell.azul {
+            background: #1e3a6b;
+            border-color: #3b82f6;
+            color: #bfdbfe;
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+        }
+
+        .cell-number {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .cell-label {
+            font-size: 0.6rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        /* GRID EXPEDIÇÃO (3x4) */
+        .exp-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .exp-cell {
+            background: #111827;
+            border-radius: 14px;
+            border: 1px solid #283548;
+            padding: 12px 6px;
+            text-align: center;
+            transition: 0.1s;
+            min-height: 75px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .exp-cell.empty {
+            background: #0f172a;
+            border-style: dashed;
+            color: #6b7a99;
+        }
+
+        .exp-cell.occupied {
+            background: linear-gradient(145deg, #0b2e26, #064e3b);
+            border-color: #2dd4bf;
+            box-shadow: 0 0 8px rgba(45, 212, 191, 0.2);
+        }
+
+        .exp-pos {
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .exp-op {
+            font-size: 0.65rem;
+            margin-top: 6px;
+            font-family: monospace;
+            color: #9efff0;
+            word-break: break-all;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 18px;
+            padding-top: 12px;
+            border-top: 1px solid #1e293b;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.7rem;
+            color: #334155;
+        }
+
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .error-msg {
+            background: #2c1a1e;
+            border: 1px solid #ef4444;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: #f9acac;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div>
-      <h1>SMART 4.0 · Planta Digital</h1>
-      <div class="sub">Monitoramento em tempo real | Estoque & Expedição</div>
-    </div>
-    <button class="refresh-btn" onclick="carregarTodosDados()">
-      Atualizar dashboard
-    </button>
-  </div>
 
-  <!-- Cards estatísticas -->
-  <div class="stats-grid" id="statsContainer">
-    <div class="stat-card total"><div class="label">TOTAL PEDIDOS</div><div class="value" id="totalPedidos">--</div><div class="trend">ordens registradas</div></div>
-    <div class="stat-card pendente"><div class="label">PENDENTES</div><div class="value" id="pendentes">--</div><div class="trend">aguardando início</div></div>
-    <div class="stat-card producao"><div class="label">EM PRODUÇÃO</div><div class="value" id="producao">--</div><div class="trend">em andamento</div></div>
-    <div class="stat-card concluido"><div class="label">CONCLUÍDOS</div><div class="value" id="concluidos">--</div><div class="trend">prontos / expedição</div></div>
-  </div>
-
-  <!-- Painéis: Estoque + Expedição -->
-  <div class="panels">
-    <!-- Estoque (28 posições) -->
-    <div class="panel">
-      <div class="panel-header">
-        <h3>ESTOQUE DE BLOCOS</h3>
-        <span class="badge-pos" id="estoqueContador">0/28 ocupadas</span>
-      </div>
-      <div class="panel-body">
-        <div class="stock-grid" id="stockGrid"></div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#0f172a; border:1px dashed #475569;"></div> Vazio</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#1e1e2f; border:1px solid #4b4b6e;"></div> Preto</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#7f1a1a; border:1px solid #f87171;"></div> Vermelho</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#1e3a6b; border:1px solid #60a5fa;"></div> Azul</div>
+    <!-- MENU DE NAVEGAÇÃO (modelo fornecido) -->
+    <nav>
+        <div class="nav-logo">
+            <h1>SMART 4.0 · Planta Digital</h1>
+            <span>SENAI - TIMBÓ-SC</span>
         </div>
-      </div>
-    </div>
+        <ul class="nav-menu">
+            <li><a href="#">Início</a></li>
+            <li><a href="Formulario.html">Criar Pedido</a></li>
+            <li><a href="gestor.html">Gestor De Pedidos</a></li>
+            <li><a href="Dashboard_simples.html" class="active">Dashboard</a></li>
+        </ul>
+    </nav>
 
-    <!-- Expedição (12 posições) -->
-    <div class="panel">
-      <div class="panel-header">
-        <h3>EXPEDIÇÃO</h3>
-        <span class="badge-pos" id="expedicaoContador">0/12 ocupadas</span>
-      </div>
-      <div class="panel-body">
-        <div class="exp-grid" id="expGrid"></div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#0f172a; border:1px dashed #5b6e8c;"></div> Livre</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#064e3b; border:1px solid #2dd4bf;"></div> Ocupado (OP)</div>
+    <!-- Conteúdo principal do Dashboard -->
+    <div class="container">
+        <div class="dashboard-header">
+            <div>
+                <h2>Monitoramento em tempo real</h2>
+                <div class="sub">Estoque & Expedição · Dados atualizados via API</div>
+            </div>
+            <button class="refresh-btn" onclick="carregarTodosDados()">
+                ↻ Atualizar dashboard
+            </button>
         </div>
-      </div>
+
+        <!-- Cards estatísticas -->
+        <div class="stats-grid" id="statsContainer">
+            <div class="stat-card total"><div class="label">TOTAL PEDIDOS</div><div class="value" id="totalPedidos">--</div><div class="trend">ordens registradas</div></div>
+            <div class="stat-card pendente"><div class="label">PENDENTES</div><div class="value" id="pendentes">--</div><div class="trend">aguardando início</div></div>
+            <div class="stat-card producao"><div class="label">EM PRODUÇÃO</div><div class="value" id="producao">--</div><div class="trend">em andamento</div></div>
+            <div class="stat-card concluido"><div class="label">CONCLUÍDOS</div><div class="value" id="concluidos">--</div><div class="trend">prontos / expedição</div></div>
+        </div>
+
+        <!-- Painéis: Estoque + Expedição -->
+        <div class="panels">
+            <!-- Estoque (28 posições) -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>ESTOQUE DE BLOCOS</h3>
+                    <span class="badge-pos" id="estoqueContador">0/28 ocupadas</span>
+                </div>
+                <div class="panel-body">
+                    <div class="stock-grid" id="stockGrid"></div>
+                    <div class="legend">
+                        <div class="legend-item"><div class="legend-dot" style="background:#0f172a; border:1px dashed #475569;"></div> Vazio</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#1e1e2f; border:1px solid #4b4b6e;"></div> Preto</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#7f1a1a; border:1px solid #f87171;"></div> Vermelho</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#1e3a6b; border:1px solid #60a5fa;"></div> Azul</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expedição (12 posições) -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>EXPEDIÇÃO</h3>
+                    <span class="badge-pos" id="expedicaoContador">0/12 ocupadas</span>
+                </div>
+                <div class="panel-body">
+                    <div class="exp-grid" id="expGrid"></div>
+                    <div class="legend">
+                        <div class="legend-item"><div class="legend-dot" style="background:#0f172a; border:1px dashed #5b6e8c;"></div> Livre</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#064e3b; border:1px solid #2dd4bf;"></div> Ocupado (OP)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>API backend · dbSmart40 | Conectividade em tempo real</footer>
     </div>
-  </div>
-  <footer>API backend · dbSmart40 | Conectividade em tempo real</footer>
-</div>
 
-<script>
-  // --------------------------------------------------------------
-  // CONFIGURAÇÃO - ajuste a porta se necessário (padrão 8088)
-  // --------------------------------------------------------------
-  const API_BASE = "http://localhost:8088";
+    <script>
+        // --------------------------------------------------------------
+        // CONFIGURAÇÃO - mesmo endpoint da API original
+        // --------------------------------------------------------------
+        const API_BASE = "http://localhost:8088";
 
-  // Mapeamento cores estoque (conforme regra: 0=vazio,1=preto,2=vermelho,3=azul)
-  const corEstoqueMap = {
-    0: 'vazio',
-    1: 'preto',
-    2: 'vermelho',
-    3: 'azul'
-  };
+        // Mapeamento cores estoque (0=vazio,1=preto,2=vermelho,3=azul)
+        const corEstoqueMap = {
+            0: 'vazio',
+            1: 'preto',
+            2: 'vermelho',
+            3: 'azul'
+        };
 
-  // Helper para requisições
-  async function fetchAPI(endpoint) {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
-      headers: { 'Accept': 'application/json' }
-    });
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-    }
-    // se 204 no content, retorna []
-    if (res.status === 204) return [];
-    return res.json();
-  }
-
-  // --------------------------------------------------------------
-  // 1. CARREGAR ESTATÍSTICAS (PEDIDOS)
-  // --------------------------------------------------------------
-  async function carregarEstatisticas() {
-    try {
-      const pedidos = await fetchAPI('/api/pedidos/listar');
-      const total = pedidos.length;
-      const pendentes = pedidos.filter(p => p.statusPedido === 1).length;
-      const producao = pedidos.filter(p => p.statusPedido === 2).length;
-      const concluidos = pedidos.filter(p => p.statusPedido === 3).length;
-
-      document.getElementById('totalPedidos').innerText = total;
-      document.getElementById('pendentes').innerText = pendentes;
-      document.getElementById('producao').innerText = producao;
-      document.getElementById('concluidos').innerText = concluidos;
-    } catch (err) {
-      console.error('Erro estatísticas:', err);
-      document.getElementById('totalPedidos').innerText = 'ERR';
-      document.getElementById('pendentes').innerText = '--';
-      document.getElementById('producao').innerText = '--';
-      document.getElementById('concluidos').innerText = '--';
-    }
-  }
-
-  // --------------------------------------------------------------
-  // 2. CARREGAR ESTOQUE (28 posições)
-  // --------------------------------------------------------------
-  async function carregarEstoque() {
-    const grid = document.getElementById('stockGrid');
-    const contadorSpan = document.getElementById('estoqueContador');
-    try {
-      const items = await fetchAPI('/api/estoque/listar');
-      // cria um dicionário posição -> cor
-      const posMap = new Map();
-      items.forEach(item => {
-        if (item.posicao && item.cor !== undefined) {
-          posMap.set(item.posicao, item.cor);
+        async function fetchAPI(endpoint) {
+            const res = await fetch(`${API_BASE}${endpoint}`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+            }
+            if (res.status === 204) return [];
+            return res.json();
         }
-      });
 
-      let ocupadas = 0;
-      let html = '';
-      for (let pos = 1; pos <= 28; pos++) {
-        const cor = posMap.has(pos) ? posMap.get(pos) : 0;
-        const corClass = corEstoqueMap[cor] || 'vazio';
-        if (cor !== 0) ocupadas++;
-        const corNome = { 1:'PTR', 2:'VRM', 3:'AZL', 0:'' }[cor] || '';
-        html += `
-          <div class="stock-cell ${corClass}" title="Posição ${pos} - ${cor===1?'Preto':cor===2?'Vermelho':cor===3?'Azul':'Vazio'}">
-            <div class="cell-number">${String(pos).padStart(2,'0')}</div>
-            <div class="cell-label">${corNome}</div>
-          </div>
-        `;
-      }
-      grid.innerHTML = html;
-      contadorSpan.innerText = `${ocupadas}/28 ocupadas`;
-    } catch (err) {
-      console.error('Erro ao carregar estoque:', err);
-      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;">Erro ao carregar estoque</div>';
-      contadorSpan.innerText = 'ERRO';
-    }
-  }
+        // 1. ESTATÍSTICAS (pedidos)
+        async function carregarEstatisticas() {
+            try {
+                const pedidos = await fetchAPI('/api/pedidos/listar');
+                const total = pedidos.length;
+                const pendentes = pedidos.filter(p => p.statusPedido === 1).length;
+                const producao = pedidos.filter(p => p.statusPedido === 2).length;
+                const concluidos = pedidos.filter(p => p.statusPedido === 3).length;
 
-  // --------------------------------------------------------------
-  // 3. CARREGAR EXPEDIÇÃO (12 posições)
-  // --------------------------------------------------------------
-  async function carregarExpedicao() {
-    const grid = document.getElementById('expGrid');
-    const contadorSpan = document.getElementById('expedicaoContador');
-    try {
-      const expedicoes = await fetchAPI('/api/expedicao/listar');
-      const posMap = new Map();
-      expedicoes.forEach(exp => {
-        if (exp.posicaoExpedicao && exp.ordemProducao) {
-          posMap.set(exp.posicaoExpedicao, exp.ordemProducao);
-        } else if (exp.posicaoExpedicao) {
-          // pode existir sem ordemProducao? por segurança
-          posMap.set(exp.posicaoExpedicao, 'OP');
+                document.getElementById('totalPedidos').innerText = total;
+                document.getElementById('pendentes').innerText = pendentes;
+                document.getElementById('producao').innerText = producao;
+                document.getElementById('concluidos').innerText = concluidos;
+            } catch (err) {
+                console.error('Erro estatísticas:', err);
+                document.getElementById('totalPedidos').innerText = 'ERR';
+                document.getElementById('pendentes').innerText = '--';
+                document.getElementById('producao').innerText = '--';
+                document.getElementById('concluidos').innerText = '--';
+            }
         }
-      });
 
-      let ocupadas = 0;
-      let html = '';
-      for (let i = 1; i <= 12; i++) {
-        const op = posMap.get(i);
-        if (op) {
-          ocupadas++;
-          html += `
-            <div class="exp-cell occupied" title="Posição ${i} - Pedido: ${op}">
-              <div class="exp-pos">${String(i).padStart(2,'0')}</div>
-              <div class="exp-op">${op.length > 14 ? op.slice(0,12)+'…' : op}</div>
-            </div>
-          `;
-        } else {
-          html += `
-            <div class="exp-cell empty">
-              <div class="exp-pos">${String(i).padStart(2,'0')}</div>
-              <div class="exp-op" style="color:#5b6e8c;">─ vago ─</div>
-            </div>
-          `;
+        // 2. ESTOQUE (28 posições)
+        async function carregarEstoque() {
+            const grid = document.getElementById('stockGrid');
+            const contadorSpan = document.getElementById('estoqueContador');
+            try {
+                const items = await fetchAPI('/api/estoque/listar');
+                const posMap = new Map();
+                items.forEach(item => {
+                    if (item.posicao && item.cor !== undefined) {
+                        posMap.set(item.posicao, item.cor);
+                    }
+                });
+
+                let ocupadas = 0;
+                let html = '';
+                for (let pos = 1; pos <= 28; pos++) {
+                    const cor = posMap.has(pos) ? posMap.get(pos) : 0;
+                    const corClass = corEstoqueMap[cor] || 'vazio';
+                    if (cor !== 0) ocupadas++;
+                    const corNome = { 1: 'PTR', 2: 'VRM', 3: 'AZL', 0: '' }[cor] || '';
+                    html += `
+                        <div class="stock-cell ${corClass}" title="Posição ${pos} - ${cor === 1 ? 'Preto' : cor === 2 ? 'Vermelho' : cor === 3 ? 'Azul' : 'Vazio'}">
+                            <div class="cell-number">${String(pos).padStart(2, '0')}</div>
+                            <div class="cell-label">${corNome}</div>
+                        </div>
+                    `;
+                }
+                grid.innerHTML = html;
+                contadorSpan.innerText = `${ocupadas}/28 ocupadas`;
+            } catch (err) {
+                console.error('Erro ao carregar estoque:', err);
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;">Erro ao carregar estoque</div>';
+                contadorSpan.innerText = 'ERRO';
+            }
         }
-      }
-      grid.innerHTML = html;
-      contadorSpan.innerText = `${ocupadas}/12 ocupadas`;
-    } catch (err) {
-      console.error('Erro ao carregar expedição:', err);
-      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;">Falha ao carregar expedição</div>';
-      contadorSpan.innerText = 'ERRO';
-    }
-  }
 
-  // --------------------------------------------------------------
-  // CARREGAR TUDO (atualização global)
-  // --------------------------------------------------------------
-  async function carregarTodosDados() {
-    // exibe um pequeno feedback (opcional, sem spinner pesado)
-    const btn = document.querySelector('.refresh-btn');
-    const originalText = btn.innerText;
-    btn.innerText = 'Atualizando...';
-    try {
-      await Promise.all([
-        carregarEstatisticas(),
-        carregarEstoque(),
-        carregarExpedicao()
-      ]);
-    } catch (err) {
-      console.warn('Falha em alguma requisição:', err);
-    } finally {
-      btn.innerText = originalText;
-    }
-  }
+        // 3. EXPEDIÇÃO (12 posições)
+        async function carregarExpedicao() {
+            const grid = document.getElementById('expGrid');
+            const contadorSpan = document.getElementById('expedicaoContador');
+            try {
+                const expedicoes = await fetchAPI('/api/expedicao/listar');
+                const posMap = new Map();
+                expedicoes.forEach(exp => {
+                    if (exp.posicaoExpedicao && exp.ordemProducao) {
+                        posMap.set(exp.posicaoExpedicao, exp.ordemProducao);
+                    } else if (exp.posicaoExpedicao) {
+                        posMap.set(exp.posicaoExpedicao, 'OP');
+                    }
+                });
 
-  // --------------------------------------------------------------
-  // INICIALIZA
-  // --------------------------------------------------------------
-  carregarTodosDados();
-  // recarga automática a cada 30 segundos (opcional)
-  setInterval(() => {
-    carregarTodosDados();
-  }, 30000);
-</script>
+                let ocupadas = 0;
+                let html = '';
+                for (let i = 1; i <= 12; i++) {
+                    const op = posMap.get(i);
+                    if (op) {
+                        ocupadas++;
+                        html += `
+                            <div class="exp-cell occupied" title="Posição ${i} - Pedido: ${op}">
+                                <div class="exp-pos">${String(i).padStart(2, '0')}</div>
+                                <div class="exp-op">${op.length > 14 ? op.slice(0, 12) + '…' : op}</div>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="exp-cell empty">
+                                <div class="exp-pos">${String(i).padStart(2, '0')}</div>
+                                <div class="exp-op" style="color:#5b6e8c;">─ vago ─</div>
+                            </div>
+                        `;
+                    }
+                }
+                grid.innerHTML = html;
+                contadorSpan.innerText = `${ocupadas}/12 ocupadas`;
+            } catch (err) {
+                console.error('Erro ao carregar expedição:', err);
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;">Falha ao carregar expedição</div>';
+                contadorSpan.innerText = 'ERRO';
+            }
+        }
+
+        // CARREGAR TUDO
+        async function carregarTodosDados() {
+            const btn = document.querySelector('.refresh-btn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Atualizando...';
+            try {
+                await Promise.all([
+                    carregarEstatisticas(),
+                    carregarEstoque(),
+                    carregarExpedicao()
+                ]);
+            } catch (err) {
+                console.warn('Falha em alguma requisição:', err);
+            } finally {
+                btn.innerText = originalText;
+            }
+        }
+
+        // Inicialização e atualização automática a cada 30s
+        carregarTodosDados();
+        setInterval(() => {
+            carregarTodosDados();
+        }, 30000);
+    </script>
 </body>
 </html>
