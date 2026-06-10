@@ -22,39 +22,39 @@ public class PedidoController {
         this.pedidoService = pedidoService;
     }
 
-    // 📋 LISTAR TODOS
+    // LISTAR TODOS
     @GetMapping("/listar")
     public List<Pedido> listar() {
         return pedidoService.listarTodos();
     }
 
-    // ➕ CRIAR PEDIDO
+    // CRIAR PEDIDO
     @PostMapping("/salvar")
     public ResponseEntity<Pedido> criar(@RequestBody Pedido pedido) {
         return ResponseEntity.ok(pedidoService.criarPedido(pedido));
     }
 
-    // 📊 DASHBOARD (MES KPI)
+    // DASHBOARD (MES KPI)
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Long>> dashboard() {
         return ResponseEntity.ok(pedidoService.dashboard());
     }
 
-    // 🔵 INICIAR PRODUÇÃO (PENDENTE → PRODUÇÃO)
+    // INICIAR PRODUÇÃO (PENDENTE → PRODUÇÃO)
     @PutMapping("/{id}/producao")
     public ResponseEntity<Void> iniciarProducao(@PathVariable Long id) {
         pedidoService.iniciarProducao(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 🟢 CONCLUIR PEDIDO (PRODUÇÃO → CONCLUÍDO)
+    // CONCLUIR PEDIDO (PRODUÇÃO → CONCLUÍDO)
     @PutMapping("/{id}/concluir")
     public ResponseEntity<Void> concluir(@PathVariable Long id) {
         pedidoService.atualizarStatusParaConcluido(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ✏️ ATUALIZAÇÃO PARCIAL
+    // ATUALIZAÇÃO PARCIAL
     @PatchMapping("/{id}")
     public ResponseEntity<Pedido> atualizarParcial(
             @PathVariable Long id,
@@ -65,14 +65,14 @@ public class PedidoController {
             );
     }
 
-    // ❌ DELETAR (somente pendentes)
+    // DELETAR (somente pendentes)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         pedidoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 📋 TABELA PARA HTMX (DASHBOARD MES)
+    // TABELA PARA HTMX (DASHBOARD MES)
     @GetMapping("/tabela")
     public List<Pedido> tabela() {
         return pedidoService.ultimosPedidos();
