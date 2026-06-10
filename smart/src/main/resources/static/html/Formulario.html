@@ -13,6 +13,23 @@
     padding: 0;
     box-sizing: border-box;
 }
+    #padrao-esquerda-0,
+    #padrao-esquerda-1,
+    #padrao-esquerda-2{
+        z-index:11;
+    }
+    
+    #padrao-frente-0,
+    #padrao-frente-1,
+    #padrao-frente-2{
+        z-index:21;
+    }
+    
+    #padrao-direita-0,
+    #padrao-direita-1,
+    #padrao-direita-2{
+        z-index:16;
+}
 
 body {
     font-family: "Inter", Arial, sans-serif;
@@ -673,7 +690,7 @@ function atualizarPreview() {
         blocoPreview.className =
         "bloco-preview";
 
-
+    })
 
 
         blocoPreview.innerHTML = `
@@ -708,7 +725,7 @@ function atualizarPreview() {
 
 
 
-   
+    
 
         document.getElementById(
             `lamina-esquerda-${index}`
@@ -736,8 +753,8 @@ function atualizarPreview() {
         ).style.backgroundImage = "none";
 
 
-
-
+        }
+        
 
         bloco.querySelectorAll(".lamina-card")
         .forEach(card => {
@@ -752,7 +769,7 @@ function atualizarPreview() {
             card.querySelector(".posicaoLamina").value;
 
 
-
+        });
 
             let nomePosicao = "";
 
@@ -801,56 +818,62 @@ function atualizarPreview() {
 
             camadaLamina.style.backgroundImage =
             `url('../assets/laminas/lamina${posicao}-${cor}.png')`;
+        
 
-
-
+            
             const camadaPadrao =
-            document.getElementById(
-                `padrao-${nomePosicao}-${index}`
-            );
+document.getElementById(
+    `padrao-${nomePosicao}-${index}`
+);
 
-            if(posicao == 1){
-
-            camadaPadrao.style.zIndex = 11;
-
-                }
-
-                if(posicao == 2){
-                
-                    camadaPadrao.style.zIndex = 31;
-                
-                }
-
-                if(posicao == 3){
-                
-                    camadaPadrao.style.zIndex = 21;
-                
-                }
-
-
-
-            if(padrao == 0) {
-
-                camadaPadrao.style.backgroundImage =
-                "none";
-
-            }
-
-  
-            else {
-
-                camadaPadrao.style.backgroundImage =
-                `url('../assets/padroes/padrao${posicao}-${padrao}.png')`;
-
-            }
-
-        });
-
-    });
-
+if(posicao == 1){
+    camadaPadrao.style.zIndex = 11;
 }
 
+if(posicao == 2){
+    camadaPadrao.style.zIndex = 21;
+}
 
+if(posicao == 3){
+    camadaPadrao.style.zIndex = 16;
+}
+
+if(padrao == 0){
+
+    camadaPadrao.style.backgroundImage = "none";
+
+} else {
+
+    let caminho = "";
+
+    // ESQUERDA
+    if(posicao == 1){
+
+        caminho =
+        `../assets/padroes/padrao${padrao}-1.png`;
+
+    }
+
+    // FRENTE
+    if(posicao == 2){
+
+        caminho =
+        `../assets/padroes/padrao${padrao}-2.png`;
+
+    }
+
+    // DIREITA
+    if(posicao == 3){
+
+        caminho =
+        `../assets/padroes/rPadrao${padrao}-1.png`;
+
+    }
+
+    camadaPadrao.style.backgroundImage =
+    `url('${caminho}')`;
+
+}
 
 atualizarPreview();
 
