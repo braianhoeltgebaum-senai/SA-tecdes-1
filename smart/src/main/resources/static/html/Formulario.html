@@ -97,6 +97,22 @@ select {
     transition: 0.2s;
     width: 100%;
 }
+.tampa-global{
+    width:340px;
+    height:200px;
+    position:relative;
+}
+
+#previewTampa{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center;
+    z-index:9999;
+}
 
 input:focus,
 select:focus {
@@ -662,329 +678,289 @@ function removerLamina(id) {
 
 function atualizarPreview() {
 
-    const previewStack =
-    document.getElementById("previewStack");
+const previewStack =
+document.getElementById("previewStack");
 
-    previewStack.innerHTML = "";
+previewStack.innerHTML = "";
+
+// TAMPA
+const corTampa =
+document.getElementById("corTampa").value;
+
+document.getElementById("previewTampa")
+.style.backgroundImage =
+`url('../assets/bloco/rTampa${corTampa}.png')`;
+
+document.querySelectorAll(".bloco")
+.forEach((bloco, index) => {
+
+    const corBloco =
+    bloco.querySelector(".corBloco").value;
+
+    const blocoPreview =
+    document.createElement("div");
+
+    blocoPreview.className =
+    "bloco-preview";
+
+    blocoPreview.innerHTML = `
+
+        <div
+            class="camada"
+            style="
+                z-index:1;
+                background-image:
+                url('../assets/bloco/rBlocoCor${corBloco}.png');
+            ">
+        </div>
+
+        <!-- LÂMINAS -->
+        <div class="camada" id="lamina-esquerda-${index}"></div>
+        <div class="camada" id="lamina-frente-${index}"></div>
+        <div class="camada" id="lamina-direita-${index}"></div>
+
+        <!-- PADRÕES -->
+        <div class="camada" id="padrao-esquerda-${index}"></div>
+        <div class="camada" id="padrao-frente-${index}"></div>
+        <div class="camada" id="padrao-direita-${index}"></div>
+
+    `;
+
+    previewStack.appendChild(
+        blocoPreview
+    );
 
 
 
-    const corTampa =
-    document.getElementById("corTampa").value;
+    bloco.querySelectorAll(".lamina-card")
+    .forEach(card => {
 
-    document.getElementById("previewTampa")
-    .style.backgroundImage =
-    `url('../assets/bloco/rTampa${corTampa}.png')`;
+        const cor =
+        card.querySelector(".corLamina").value;
 
+        const padrao =
+        card.querySelector(".padraoLamina").value;
 
-
-    document.querySelectorAll(".bloco")
-    .forEach((bloco, index) => {
-
-        const corBloco =
-        bloco.querySelector(".corBloco").value;
-
-        const blocoPreview =
-        document.createElement("div");
-
-        blocoPreview.className =
-        "bloco-preview";
-
-    })
+        const posicao =
+        card.querySelector(".posicaoLamina").value;
 
 
-        blocoPreview.innerHTML = `
 
-            <div
-                class="camada"
-                style="
-                    z-index:1;
-                    background-image:
-                    url('../assets/bloco/rBlocoCor${corBloco}.png');
-                ">
-            </div>
+        if(posicao == 0){
+            return;
+        }
 
 
-            <!-- LÂMINAS -->
-            <div class="camada" id="lamina-esquerda-${index}"></div>
-            
-            <div class="camada" id="lamina-frente-${index}"></div>
-            <div class="camada" id="lamina-direita-${index}"></div>
+
+        let nomePosicao = "";
+
+        if(posicao == 1){
+            nomePosicao = "esquerda";
+        }
+
+        if(posicao == 2){
+            nomePosicao = "frente";
+        }
+
+        if(posicao == 3){
+            nomePosicao = "direita";
+        }
 
 
-            <!-- PADRÕES -->
-            <div class="camada" id="padrao-esquerda-${index}"></div>
-            <div class="camada" id="padrao-frente-${index}"></div>
-            <div class="camada" id="padrao-direita-${index}"></div>
 
-        `;
-
-        previewStack.appendChild(
-            blocoPreview
+        const camadaLamina =
+        document.getElementById(
+            `lamina-${nomePosicao}-${index}`
         );
 
-
-
-    
-
-        document.getElementById(
-            `lamina-esquerda-${index}`
-        ).style.backgroundImage = "none";
-
-        document.getElementById(
-            
-            `lamina-frente-${index}`
-        ).style.backgroundImage = "none";
-
-        document.getElementById(
-            `lamina-direita-${index}`
-        ).style.backgroundImage = "none";
-
-        document.getElementById(
-            `padrao-esquerda-${index}`
-        ).style.backgroundImage = "none";
-
-        document.getElementById(
-            `padrao-frente-${index}`
-        ).style.backgroundImage = "none";
-
-        document.getElementById(
-            `padrao-direita-${index}`
-        ).style.backgroundImage = "none";
-
-
-        }
-        
-
-        bloco.querySelectorAll(".lamina-card")
-        .forEach(card => {
-
-            const cor =
-            card.querySelector(".corLamina").value;
-
-            const padrao =
-            card.querySelector(".padraoLamina").value;
-
-            const posicao =
-            card.querySelector(".posicaoLamina").value;
-
-
-        });
-
-            let nomePosicao = "";
-
-            if(posicao == 1) {
-
-                nomePosicao = "esquerda";
-
-            }
-
-            if(posicao == 2) {
-
-                nomePosicao = "frente";
-
-            }
-
-            if(posicao == 3) {
-
-                nomePosicao = "direita";
-
-            }
-
-
-            const camadaLamina =
-            document.getElementById(
-                `lamina-${nomePosicao}-${index}`
-            );
+        if(camadaLamina){
 
             if(posicao == 1){
+                camadaLamina.style.zIndex = 100;
+            }
 
-                camadaLamina.style.zIndex = 10;
+            if(posicao == 2){
+                camadaLamina.style.zIndex = 200;
+            }
+
+            if(posicao == 3){
+                camadaLamina.style.zIndex = 150;
+            }
+            camadaLamina.style.backgroundImage =
+            `url('../assets/laminas/lamina${posicao}-${cor}.png')`;
+
+        }
+
+
+
+        const camadaPadrao =
+        document.getElementById(
+            `padrao-${nomePosicao}-${index}`
+        );
+
+        if(camadaPadrao){
+
+            if(posicao == 1){
+                camadaPadrao.style.zIndex = 11;
+            }
+
+            if(posicao == 2){
+                camadaPadrao.style.zIndex = 21;
+            }
+
+            if(posicao == 3){
+                camadaPadrao.style.zIndex = 16;
+            }
+
+            if(padrao == 0){
+
+                camadaPadrao.style.backgroundImage =
+                "none";
+
+            } else {
+
+                let caminho = "";
+
+                if(posicao == 1){
+
+                    caminho =
+                    `../assets/padroes/padrao${padrao}-1.png`;
 
                 }
 
                 if(posicao == 2){
-                
-                camadaLamina.style.zIndex = 30;
-                
+
+                    caminho =
+                    `../assets/padroes/padrao${padrao}-2.png`;
+
                 }
 
                 if(posicao == 3){
-                
-                camadaLamina.style.zIndex = 20;
-                
+
+                    caminho =
+                    `../assets/padroes/rPadrao${padrao}-1.png`;
+
                 }
 
+                camadaPadrao.style.backgroundImage =
+                `url('${caminho}')`;
 
-            camadaLamina.style.backgroundImage =
-            `url('../assets/laminas/lamina${posicao}-${cor}.png')`;
-        
+            }
 
-            
-            const camadaPadrao =
-document.getElementById(
-    `padrao-${nomePosicao}-${index}`
-);
-
-if(posicao == 1){
-    camadaPadrao.style.zIndex = 11;
-}
-
-if(posicao == 2){
-    camadaPadrao.style.zIndex = 21;
-}
-
-if(posicao == 3){
-    camadaPadrao.style.zIndex = 16;
-}
-
-if(padrao == 0){
-
-    camadaPadrao.style.backgroundImage = "none";
-
-} else {
-
-    let caminho = "";
-
-    // ESQUERDA
-    if(posicao == 1){
-
-        caminho =
-        `../assets/padroes/padrao${padrao}-1.png`;
-
-    }
-
-    // FRENTE
-    if(posicao == 2){
-
-        caminho =
-        `../assets/padroes/padrao${padrao}-2.png`;
-
-    }
-
-    // DIREITA
-    if(posicao == 3){
-
-        caminho =
-        `../assets/padroes/rPadrao${padrao}-1.png`;
-
-    }
-
-    camadaPadrao.style.backgroundImage =
-    `url('${caminho}')`;
-
-}
-
-atualizarPreview();
-
-
-
-
-
-document.getElementById("formPedido")
-.addEventListener("submit", async (e) => {
-
-    e.preventDefault();
-
-    const blocos = [];
-
-    document.querySelectorAll(".bloco")
-    .forEach(bloco => {
-
-        const laminas = [];
-
-        bloco.querySelectorAll(".lamina-card")
-        .forEach(card => {
-
-            laminas.push({
-
-                cor:
-                Number(
-                    card.querySelector(".corLamina").value
-                ),
-
-                padrao:
-                Number(
-                    card.querySelector(".padraoLamina").value
-                ),
-
-                posicaoNoBloco:
-                Number(
-                    card.querySelector(".posicaoLamina").value
-                )
-
-            });
-
-        });
-
-        blocos.push({
-
-            corBloco:
-            Number(
-                bloco.querySelector(".corBloco").value
-            ),
-
-            estoque: {
-                id: 1
-            },
-
-            laminas: laminas
-
-        });
+        }
 
     });
 
-    const pedido = {
-
-        ordemProducao:
-        document.getElementById("ordemProducao").value,
-
-        tipoPedido:
-        Number(tipoPedido.value),
-
-        corTampa:
-        Number(
-            document.getElementById("corTampa").value
-        ),
-
-        blocos: blocos
-
-    };
-    try {
-
-const response = await fetch(
-    "http://localhost:8088/pedidos",
-    {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(pedido)
-    }
-);
-
-if(!response.ok){
-    throw new Error("Erro ao salvar");
-}
-
-const data = await response.json();
-
-console.log(data);
-
-alert("Pedido salvo com sucesso!");
-
-}
-catch(error){
-
-console.error(error);
-
-alert("Erro ao salvar pedido");
-
-}
 });
 
-</script>
+}
 
-</body>
 
-</html>
+
+        document.getElementById("formPedido")
+        .addEventListener("submit", async (e) => {
+
+            e.preventDefault();
+
+            const blocos = [];
+
+            document.querySelectorAll(".bloco")
+            .forEach(bloco => {
+
+                const laminas = [];
+
+                bloco.querySelectorAll(".lamina-card")
+                .forEach(card => {
+
+                    laminas.push({
+
+                        cor:
+                        Number(
+                            card.querySelector(".corLamina").value
+                        ),
+
+                        padrao:
+                        Number(
+                            card.querySelector(".padraoLamina").value
+                        ),
+
+                        posicaoNoBloco:
+                        Number(
+                            card.querySelector(".posicaoLamina").value
+                        )
+
+                    });
+
+                });
+
+                blocos.push({
+
+                    corBloco:
+                    Number(
+                        bloco.querySelector(".corBloco").value
+                    ),
+
+                    estoque: {
+                        id: 1
+                    },
+
+                    laminas: laminas
+
+                });
+
+            });
+
+            const pedido = {
+
+                ordemProducao:
+                document.getElementById("ordemProducao").value,
+
+                tipoPedido:
+                Number(tipoPedido.value),
+
+                corTampa:
+                Number(
+                    document.getElementById("corTampa").value
+                ),
+
+                blocos: blocos
+
+            };
+            try {
+
+        const response = await fetch(
+            "http://localhost:8088/pedidos",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(pedido)
+            }
+        );
+
+        if(!response.ok){
+            throw new Error("Erro ao salvar");
+        }
+
+        const data = await response.json();
+
+        console.log(data);
+
+        alert("Pedido salvo com sucesso!");
+
+        }
+        catch(error){
+
+        console.error(error);
+
+        alert("Erro ao salvar pedido");
+
+        }
+        });
+
+        </script>
+
+        </body>
+
+        </html>
