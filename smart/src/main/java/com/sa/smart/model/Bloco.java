@@ -1,7 +1,12 @@
 package com.sa.smart.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +40,17 @@ public class Bloco {
 
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "bloco", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Lamina> laminas = new ArrayList<>();
+
+    public void adicionarLamina(Lamina lamina) {
+
+        laminas.add(lamina);
+        lamina.setBloco(this);
+
+    }
 
     @PrePersist
     public void prePersist() {
