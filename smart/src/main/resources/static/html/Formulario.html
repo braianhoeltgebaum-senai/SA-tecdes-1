@@ -695,9 +695,8 @@
             const corTampa =
                 document.getElementById("corTampa").value;
 
-            document.getElementById("previewTampa")
-                .style.backgroundImage =
-                `url('../static/assets/bloco/rTampa${corTampa}.png')`;
+            document.getElementById("previewTampa").style.backgroundImage =
+                `url('/src/main/resources/static/assets/bloco/rTampa${corTampa}.png')`;
 
             document.querySelectorAll(".bloco")
                 .forEach((bloco, index) => {
@@ -716,7 +715,7 @@
         <div class="camada"
              style="
                 z-index:1;
-                background-image:url('../static/assets/bloco/rBlocoCor${corBloco}.png');
+                background-image:url('/src/main/resources/static/assets/bloco/rBlocoCor${corBloco}.png');
              ">
         </div>
 
@@ -758,7 +757,7 @@
                                 );
 
                             camadaLamina.style.backgroundImage =
-                                `url('../static/assets/laminas/lamina${posicao}-${cor}.png')`;
+                                `url('/src/main/resources/static/assets/laminas/lamina${posicao}-${cor}.png')`;
 
                             const camadaPadrao =
                                 document.getElementById(
@@ -771,17 +770,17 @@
 
                                 if (posicao == 1) {
                                     caminho =
-                                        `../static/assets/padroes/padrao${padrao}-1.png`;
+                                        `/src/main/resources/static/assets/padroes/padrao${padrao}-1.png`;
                                 }
 
                                 if (posicao == 2) {
                                     caminho =
-                                        `../static/assets/padroes/padrao${padrao}-2.png`;
+                                        `/src/main/resources/static/assets/padroes/padrao${padrao}-2.png`;
                                 }
 
                                 if (posicao == 3) {
                                     caminho =
-                                        `../static/assets/padroes/rPadrao${padrao}-3.png`;
+                                        `/src/main/resources/static/assets/padroes/padrao${padrao}-3.png`;
                                 }
 
                                 camadaPadrao.style.backgroundImage =
