@@ -801,18 +801,17 @@ document.querySelectorAll(".bloco")
         if(camadaPadrao){
 
             if(posicao == 1){
-                camadaPadrao.style.zIndex = 11;
-            }
+        camadaPadrao.style.zIndex = 101;
+        }
 
-            if(posicao == 2){
-                camadaPadrao.style.zIndex = 21;
-            }
+        if(posicao == 2){
+            camadaPadrao.style.zIndex = 201;
+        }
 
-            if(posicao == 3){
-                camadaPadrao.style.zIndex = 16;
-            }
-
-            if(padrao == 0){
+        if(posicao == 3){
+            camadaPadrao.style.zIndex = 151;
+        }
+                    if(padrao == 0){
 
                 camadaPadrao.style.backgroundImage =
                 "none";
@@ -842,6 +841,15 @@ document.querySelectorAll(".bloco")
 
                 }
 
+                    console.log(
+                    "Padrao:",
+                    padrao,
+                    "Posicao:",
+                    posicao,
+                    "Caminho:",
+                    caminho
+                );              
+
                 camadaPadrao.style.backgroundImage =
                 `url('${caminho}')`;
 
@@ -851,9 +859,9 @@ document.querySelectorAll(".bloco")
 
     });
 
-});
 
-}
+})};
+
 
 
 
@@ -893,6 +901,7 @@ document.querySelectorAll(".bloco")
 
                 });
 
+            
                 blocos.push({
 
                     corBloco:
