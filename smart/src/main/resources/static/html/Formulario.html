@@ -390,6 +390,8 @@ select:focus {
             </form>
         </div>
 
+
+
         
         <div class="painel-preview">
             <div class="preview-card">
@@ -428,6 +430,24 @@ tipoPedido.addEventListener("change", () => {
     );
 
 });
+
+function iniciarProcessoCLP(){
+
+const ip =
+document.getElementById("ipCLP").value;
+
+if(!ip){
+
+    alert("Informe o IP do CLP");
+    return;
+
+}
+
+alert(
+    "Processo iniciado no CLP: " + ip
+);
+
+}
 
 function criarBlocos(qtd) {
 
@@ -509,6 +529,7 @@ function adicionarLamina(btn) {
 
     }
 
+   
     const id = Date.now();
 
     const html = `
@@ -753,12 +774,30 @@ function atualizarPreview() {
 
             }
 
+
             const camadaLamina =
             document.getElementById(
                 `lamina-${nomePosicao}-${index}`
             );
 
-            camadaLamina.style.zIndex = 2;
+            if(posicao == 1){
+
+                camadaLamina.style.zIndex = 10;
+
+                }
+
+                if(posicao == 2){
+                
+                camadaLamina.style.zIndex = 30;
+                
+                }
+
+                if(posicao == 3){
+                
+                camadaLamina.style.zIndex = 20;
+                
+                }
+
 
             camadaLamina.style.backgroundImage =
             `url('../assets/laminas/lamina${posicao}-${cor}.png')`;
@@ -770,7 +809,23 @@ function atualizarPreview() {
                 `padrao-${nomePosicao}-${index}`
             );
 
-            camadaPadrao.style.zIndex = 3;
+            if(posicao == 1){
+
+            camadaPadrao.style.zIndex = 11;
+
+                }
+
+                if(posicao == 2){
+                
+                    camadaPadrao.style.zIndex = 31;
+                
+                }
+
+                if(posicao == 3){
+                
+                    camadaPadrao.style.zIndex = 21;
+                
+                }
 
 
 
@@ -872,11 +927,37 @@ document.getElementById("formPedido")
         blocos: blocos
 
     };
+    try {
 
-    console.log(pedido);
+const response = await fetch(
+    "http://localhost:8088/pedidos",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pedido)
+    }
+);
 
-    alert("Pedido salvo!");
+if(!response.ok){
+    throw new Error("Erro ao salvar");
+}
 
+const data = await response.json();
+
+console.log(data);
+
+alert("Pedido salvo com sucesso!");
+
+}
+catch(error){
+
+console.error(error);
+
+alert("Erro ao salvar pedido");
+
+}
 });
 
 </script>
