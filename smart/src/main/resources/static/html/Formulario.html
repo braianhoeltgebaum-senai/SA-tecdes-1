@@ -7,282 +7,324 @@
     <title>Smart Factory</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: "Inter", Arial, sans-serif;
-            background:
-                radial-gradient(circle at top left, #1e293b 0%, #0f172a 40%),
-                #020617;
-            min-height: 100vh;
-            padding: 40px;
-            color: white;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        h1 {
-            text-align: center;
-            margin-bottom: 35px;
-            font-size: 38px;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
+body {
+    font-family: "Inter", Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, #1e293b 0%, #0f172a 40%),
+        #020617;
+    min-height: 100vh;
+    padding: 40px;
+    color: white;
+}
 
-        .layout {
-            display: flex;
-            gap: 30px;
-            align-items: flex-start;
-        }
+h1 {
+    text-align: center;
+    margin-bottom: 35px;
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
 
-        /* =========================
-           FORM
-        ========================== */
+.layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
 
-        .painel-form {
-            flex: 1;
-            background: rgba(15, 23, 42, 0.92);
-            border: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow:
-                0 10px 40px rgba(0,0,0,0.4),
-                inset 0 0 0 1px rgba(255,255,255,0.03);
-        }
+.painel-form {
+    flex: 1;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.4),
+        inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+/* Grid de 4 colunas no topo para acomodar o IP do CLP */
+.top-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 25px;
+}
 
-        .top-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            margin-bottom: 25px;
-        }
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
 
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+}
 
-        .field label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #94a3b8;
-        }
+input,
+select {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 15px;
+    transition: 0.2s;
+    width: 100%;
+}
 
-        input,
-        select {
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: white;
-            border-radius: 14px;
-            padding: 14px;
-            font-size: 15px;
-            transition: 0.2s;
-        }
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56,189,248,0.15);
+}
 
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 4px rgba(56,189,248,0.15);
-        }
+.bloco {
+    margin-top: 28px;
+    border-radius: 22px;
+    overflow: hidden;
+    background: linear-gradient(
+        180deg,
+        rgba(30,41,59,0.95),
+        rgba(15,23,42,0.95)
+    );
+    border: 1px solid rgba(255,255,255,0.06);
+}
 
-        .bloco {
-            margin-top: 28px;
-            border-radius: 22px;
-            overflow: hidden;
-            background: linear-gradient(
-                180deg,
-                rgba(30,41,59,0.95),
-                rgba(15,23,42,0.95)
-            );
-            border: 1px solid rgba(255,255,255,0.06);
-        }
+.bloco-header {
+    padding: 18px 22px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .bloco-header {
-            padding: 18px 22px;
-            background: rgba(255,255,255,0.04);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.bloco-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
 
-        .bloco-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-        }
+.bloco-content {
+    padding: 22px;
+}
 
-        .bloco-content {
-            padding: 22px;
-        }
+.laminasContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
 
-        .laminasContainer {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
+.lamina-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 18px;
+}
 
-        .lamina-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 18px;
-            padding: 18px;
-        }
+.lamina-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
 
-        .lamina-topo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+.lamina-topo span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
 
-        .lamina-topo span {
-            font-size: 14px;
-            font-weight: 700;
-            color: #e2e8f0;
-        }
+.lamina-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+}
 
-        .lamina-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-        }
+.btn {
+    border: none;
+    border-radius: 14px;
+    padding: 13px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .btn {
-            border: none;
-            border-radius: 14px;
-            padding: 13px 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+.btn-add {
+    width: 100%;
+    margin-top: 18px;
+    background: linear-gradient(135deg,#06b6d4,#3b82f6);
+    color: white;
+}
 
-        .btn-add {
-            width: 100%;
-            margin-top: 18px;
-            background: linear-gradient(135deg,#06b6d4,#3b82f6);
-            color: white;
-        }
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.35);
+}
 
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59,130,246,0.35);
-        }
+.btn-remove {
+    background: rgba(239,68,68,0.18);
+    color: #fca5a5;
+    padding: 8px 14px;
+}
 
-        .btn-remove {
-            background: rgba(239,68,68,0.18);
-            color: #fca5a5;
-            padding: 8px 14px;
-        }
+.btn-remove:hover {
+    background: rgba(239,68,68,0.3);
+}
 
-        .btn-remove:hover {
-            background: rgba(239,68,68,0.3);
-        }
+.btn-salvar {
+    width: 100%;
+    margin-top: 30px;
+    padding: 18px;
+    font-size: 16px;
+    background: linear-gradient(135deg,#0ea5e9,#2563eb);
+    color: white;
+}
 
-        .btn-salvar {
-            width: 100%;
-            margin-top: 30px;
-            padding: 18px;
-            font-size: 16px;
-            background: linear-gradient(135deg,#0ea5e9,#2563eb);
-            color: white;
-        }
+.btn-salvar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37,99,235,0.4);
+}
 
-        .btn-salvar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(37,99,235,0.4);
-        }
+.painel-preview {
+    width: 500px;
+    position: sticky;
+    top: 40px;
+}
 
-        /* =========================
-           PREVIEW
-        ========================== */
+.preview-card {
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow:
+        0 10px 40px rgba(0,0,0,0.4),
+        inset 0 0 0 1px rgba(255,255,255,0.03);
+}
 
-        .painel-preview {
-            width: 500px;
-            position: sticky;
-            top: 40px;
-        }
+.preview-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
 
-        .preview-card {
-            background: rgba(15, 23, 42, 0.92);
-            border: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow:
-                0 10px 40px rgba(0,0,0,0.4),
-                inset 0 0 0 1px rgba(255,255,255,0.03);
-        }
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+/* ==========================================================================
+   SISTEMA DE PREVIEW ISOMÉTRICO (ORDENAÇÃO DE CAMADAS)
+   ========================================================================== */
+.bloco-preview {
+    position: relative;
+    width: 340px;
+    height: 170px;
+    isolation: isolate; /* Cria um contexto independente para as camadas internas */
+}
 
-        .preview-title {
-            text-align: center;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 25px;
-        }
+.camada {
+    position: absolute;
+    inset: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+}
+/* Fundo traseiro interno do bloco */
+.camada-base-fundo {
+    z-index: 5;
+}
+/* Lâminas Laterais (Esquerda = "1" / Direita = "3") ficam no meio */
+.camada[data-posicao="1"], 
+.camada[data-posicao="3"] { 
+    z-index: 10;
+}
+/* Lâmina da Frente ("2" - Vermelha) sobrepõe o canto das laterais */
+.camada[data-posicao="2"] { 
+    z-index: 20;
+}
+/* Carcaça preta externa frontal (Tapa as rebarbas de baixo das lâminas) */
+.camada-base-frontal {
+    z-index: 30;
+}
 
-        .stack {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
+.tampa-global {
+    width: 340px;
+    height: 200px;
+    margin-bottom: -15px;
+    z-index: 999; /* Fica no topo absoluto acima de tudo */
+    position: relative;
+}
+/* CONTAINER DE CONTROLE DO CLP */
+.acoes-clp {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px dashed rgba(56, 189, 248, 0.3);
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* ==========================================================================
+   RESPONSIVIDADE (MEDIA QUERIES)
+   ========================================================================== */
+   @media(max-width:1200px) {
+    .layout {
+        flex-direction: column;
+    }
 
-        .bloco-preview {
-            position: relative;
-            width: 340px;
-            height: 170px;
-        }
+    .painel-preview {
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+    
+    .top-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media(max-width:700px) {
+    body {
+        padding: 20px;
+    }
 
-        .camada {
-            position: absolute;
-            inset: 0;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            pointer-events: none;
-        }
+    .top-grid,
+    .lamina-grid {
+        grid-template-columns: 1fr;
+    }
 
-        .tampa-global {
-            width: 340px;
-            height: 220px;
-            margin-bottom: -35px;
-            z-index: 999;
-            position: relative;
-        }
+    .bloco-preview,
+    .tampa-global {
+        width: 100%;
+    }
+    
+    .acoes-clp {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
 
-        @media(max-width:1200px) {
-            .layout {
-                flex-direction: column;
-            }
 
-            .painel-preview {
-                width: 100%;
-                position: relative;
-                top: 0;
-            }
-        }
 
-        @media(max-width:700px) {
 
-            body {
-                padding: 20px;
-            }
 
-            .top-grid,
-            .lamina-grid {
-                grid-template-columns: 1fr;
-            }
+     
 
-            .bloco-preview,
-            .tampa-global {
-                width: 100%;
-            }
-        }
 
     </style>
 </head>
@@ -293,19 +335,14 @@
 
     <div class="layout">
 
-        <!-- =========================
-             FORM
-        ========================== -->
-
+        <!-- PAINEL DA ESQUERDA: CONFIGURAÇÕES E FORMULÁRIO -->
         <div class="painel-form">
-
             <form id="formPedido">
-
+                
                 <div class="top-grid">
-
                     <div class="field">
                         <label>Ordem de Produção</label>
-                        <input type="text" id="ordemProducao">
+                        <input type="text" id="ordemProducao" placeholder="0001">
                     </div>
 
                     <div class="field">
@@ -319,49 +356,56 @@
 
                     <div class="field">
                         <label>Cor da Tampa</label>
-                        <select id="corTampa">
+                        <select id="corTampa" onchange="atualizarPreview()">
+                            <option value="0">selecione a cor </option>
                             <option value="1">Preto</option>
                             <option value="2">Vermelho</option>
                             <option value="3">Azul</option>
                         </select>
                     </div>
 
+              
+                    <div class="field">
+                        <label>Endereço IP do CLP</label>
+                        <input type="text" id="ipCLP" placeholder="192.168.1.10">
+                    </div>
                 </div>
 
+      
+                <div class="acoes-clp">
+                    <div style="font-size: 14px; color: #94a3b8;">
+                        Controle de Automação da Fábrica
+                    </div>
+                    <button type="button" class="btn" id="btnStartCLP" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: white; padding: 10px 25px; box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);" onclick="iniciarProcessoCLP()">
+                        ▶ START PROCESSO
+                    </button>
+                </div>
+
+       
                 <div id="blocosContainer"></div>
 
                 <button class="btn btn-salvar" type="submit">
                     Salvar Pedido
                 </button>
-
             </form>
-
         </div>
 
-        <!-- =========================
-             PREVIEW
-        ========================== -->
-
+        
         <div class="painel-preview">
-
             <div class="preview-card">
-
                 <div class="preview-title">
                     Visualização do Produto
                 </div>
-
                 <div class="stack">
-
+   
                     <div class="tampa-global">
                         <div id="previewTampa" class="camada"></div>
                     </div>
-
+                    
+                   
                     <div id="previewStack"></div>
-
                 </div>
-
             </div>
-
         </div>
 
     </div>
@@ -374,9 +418,6 @@ const blocosContainer =
 document.getElementById("blocosContainer");
 
 
-// ==========================
-// CRIAR BLOCOS
-// ==========================
 
 criarBlocos(1);
 
@@ -390,7 +431,6 @@ tipoPedido.addEventListener("change", () => {
 
 function criarBlocos(qtd) {
 
-    // MÁXIMO 3 BLOCOS
     if(qtd > 3) qtd = 3;
 
     blocosContainer.innerHTML = "";
@@ -450,9 +490,6 @@ function criarBlocos(qtd) {
 
 
 
-// ==========================
-// ADICIONAR LÂMINA
-// ==========================
 
 function adicionarLamina(btn) {
 
@@ -465,7 +502,6 @@ function adicionarLamina(btn) {
     const total =
     container.querySelectorAll(".lamina-card").length;
 
-    // MÁXIMO 3 LÂMINAS
     if(total >= 3) {
 
         alert("Máximo de 3 lâminas por bloco");
@@ -505,7 +541,7 @@ function adicionarLamina(btn) {
                     <select
                         class="corLamina"
                         onchange="atualizarPreview()">
-
+                        <option value="0" nenhuma</option>
                         <option value="1">Vermelho</option>
                         <option value="2">Azul</option>
                         <option value="3">Amarelo</option>
@@ -548,6 +584,7 @@ function adicionarLamina(btn) {
                         class="posicaoLamina"
                         onchange="atualizarPreview()">
 
+                        <option value="0">Nenhuma</option>
                         <option value="1">Esquerda</option>
                         <option value="2">Frente</option>
                         <option value="3">Direita</option>
@@ -572,11 +609,6 @@ function adicionarLamina(btn) {
 }
 
 
-
-// ==========================
-// REMOVER
-// ==========================
-
 function removerLamina(id) {
 
     document
@@ -589,9 +621,6 @@ function removerLamina(id) {
 
 
 
-// ==========================
-// PREVIEW
-// ==========================
 
 function atualizarPreview() {
 
@@ -602,10 +631,6 @@ function atualizarPreview() {
 
 
 
-    // ======================
-    // TAMPA
-    // ======================
-
     const corTampa =
     document.getElementById("corTampa").value;
 
@@ -614,10 +639,6 @@ function atualizarPreview() {
     `url('../assets/bloco/rTampa${corTampa}.png')`;
 
 
-
-    // ======================
-    // CADA BLOCO
-    // ======================
 
     document.querySelectorAll(".bloco")
     .forEach((bloco, index) => {
@@ -633,13 +654,9 @@ function atualizarPreview() {
 
 
 
-        // ======================
-        // CAMADAS
-        // ======================
 
         blocoPreview.innerHTML = `
 
-            <!-- BLOCO -->
             <div
                 class="camada"
                 style="
@@ -652,6 +669,7 @@ function atualizarPreview() {
 
             <!-- LÂMINAS -->
             <div class="camada" id="lamina-esquerda-${index}"></div>
+            
             <div class="camada" id="lamina-frente-${index}"></div>
             <div class="camada" id="lamina-direita-${index}"></div>
 
@@ -669,15 +687,14 @@ function atualizarPreview() {
 
 
 
-        // ======================
-        // LIMPA CAMADAS
-        // ======================
+   
 
         document.getElementById(
             `lamina-esquerda-${index}`
         ).style.backgroundImage = "none";
 
         document.getElementById(
+            
             `lamina-frente-${index}`
         ).style.backgroundImage = "none";
 
@@ -699,9 +716,7 @@ function atualizarPreview() {
 
 
 
-        // ======================
-        // LÂMINAS DO BLOCO
-        // ======================
+
 
         bloco.querySelectorAll(".lamina-card")
         .forEach(card => {
@@ -717,9 +732,6 @@ function atualizarPreview() {
 
 
 
-            // ======================
-            // DEFINE POSIÇÃO
-            // ======================
 
             let nomePosicao = "";
 
@@ -741,12 +753,6 @@ function atualizarPreview() {
 
             }
 
-
-
-            // ======================
-            // LÂMINA
-            // ======================
-
             const camadaLamina =
             document.getElementById(
                 `lamina-${nomePosicao}-${index}`
@@ -759,10 +765,6 @@ function atualizarPreview() {
 
 
 
-            // ======================
-            // PADRÃO
-            // ======================
-
             const camadaPadrao =
             document.getElementById(
                 `padrao-${nomePosicao}-${index}`
@@ -772,7 +774,6 @@ function atualizarPreview() {
 
 
 
-            // SEM DESENHO
             if(padrao == 0) {
 
                 camadaPadrao.style.backgroundImage =
@@ -780,7 +781,7 @@ function atualizarPreview() {
 
             }
 
-            // COM DESENHO
+  
             else {
 
                 camadaPadrao.style.backgroundImage =
@@ -796,17 +797,11 @@ function atualizarPreview() {
 
 
 
-// ==========================
-// INICIAL
-// ==========================
-
 atualizarPreview();
 
 
 
-// ==========================
-// ENVIO
-// ==========================
+
 
 document.getElementById("formPedido")
 .addEventListener("submit", async (e) => {
