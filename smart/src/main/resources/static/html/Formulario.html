@@ -903,20 +903,19 @@ document.querySelectorAll(".bloco")
 
             
                 blocos.push({
-
-                    corBloco:
-                    Number(
-                        bloco.querySelector(".corBloco").value
-                    ),
-
-                    estoque: {
-                        id: 1
-                    },
-
-                    laminas: laminas
-
-                });
-
+                corBloco: Number(
+                    bloco.querySelector(".corBloco").value
+                ),
+                            
+                estoquePosicao: 90,
+                            
+                estoque: {
+                    id: 90
+                },
+            
+                laminas: laminas
+            });
+            
             });
 
             const pedido = {

@@ -46,15 +46,32 @@ public class Bloco {
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
 
+    @Column(name = "estoque_posicao", nullable = false)
+    private String estoquePosicao;
+
+    @Column(name = "pedido_ordem_producao", nullable = false)
+    private String pedidoOrdemProducao;
+
     @JsonManagedReference
-    @OneToMany(mappedBy = "bloco",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "bloco",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     private List<Lamina> laminas = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
+
         this.criadoEm = LocalDateTime.now();
+
+        if (pedido != null) {
+            this.pedidoOrdemProducao = pedido.getOrdemProducao();
+        }
+
+        if (estoque != null) {
+            this.estoquePosicao = estoque.getPosicao();
+        }
     }
 
     public void adicionarLamina(Lamina lamina) {
