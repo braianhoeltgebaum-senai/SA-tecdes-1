@@ -42,7 +42,7 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
 
-    @JsonManagedReference
+    
     private List<Bloco> blocos = new ArrayList<>();
 
     public void adicionarBloco(Bloco bloco) {
