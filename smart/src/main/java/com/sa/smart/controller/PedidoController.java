@@ -3,74 +3,170 @@ package com.sa.smart.controller;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sa.smart.dto.PedidoConfigDTO;
+import com.sa.smart.dto.PedidoInfoDTO;
 import com.sa.smart.model.Pedido;
 import com.sa.smart.service.PedidoService;
+import com.sa.smart.service.SmartService;
 
-@CrossOrigin("*")
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/pedidos")
+@RequiredArgsConstructor
 public class PedidoController {
 
     private final PedidoService pedidoService;
+    private final SmartService  smartService;
 
-    public PedidoController(PedidoService pedidoService) {
-        this.pedidoService = pedidoService;
-    }
-
+    // -------------------------------------------------------------------------
+    // GET /pedidos — lista todos os pedidos
+    // -------------------------------------------------------------------------
     @GetMapping
-    public List<Pedido> listar() {
-        return pedidoService.listarTodos();
+    public ResponseEntity<List<Pedido>> listar() {
+        return ResponseEntity.ok(pedidoService.listarTodos());
     }
 
+    // -------------------------------------------------------------------------
+    // GET /pedidos/{id} — busca um pedido por ID
+    // -------------------------------------------------------------------------
+    @GetMapping("/{id}")
+    public ResponseEntity<Pedido> buscar(@PathVariable Long id) {
+        return pedidoService.listarTodos()
+                .stream()
+                .filter(p -> p.getIdPedido().equals(id))
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // -------------------------------------------------------------------------
+    // POST /pedidos — cria um novo pedido
+    // -------------------------------------------------------------------------
     @PostMapping
-    public ResponseEntity<?> criar(@RequestBody Pedido pedido) {
+    public ResponseEntity<Pedido> criar(@RequestBody Pedido pedido) {
         try {
-            Pedido novoPedido = pedidoService.criarPedido(pedido);
-            return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
-        } catch (DataIntegrityViolationException e) {
-            // Retorna o HTTP 409 (Conflito) junto com um objeto de erro amigável em formato JSON
-            return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body("{\"erro\": \"A Ordem de Produção '" + pedido.getOrdemProducao() + "' já está cadastrada.\"}");
+            Pedido salvo = pedidoService.criarPedido(pedido);
+            return ResponseEntity.ok(salvo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<Void> atualizarStatus(@PathVariable Long id) {
-
-        pedidoService.atualizarStatusParaConcluido(id);
-        return ResponseEntity.noContent().build();
-        
-    }
-
+    // -------------------------------------------------------------------------
+    // PATCH /pedidos/{id} — atualização parcial de campos do pedido
+    // -------------------------------------------------------------------------
     @PatchMapping("/{id}")
-    public ResponseEntity<Pedido> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
-
-        Pedido pedidoAtualizado = pedidoService.atualizarParcial(id, campos);
-        return ResponseEntity.ok(pedidoAtualizado);
-
+    public ResponseEntity<Pedido> atualizarParcial(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> campos) {
+        try {
+            Pedido atualizado = pedidoService.atualizarParcial(id, campos);
+            return ResponseEntity.ok(atualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
+    // -------------------------------------------------------------------------
+    // DELETE /pedidos/{id} — exclui pedido (somente se estiver Pendente)
+    // -------------------------------------------------------------------------
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        try {
+            pedidoService.excluir(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
-        pedidoService.excluir(id);
-        return ResponseEntity.noContent().build();
+    // -------------------------------------------------------------------------
+    // PATCH /pedidos/{id}/concluir — marca o pedido como Concluído (status 3)
+    // -------------------------------------------------------------------------
+    @PatchMapping("/{id}/concluir")
+    public ResponseEntity<Void> concluir(@PathVariable Long id) {
+        try {
+            pedidoService.atualizarStatusParaConcluido(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
+    // -------------------------------------------------------------------------
+    // GET /pedidos/{id}/config — retorna o PedidoConfigDTO (dados de controle)
+    // -------------------------------------------------------------------------
+    @GetMapping("/{id}/config")
+    public ResponseEntity<PedidoConfigDTO> config(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(pedidoService.gerarConfig(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // GET /pedidos/{id}/info — retorna o PedidoInfoDTO (dados de produção)
+    // -------------------------------------------------------------------------
+    @GetMapping("/{id}/info")
+    public ResponseEntity<PedidoInfoDTO> info(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(pedidoService.gerarInfo(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // POST /pedidos/{id}/iniciar — envia o pedido ao CLP e inicia a produção
+    //
+    // Parâmetro opcional ?ip=192.168.x.x
+    //   → se informado, sobrescreve o IP hardcoded no gerarConfig()
+    //   → se omitido, usa o IP que estiver salvo no gerarConfig() (10.74.241.10)
+    // -------------------------------------------------------------------------
+    @PostMapping("/{id}/iniciar")
+    public ResponseEntity<String> iniciar(
+            @PathVariable Long id,
+            @RequestParam(required = false) String ip) {
+        try {
+            PedidoConfigDTO config = pedidoService.gerarConfig(id);
+            PedidoInfoDTO   info   = pedidoService.gerarInfo(id);
+
+            // Usa o IP enviado pelo frontend (se existir)
+            if (ip != null && !ip.isBlank()) {
+                config.setIpClp(ip);
+            }
+
+            // Valida que temos um IP antes de tentar conectar
+            if (config.getIpClp() == null || config.getIpClp().isBlank()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("IP do CLP não informado.");
+            }
+
+            // SmartService converte os dados em bytes e escreve no CLP via S7
+            smartService.enviarParaProducao(config, info);
+
+            return ResponseEntity.ok(
+                "Pedido #" + id + " enviado ao CLP " + config.getIpClp()
+            );
+
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body("Erro ao iniciar produção: " + e.getMessage());
+        }
     }
 }
-

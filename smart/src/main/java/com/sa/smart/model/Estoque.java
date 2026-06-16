@@ -21,9 +21,8 @@ public class Estoque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cor")
-    private Integer cor;
+    @Column(nullable = false)
+    private Integer posicao;
 
-    @Column(name = "posicao")
-    private String posicao;
+    private Integer cor;
 }
