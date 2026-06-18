@@ -57,12 +57,22 @@ public class PedidoService {
 
                 bloco.setCriadoEm(LocalDateTime.now());
 
-                Long idEstoque = bloco.getEstoque() != null ? bloco.getEstoque().getId() : null;
-                if (idEstoque == null)
-                    throw new RuntimeException("Estoque não informado no bloco");
-                Estoque estoque = estoqueRepository.findById(idEstoque).orElseThrow();
+                // Em vez de depender de um id de estoque enviado pelo frontend,
+                // procuramos no estoque a posição que já tem um bloco da cor pedida.
+                Integer corBloco = bloco.getCorBloco();
+                if (corBloco == null) {
+                    throw new RuntimeException("Cor do bloco não informada.");
+                }
+
+                Estoque estoque = estoqueRepository.findFirstByCorOrderByPosicaoAsc(corBloco)
+                        .orElseThrow(() -> new RuntimeException(
+                                "Nenhuma posição de estoque disponível com a cor: " + corBloco));
 
                 bloco.setEstoque(estoque);
+
+                // A posição usada deixa de ter bloco disponível (fica vazia, cor = 0)
+                estoque.setCor(0);
+                estoqueRepository.save(estoque);
             }
         }
 
