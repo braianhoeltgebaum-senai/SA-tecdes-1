@@ -2,6 +2,7 @@ package com.sa.smart.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,9 @@ public class Expedicao {
     private Integer posicaoExpedicao;
     private LocalDateTime entradaEm;
     private LocalDateTime saidaEm;
+
+    @Column(name = "order_number")
+    private Integer orderNumber;
 
     @ManyToOne
     @JoinColumn(name = "pedido_ordem_producao", nullable = false)

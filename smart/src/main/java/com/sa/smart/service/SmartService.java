@@ -1,33 +1,183 @@
 package com.sa.smart.service;
 
-import java.lang.reflect.Field;
+import java.net.http.HttpHeaders;
 import java.nio.ByteBuffer;
+import java.text.DateFormat.Field;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.sa.smart.clpcomm.PlcConnectionService;
 import com.sa.smart.clpcomm.PlcConnector;
+import com.sa.smart.config.ApiUrlConfig;
 import com.sa.smart.dto.PedidoConfigDTO;
 import com.sa.smart.dto.PedidoInfoDTO;
+import com.sa.smart.model.Estoque;
+import com.sa.smart.repository.EstoqueRepository;
+import com.sa.smart.repository.ExpedicaoRepository;
 
-import lombok.RequiredArgsConstructor;
-
-@Service                    // FIX 1: anotação estava faltando — Spring não registrava o bean
-@RequiredArgsConstructor
+@Service
 public class SmartService {
 
-    private final PlcConnectionService plcConnectionService;
+    // Variáveis globais do programa
+    public static boolean readOnly = false;
+    public static boolean aux_expedicao = false; // Aux Expedição
 
-    // -------------------------------------------------------------------------
-    // Envia os dados do pedido ao CLP e dispara a produção
-    // -------------------------------------------------------------------------
+    public static boolean pedidoEmCurso = false;
+    public static byte statusProducao = 0;
+
+    public static byte statusEstoque = 0;
+    public static byte statusProcesso = 0;
+    public static byte statusMontagem = 0;
+    public static byte statusExpedicao = 0;
+
+    public static int posicaoEstoqueSolicitada = 0;
+    public static int posicaoExpedicaoSolicitada = 0;
+
+    public static boolean blockFinished = false;
+
+    @Autowired
+    private PlcConnectionService plcConnectionService;
+
+    @Autowired
+    private EstoqueRepository estoqueRepository;
+
+    @Autowired
+    private ExpedicaoRepository expedicaoRepository;
+
+    @Autowired
+    private ApiUrlConfig apiUrlConfig;
+
+    /*---- RealidadeAumentada */
+    boolean xEmergenciaAtivadaExp = false;
+    boolean xComutadorAutomaticoExp = false;
+    boolean xNecessitaHomeEixoVerticalExp = false;
+    boolean xNecessitaHomeEixoGiroExp = false;
+    boolean xNecessitaHomeEixoHorizontalExp = false;
+    boolean xServoDesligadoEixoHorizontalExp = false;
+    boolean xServoDesligadoEixoGiroExp = false;
+    boolean xServoDesligadoEixoVerticalExp = false;
+    boolean xCondicaoIniciarExp = false;
+
+    private Map<String, List<String>> eventosCLP = new ConcurrentHashMap<>();
+
+    public void chamarApis() {
+        String estoqueUrl = apiUrlConfig.getEstoqueApiUrl();
+        String expedicaoUrl = apiUrlConfig.getExpedicaoApiUrl();
+
+        System.out.println("Chamando estoque em: " + estoqueUrl);
+        System.out.println("Chamando expedição em: " + expedicaoUrl);
+    }
+
+    public boolean sendBlockBytesToClp(String ipClp, int db, int offset, byte[] dados, int size) {
+        PlcConnector plcConnector = plcConnectionService.getConnection(ipClp);
+        if (plcConnector == null) {
+            System.out.println("Sem conexão com CLP " + ipClp);
+            return false;
+        }
+        if (!readOnly) {
+            try {
+                plcConnector.writeBlock(db, offset, size, dados); // escreve no bloco de dados
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        // se for readOnly ou nada a fazer, considere sucesso
+        return true;
+    }
+
+    //*************************************************************
+    // Função para iniciar a Execução do pedido
+    //*************************************************************
+    public void startExecuteOrder(String ipClp) {
+
+        // Etapas a desenvolver:
+        // 1 - ATUALIZAR O PRÓXIMO NÚMERO DE PEDIDO
+        // MainFrame.posExpedArray[12] = MainFrame.posExpedArray[12] + 1;
+        // int orderProduction = obterProximoPedido();
+        //PlcConnector plcConnector = new PlcConnector(ipClp, 102); // ajuste o IP se necessário
+        if (!readOnly) {
+
+            PlcConnector plcConnector = plcConnectionService.getConnection(ipClp);
+            if (plcConnector == null) {
+                return;
+            }
+
+            posicaoExpedicaoSolicitada = searchFirstPositionFreeExp();
+
+            try {
+
+                // Inicializa as flags da estação ESTOQUE
+                //plcConnector.connect();
+                plcConnector.writeBit(9, 0, 0, Boolean.parseBoolean("FALSE"));
+                plcConnector.writeBit(9, 64, 0, Boolean.parseBoolean("FALSE"));
+                plcConnector.writeBit(9, 64, 1, Boolean.parseBoolean("FALSE"));
+                plcConnector.writeBit(9, 62, 0, Boolean.parseBoolean("FALSE"));
+
+                // plcConnector.writeBit(9, 62, 0, Boolean.parseBoolean("FALSE"));
+                // Iniciar pedido
+                System.out.println("INICIAR PEDIDO 2");
+                plcConnector.writeBit(9, 62, 0, Boolean.parseBoolean("TRUE"));
+
+            } catch (Exception ex) {
+
+            }
+        }
+    }
+
+    //***************************************************************
+    // Funções para gerenciamento de posições no Estoque e Expedição
+    //***************************************************************
+    //********************************************************************************************************************************************** */
+    public int SearchFirstPositionByColor(int cor, Set<Integer> posicoesUsadas) {
+        List<Estoque> estoque = estoqueRepository.findByCorOrderByPosicaoEstoqueAsc(cor);
+
+        for (Estoque e : estoque) {
+            if (!posicoesUsadas.contains(e.getPosicaoEstoque())) {
+                return e.getPosicaoEstoque();
+            }
+        }
+
+        return -1; // Nenhuma posição disponível
+    }
+
+    public int searchFirstPositionFreeExp() {
+        List<Integer> ocupadas = expedicaoRepository.findAllPosicoesOcupadas();
+
+        for (int i = 1; i <= 12; i++) {
+            if (!ocupadas.contains(i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    //*************************************************************
+    // Função para reiniciar status de operação das estações
+    //*************************************************************
+    public void resetarStatus() {
+        statusEstoque = 0;
+        statusProcesso = 0;
+        statusMontagem = 0;
+        statusExpedicao = 0;
+    }
+
+    //*************************************************************
+    // Funções para gerenciamento do modo Leitura
+    //*************************************************************
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
     public void enviarParaProducao(PedidoConfigDTO config, PedidoInfoDTO detalhes) {
 
         byte[] buffer = converterParaBytes(detalhes);
@@ -49,9 +199,27 @@ public class SmartService {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Converte o PedidoInfoDTO para bloco de bytes (cada campo int → Short de 2 bytes)
-    // -------------------------------------------------------------------------
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        System.out.println("readOnly: " + readOnly);
+    }
+
+    public void printHex(byte[] bytes) {
+
+        StringBuilder sb = new StringBuilder();
+        System.out.println("--- BLOCO DE BYTES (HEXADECIMAL) ---");
+
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(String.format("%02X ", bytes[i]));
+            if ((i + 1) % 10 == 0) {
+                sb.append("\n");
+            }
+        }
+
+        System.out.println(sb.toString());
+        System.out.println("------------------------------------");
+    }
+
     private byte[] converterParaBytes(PedidoInfoDTO dto) {
 
         Field[] campos = dto.getClass().getDeclaredFields();
@@ -70,34 +238,7 @@ public class SmartService {
         return buffer.array();
     }
 
-    // -------------------------------------------------------------------------
-    // Printa o bloco de bytes em hexadecimal no console (debug)
-    // -------------------------------------------------------------------------
-    public void printHex(byte[] bytes) {
-
-        StringBuilder sb = new StringBuilder();
-        System.out.println("--- BLOCO DE BYTES (HEXADECIMAL) ---");
-
-        for (int i = 0; i < bytes.length; i++) {
-            sb.append(String.format("%02X ", bytes[i]));
-            if ((i + 1) % 10 == 0) {
-                sb.append("\n");
-            }
-        }
-
-        System.out.println(sb.toString());
-        System.out.println("------------------------------------");
-    }
-
-    // -------------------------------------------------------------------------
-    // Seta as flags no CLP para iniciar o pedido e seleciona a tampa no ESP32
-    //
-    // FIX 3: parâmetro 'corTampa' adicionado — era referenciado como 'tampa'
-    //         sem estar declarado em lugar nenhum (erro de compilação)
-    // FIX 4: 'return ResponseEntity...' removido — método é void, não pode retornar
-    //         ResponseEntity. Erros agora são logados via System.err
-    // -------------------------------------------------------------------------
-    public void iniciarExecucaoPedido(String ipClp, int corTampa) {
+    public void startExecuteOrder(String ipClp, int corTampa) {
 
         PlcConnector plcConnector = plcConnectionService.getConnection(ipClp);
         if (plcConnector == null) {
@@ -166,4 +307,6 @@ public class SmartService {
             e.printStackTrace();
         }
     }
+
 }
+
