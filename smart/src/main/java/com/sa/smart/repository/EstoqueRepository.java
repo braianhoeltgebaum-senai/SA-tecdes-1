@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.sa.smart.model.Estoque;
 
 public interface EstoqueRepository extends JpaRepository<Estoque, Long> {
+    // Busca por posição exata
+    Optional<Estoque> findByPosicaoEstoque(int posicao);
 
-    Optional<Estoque> findFirstByCorOrderByPosicaoAsc(Integer cor);
+    // Busca a primeira posição disponível com a cor ordenada pelo campo
+    // posicaoEstoque
+    Optional<Estoque> findFirstByCorOrderByPosicaoEstoqueAsc(Integer cor);
 
-    Optional<Estoque> findByPosicaoEstoque(Integer posicaoEstoque);
-
+    // Lista todas as posições com determinada cor ordenadas por posicaoEstoque
     List<Estoque> findByCorOrderByPosicaoEstoqueAsc(Integer cor);
 }

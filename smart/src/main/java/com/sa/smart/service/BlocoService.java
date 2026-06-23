@@ -3,15 +3,18 @@ package com.sa.smart.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.sa.smart.dto.BlocoDTO;
+import com.sa.smart.dto.LaminaDTO;
 import com.sa.smart.enums.EnumCorBloco;
 import com.sa.smart.enums.EnumStatusPedido;
 import com.sa.smart.enums.EnumTipoPedido;
 import com.sa.smart.model.Bloco;
 import com.sa.smart.model.Estoque;
+import com.sa.smart.model.Lamina;
 import com.sa.smart.model.Pedido;
 import com.sa.smart.repository.BlocoRepository;
 import com.sa.smart.repository.EstoqueRepository;
@@ -28,9 +31,24 @@ public class BlocoService {
     private final PedidoRepository pedidoRepository;
     private final EstoqueRepository estoqueRepository;
 
+    // ==================== UTILITÁRIO ====================
+    private List<LaminaDTO> toLaminaDTOList(List<Lamina> laminas) {
+        if (laminas == null) return new ArrayList<>();
+        return laminas.stream()
+                .map(l -> new LaminaDTO(
+                        l.getId(),
+                        l.getCor(),
+                        l.getPadrao(),
+                        l.getPosicaoNoBloco(),
+                        l.getBloco().getIdBloco()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    // ==================== MÉTODOS ====================
+
     @Transactional
     public BlocoDTO criar(BlocoDTO dto) {
-        
         if (dto.corBloco() == null || !EnumCorBloco.isValid(dto.corBloco().getCodigo())) {
             throw new RuntimeException("Cor do bloco inválida. Use: 1-Preto, 2-Vermelho, 3-Azul");
         }
@@ -54,16 +72,20 @@ public class BlocoService {
         Bloco bloco = new Bloco();
         bloco.setPedido(pedido);
         bloco.setEstoque(estoque);
-        bloco.setCorBloco(dto.corBloco().getCodigo()); 
+        bloco.setCorBloco(dto.corBloco().getCodigo());
         bloco.setCriadoEm(LocalDateTime.now());
 
         Bloco salvo = blocoRepository.save(bloco);
+
+        // Retorna o DTO com os campos preenchidos
         return new BlocoDTO(
-            salvo.getIdBloco(),
-            EnumCorBloco.fromCodigo(salvo.getCorBloco()), 
-            salvo.getCriadoEm(),
-            salvo.getEstoque() != null ? salvo.getEstoque().getId() : null,
-            salvo.getPedido() != null ? salvo.getPedido().getIdPedido() : null
+                salvo.getIdBloco(),
+                dto.andar(), // pode ser null se não informado
+                EnumCorBloco.fromCodigo(salvo.getCorBloco()),
+                toLaminaDTOList(salvo.getLaminas()),
+                salvo.getCriadoEm(),
+                salvo.getEstoque() != null ? salvo.getEstoque().getId() : null,
+                salvo.getPedido() != null ? salvo.getPedido().getIdPedido() : null
         );
     }
 
@@ -72,11 +94,13 @@ public class BlocoService {
         List<BlocoDTO> lista = new ArrayList<>();
         for (Bloco b : blocos) {
             lista.add(new BlocoDTO(
-                b.getIdBloco(),
-                EnumCorBloco.fromCodigo(b.getCorBloco()),
-                b.getCriadoEm(),
-                b.getEstoque() != null ? b.getEstoque().getId() : null,
-                b.getPedido() != null ? b.getPedido().getIdPedido() : null
+                    b.getIdBloco(),
+                    null, // andar não disponível no modelo
+                    EnumCorBloco.fromCodigo(b.getCorBloco()),
+                    toLaminaDTOList(b.getLaminas()),
+                    b.getCriadoEm(),
+                    b.getEstoque() != null ? b.getEstoque().getId() : null,
+                    b.getPedido() != null ? b.getPedido().getIdPedido() : null
             ));
         }
         return lista;
@@ -86,11 +110,13 @@ public class BlocoService {
         Bloco b = blocoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bloco não encontrado com ID: " + id));
         return new BlocoDTO(
-            b.getIdBloco(),
-            EnumCorBloco.fromCodigo(b.getCorBloco()),
-            b.getCriadoEm(),
-            b.getEstoque() != null ? b.getEstoque().getId() : null,
-            b.getPedido() != null ? b.getPedido().getIdPedido() : null
+                b.getIdBloco(),
+                null,
+                EnumCorBloco.fromCodigo(b.getCorBloco()),
+                toLaminaDTOList(b.getLaminas()),
+                b.getCriadoEm(),
+                b.getEstoque() != null ? b.getEstoque().getId() : null,
+                b.getPedido() != null ? b.getPedido().getIdPedido() : null
         );
     }
 
@@ -118,11 +144,13 @@ public class BlocoService {
 
         Bloco atualizado = blocoRepository.save(existente);
         return new BlocoDTO(
-            atualizado.getIdBloco(),
-            EnumCorBloco.fromCodigo(atualizado.getCorBloco()),
-            atualizado.getCriadoEm(),
-            atualizado.getEstoque() != null ? atualizado.getEstoque().getId() : null,
-            atualizado.getPedido() != null ? atualizado.getPedido().getIdPedido() : null
+                atualizado.getIdBloco(),
+                dto.andar(),
+                EnumCorBloco.fromCodigo(atualizado.getCorBloco()),
+                toLaminaDTOList(atualizado.getLaminas()),
+                atualizado.getCriadoEm(),
+                atualizado.getEstoque() != null ? atualizado.getEstoque().getId() : null,
+                atualizado.getPedido() != null ? atualizado.getPedido().getIdPedido() : null
         );
     }
 
@@ -150,11 +178,13 @@ public class BlocoService {
 
         Bloco atualizado = blocoRepository.save(existente);
         return new BlocoDTO(
-            atualizado.getIdBloco(),
-            EnumCorBloco.fromCodigo(atualizado.getCorBloco()),
-            atualizado.getCriadoEm(),
-            atualizado.getEstoque() != null ? atualizado.getEstoque().getId() : null,
-            atualizado.getPedido() != null ? atualizado.getPedido().getIdPedido() : null
+                atualizado.getIdBloco(),
+                dto.andar(),
+                EnumCorBloco.fromCodigo(atualizado.getCorBloco()),
+                toLaminaDTOList(atualizado.getLaminas()),
+                atualizado.getCriadoEm(),
+                atualizado.getEstoque() != null ? atualizado.getEstoque().getId() : null,
+                atualizado.getPedido() != null ? atualizado.getPedido().getIdPedido() : null
         );
     }
 
@@ -171,11 +201,13 @@ public class BlocoService {
         for (Bloco b : blocos) {
             if (b.getEstoque() != null && b.getEstoque().getCor() != 0) {
                 lista.add(new BlocoDTO(
-                    b.getIdBloco(),
-                    EnumCorBloco.fromCodigo(b.getCorBloco()),
-                    b.getCriadoEm(),
-                    b.getEstoque() != null ? b.getEstoque().getId() : null,
-                    b.getPedido() != null ? b.getPedido().getIdPedido() : null
+                        b.getIdBloco(),
+                        null,
+                        EnumCorBloco.fromCodigo(b.getCorBloco()),
+                        toLaminaDTOList(b.getLaminas()),
+                        b.getCriadoEm(),
+                        b.getEstoque() != null ? b.getEstoque().getId() : null,
+                        b.getPedido() != null ? b.getPedido().getIdPedido() : null
                 ));
             }
         }

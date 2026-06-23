@@ -468,7 +468,7 @@
         // 1. ESTATÍSTICAS (pedidos)
         async function carregarEstatisticas() {
             try {
-                const pedidos = await fetchAPI('/api/pedidos/listar');
+                const pedidos = await fetchAPI('/pedidos');
                 const total = pedidos.length;
                 const pendentes = pedidos.filter(p => p.statusPedido === 1).length;
                 const producao = pedidos.filter(p => p.statusPedido === 2).length;

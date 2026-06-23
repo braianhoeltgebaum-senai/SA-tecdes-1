@@ -5,13 +5,16 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import com.sa.smart.dto.BlocoDTO;
+import com.sa.smart.dto.LaminaDTO;
 import com.sa.smart.dto.PedidoConfigDTO;
 import com.sa.smart.dto.PedidoInfoDTO;
+import com.sa.smart.enums.EnumCorBloco;
 import com.sa.smart.model.Bloco;
 import com.sa.smart.model.Estoque;
 import com.sa.smart.model.Lamina;
@@ -22,29 +25,49 @@ import com.sa.smart.repository.PedidoRepository;
 @Service
 public class PedidoService {
 
-    private final PedidoRepository  pedidoRepository;
+    private final PedidoRepository pedidoRepository;
     private final EstoqueRepository estoqueRepository;
 
     public PedidoService(
-            PedidoRepository  pedidoRepository,
+            PedidoRepository pedidoRepository,
             EstoqueRepository estoqueRepository) {
 
-        this.pedidoRepository  = pedidoRepository;
+        this.pedidoRepository = pedidoRepository;
         this.estoqueRepository = estoqueRepository;
     }
+
+    // ─── Mapeamento auxiliar ────────────────────────────────────────────────────
+
+    private List<LaminaDTO> toLaminaDTOList(List<Lamina> laminas) {
+        return laminas.stream()
+                .map(l -> new LaminaDTO(
+                        l.getId(),
+                        l.getCor(),
+                        l.getPadrao(),
+                        l.getPosicaoNoBloco(),
+                        l.getBloco().getIdBloco()))
+                .collect(Collectors.toList());
+    }
+
+    // ─── CRUD básico ──────────────────────────────────────────────────────────
 
     public List<Pedido> listarTodos() {
         return pedidoRepository.findAll();
     }
 
+    /**
+     * Cria um novo pedido a partir do objeto Pedido recebido.
+     * Valida se pedidos triplos têm exatamente 3 blocos,
+     * atribui status Pendente (1) e associa cada bloco a uma posição de estoque
+     * disponível.
+     */
     public Pedido criarPedido(Pedido pedido) {
-
         if (pedido.getTipoPedido() == 3 &&
                 (pedido.getBlocos() == null || pedido.getBlocos().size() != 3)) {
             throw new RuntimeException("Pedidos triplos exigem exatamente 3 blocos.");
         }
 
-        pedido.setStatusPedido(1);
+        pedido.setStatusPedido(1); // Pendente
 
         if (pedido.getBlocos() != null) {
             for (Bloco bloco : pedido.getBlocos()) {
@@ -56,12 +79,12 @@ public class PedidoService {
                     throw new RuntimeException("Cor do bloco não informada.");
                 }
 
-                Estoque estoque = estoqueRepository.findFirstByCorOrderByPosicaoAsc(corBloco)
+                Estoque estoque = estoqueRepository.findFirstByCorOrderByPosicaoEstoqueAsc(corBloco)
                         .orElseThrow(() -> new RuntimeException(
                                 "Nenhuma posição de estoque disponível com a cor: " + corBloco));
 
                 bloco.setEstoque(estoque);
-                estoque.setCor(0);
+                estoque.setCor(0); // marca como ocupado
                 estoqueRepository.save(estoque);
             }
         }
@@ -113,15 +136,25 @@ public class PedidoService {
         dto.setTipoPedido(pedido.getTipoPedido());
         dto.setCorTampa(pedido.getCorTampa());
         dto.setStatusPedido(pedido.getStatusPedido());
-        dto.setBlocos(
-                pedido.getBlocos().stream()
-                        .map(bloco -> new BlocoDTO(
-                                bloco.getIdBloco(),
-                                null,
-                                bloco.getCriadoEm(),
-                                bloco.getEstoque().getId(),
-                                pedido.getIdPedido()))
-                        .toList());
+
+        List<Bloco> blocos = pedido.getBlocos();
+        List<BlocoDTO> blocosDTO = new java.util.ArrayList<>();
+        for (int i = 0; i < blocos.size(); i++) {
+            Bloco bloco = blocos.get(i);
+            // Obtém o andar (i+1) e converte a cor para EnumCorBloco
+            EnumCorBloco enumCor = EnumCorBloco.fromCodigo(bloco.getCorBloco());
+            BlocoDTO blocoDTO = new BlocoDTO(
+                    bloco.getIdBloco(),
+                    i + 1, // andar
+                    enumCor, // corBloco (Enum)
+                    toLaminaDTOList(bloco.getLaminas()), // lâminas
+                    bloco.getCriadoEm(),
+                    bloco.getEstoque() != null ? bloco.getEstoque().getId() : null,
+                    pedido.getIdPedido());
+            blocosDTO.add(blocoDTO);
+        }
+        dto.setBlocos(blocosDTO);
+        // IP padrão (pode ser sobrescrito pelo frontend)
         dto.setIpClp("10.74.241.10");
 
         return dto;
@@ -155,8 +188,6 @@ public class PedidoService {
         switch (andar) {
             case 1 -> {
                 dto.setCorAndar1(bloco.getCorBloco());
-                // CORRIGIDO: era bloco.getEstoque().getPosicao() → método não existe no model Estoque
-                // O campo correto é getPosicaoEstoque()
                 dto.setPosicaoEstoqueAndar1(bloco.getEstoque().getPosicaoEstoque());
                 preencherLaminasAndar1(dto, laminas);
                 dto.setProcessamentoAndar1(1);
