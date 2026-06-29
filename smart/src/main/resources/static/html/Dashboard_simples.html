@@ -20,7 +20,6 @@
             flex-direction: column;
         }
 
-        /* --- BARRA DE NAVEGAÇÃO (mesmo modelo do gestor) --- */
         nav {
             width: 100%;
             background: #111c30;
@@ -66,7 +65,6 @@
             color: #38bdf8;
         }
 
-        /* --- CONTEÚNO DO DASHBOARD (original adaptado) --- */
         .container {
             max-width: 1400px;
             margin: 32px auto;
@@ -74,7 +72,6 @@
             width: 100%;
         }
 
-        /* cabeçalho interno (sem redundância com o nav) */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -120,7 +117,6 @@
             color: white;
         }
 
-        /* CARDS ESTATÍSTICAS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -156,23 +152,11 @@
             color: #5b6e8c;
         }
 
-        .stat-card.total .value {
-            color: #60a5fa;
-        }
+        .stat-card.total .value    { color: #60a5fa; }
+        .stat-card.pendente .value { color: #facc15; }
+        .stat-card.producao .value { color: #38bdf8; }
+        .stat-card.concluido .value{ color: #4ade80; }
 
-        .stat-card.pendente .value {
-            color: #facc15;
-        }
-
-        .stat-card.producao .value {
-            color: #38bdf8;
-        }
-
-        .stat-card.concluido .value {
-            color: #4ade80;
-        }
-
-        /* LAYOUT DOS PAINÉIS (ESTOQUE + EXPEDIÇÃO) */
         .panels {
             display: flex;
             flex-wrap: wrap;
@@ -216,7 +200,7 @@
             padding: 20px;
         }
 
-        /* GRID DE ESTOQUE (7x4) */
+        /* GRID DE ESTOQUE (6 colunas × 5 linhas = 28 + parcial) */
         .stock-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -234,8 +218,12 @@
             font-size: 0.7rem;
             font-weight: 500;
             border: 1px solid #283548;
-            transition: 0.1s;
+            transition: transform 0.15s, box-shadow 0.15s;
             cursor: default;
+        }
+
+        .stock-cell:hover {
+            transform: scale(1.04);
         }
 
         .stock-cell.vazio {
@@ -255,14 +243,14 @@
             background: #7f1a1a;
             border-color: #c24141;
             color: #fecaca;
-            box-shadow: 0 0 6px rgba(180, 50, 50, 0.3);
+            box-shadow: 0 0 8px rgba(180, 50, 50, 0.35);
         }
 
         .stock-cell.azul {
             background: #1e3a6b;
             border-color: #3b82f6;
             color: #bfdbfe;
-            box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.35);
         }
 
         .cell-number {
@@ -271,29 +259,35 @@
         }
 
         .cell-label {
-            font-size: 1rem;
+            font-size: 0.65rem;
             opacity: 0.7;
             margin-top: 4px;
+            letter-spacing: 0.05em;
         }
 
-        /* GRID EXPEDIÇÃO (3x4) */
+        /* GRID EXPEDIÇÃO (4 colunas × 3 linhas = 12) */
         .exp-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
+            gap: 14px;
         }
 
         .exp-cell {
             background: #111827;
             border-radius: 14px;
             border: 1px solid #283548;
-            padding: 50px 6px;
+            padding: 20px 8px;
             text-align: center;
-            transition: 0.1s;
-            min-height: 75px;
+            transition: transform 0.15s, box-shadow 0.15s;
+            min-height: 90px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            cursor: default;
+        }
+
+        .exp-cell:hover {
+            transform: scale(1.03);
         }
 
         .exp-cell.empty {
@@ -305,20 +299,21 @@
         .exp-cell.occupied {
             background: linear-gradient(145deg, #0b2e26, #064e3b);
             border-color: #2dd4bf;
-            box-shadow: 0 0 8px rgba(45, 212, 191, 0.2);
+            box-shadow: 0 0 10px rgba(45, 212, 191, 0.22);
         }
 
         .exp-pos {
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
 
         .exp-op {
-            font-size: 1rem;
+            font-size: 0.72rem;
             margin-top: 6px;
             font-family: monospace;
             color: #9efff0;
             word-break: break-all;
+            line-height: 1.3;
         }
 
         .legend {
@@ -334,7 +329,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 1rem;
+            font-size: 0.8rem;
             color: #94a3b8;
         }
 
@@ -342,13 +337,15 @@
             width: 14px;
             height: 14px;
             border-radius: 4px;
+            flex-shrink: 0;
         }
 
         footer {
             text-align: center;
             margin-top: 40px;
-            font-size: 0.7=rem;
+            font-size: 0.72rem;
             color: #334155;
+            padding-bottom: 20px;
         }
 
         button {
@@ -361,16 +358,26 @@
             background: #2c1a1e;
             border: 1px solid #ef4444;
             border-radius: 12px;
-            padding: 12px;
+            padding: 12px 16px;
             margin-bottom: 20px;
             font-size: 0.8rem;
             color: #f9acac;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .exp-grid   { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stock-grid { grid-template-columns: repeat(4, 1fr); }
+            .exp-grid   { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
 
-    <!-- MENU DE NAVEGAÇÃO (modelo fornecido) -->
     <nav>
         <div class="nav-logo">
             <h1>SMART 4.0 · Planta Digital</h1>
@@ -383,7 +390,6 @@
         </ul>
     </nav>
 
-    <!-- Conteúdo principal do Dashboard -->
     <div class="container">
         <div class="dashboard-header">
             <div>
@@ -395,16 +401,35 @@
             </button>
         </div>
 
+        <div id="errorContainer"></div>
+
         <!-- Cards estatísticas -->
-        <div class="stats-grid" id="statsContainer">
-            <div class="stat-card total"><div class="label">TOTAL PEDIDOS</div><div class="value" id="totalPedidos">--</div><div class="trend">ordens registradas</div></div>
-            <div class="stat-card pendente"><div class="label">PENDENTES</div><div class="value" id="pendentes">--</div><div class="trend">aguardando início</div></div>
-            <div class="stat-card producao"><div class="label">EM PRODUÇÃO</div><div class="value" id="producao">--</div><div class="trend">em andamento</div></div>
-            <div class="stat-card concluido"><div class="label">CONCLUÍDOS</div><div class="value" id="concluidos">--</div><div class="trend">prontos / expedição</div></div>
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <div class="label">TOTAL PEDIDOS</div>
+                <div class="value" id="totalPedidos">--</div>
+                <div class="trend">ordens registradas</div>
+            </div>
+            <div class="stat-card pendente">
+                <div class="label">PENDENTES</div>
+                <div class="value" id="pendentes">--</div>
+                <div class="trend">aguardando início</div>
+            </div>
+            <div class="stat-card producao">
+                <div class="label">EM PRODUÇÃO</div>
+                <div class="value" id="producao">--</div>
+                <div class="trend">em andamento</div>
+            </div>
+            <div class="stat-card concluido">
+                <div class="label">CONCLUÍDOS</div>
+                <div class="value" id="concluidos">--</div>
+                <div class="trend">prontos / expedição</div>
+            </div>
         </div>
 
         <!-- Painéis: Estoque + Expedição -->
         <div class="panels">
+
             <!-- Estoque (28 posições) -->
             <div class="panel">
                 <div class="panel-header">
@@ -412,12 +437,26 @@
                     <span class="badge-pos" id="estoqueContador">0/28 ocupadas</span>
                 </div>
                 <div class="panel-body">
-                    <div class="stock-grid" id="stockGrid"></div>
+                    <div class="stock-grid" id="stockGrid">
+                        <!-- preenchido via JS -->
+                    </div>
                     <div class="legend">
-                        <div class="legend-item"><div class="legend-dot" style="background:#0f172a; border:1px dashed #475569;"></div> Vazio</div>
-                        <div class="legend-item"><div class="legend-dot" style="background:#1e1e2f; border:1px solid #4b4b6e;"></div> Preto</div>
-                        <div class="legend-item"><div class="legend-dot" style="background:#7f1a1a; border:1px solid #f87171;"></div> Vermelho</div>
-                        <div class="legend-item"><div class="legend-dot" style="background:#1e3a6b; border:1px solid #60a5fa;"></div> Azul</div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#0f172a; border:1px dashed #475569;"></div>
+                            Vazio
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#1e1e2f; border:1px solid #4b4b6e;"></div>
+                            Preto
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#7f1a1a; border:1px solid #f87171;"></div>
+                            Vermelho
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#1e3a6b; border:1px solid #60a5fa;"></div>
+                            Azul
+                        </div>
                     </div>
                 </div>
             </div>
@@ -429,113 +468,139 @@
                     <span class="badge-pos" id="expedicaoContador">0/12 ocupadas</span>
                 </div>
                 <div class="panel-body">
-                    <div class="exp-grid" id="expGrid"></div>
+                    <div class="exp-grid" id="expGrid">
+                        <!-- preenchido via JS -->
+                    </div>
                     <div class="legend">
-                        <div class="legend-item"><div class="legend-dot" style="background:#0f172a; border:1px dashed #5b6e8c;"></div> Livre</div>
-                        <div class="legend-item"><div class="legend-dot" style="background:#064e3b; border:1px solid #2dd4bf;"></div> Ocupado (OP)</div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#0f172a; border:1px dashed #5b6e8c;"></div>
+                            Livre
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background:#064e3b; border:1px solid #2dd4bf;"></div>
+                            Ocupado (OP)
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <footer>API backend · dbSmart40 | Conectividade em tempo real</footer>
     </div>
 
     <script>
-        // --------------------------------------------------------------
-        // CONFIGURAÇÃO - mesmo endpoint da API original
-        // --------------------------------------------------------------
+        // ─── Configuração ────────────────────────────────────────────────────
         const API_BASE = "http://localhost:8088";
 
-        // Mapeamento cores estoque (0=vazio,1=preto,2=vermelho,3=azul)
-        const corEstoqueMap = {
+        // Cor numérica (0-3) → classe CSS
+        const COR_CLASS = {
             0: 'vazio',
             1: 'preto',
             2: 'vermelho',
             3: 'azul'
         };
 
+        // Cor numérica (0-3) → rótulo curto
+        const COR_LABEL = {
+            0: '',
+            1: 'PTR',
+            2: 'VRM',
+            3: 'AZL'
+        };
+
+        // ─── Helper fetch ────────────────────────────────────────────────────
         async function fetchAPI(endpoint) {
             const res = await fetch(`${API_BASE}${endpoint}`, {
-                headers: { 'Accept': 'application/json' }
+                headers: { Accept: 'application/json' }
             });
-            if (!res.ok) {
-                throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-            }
             if (res.status === 204) return [];
+            if (!res.ok) throw new Error(`HTTP ${res.status} – ${res.statusText}`);
             return res.json();
         }
 
-        // 1. ESTATÍSTICAS (pedidos)
+        function mostrarErro(msg) {
+            const c = document.getElementById('errorContainer');
+            c.innerHTML = `<div class="error-msg">⚠ ${msg}</div>`;
+            setTimeout(() => c.innerHTML = '', 8000);
+        }
+
+        // ─── 1. Estatísticas (pedidos) ────────────────────────────────────────
         async function carregarEstatisticas() {
             try {
                 const pedidos = await fetchAPI('/pedidos');
-                const total = pedidos.length;
-                const pendentes = pedidos.filter(p => p.statusPedido === 1).length;
-                const producao = pedidos.filter(p => p.statusPedido === 2).length;
-                const concluidos = pedidos.filter(p => p.statusPedido === 3).length;
-
-                document.getElementById('totalPedidos').innerText = total;
-                document.getElementById('pendentes').innerText = pendentes;
-                document.getElementById('producao').innerText = producao;
-                document.getElementById('concluidos').innerText = concluidos;
+                document.getElementById('totalPedidos').textContent = pedidos.length;
+                document.getElementById('pendentes').textContent   = pedidos.filter(p => p.statusPedido === 1).length;
+                document.getElementById('producao').textContent    = pedidos.filter(p => p.statusPedido === 2).length;
+                document.getElementById('concluidos').textContent  = pedidos.filter(p => p.statusPedido === 3).length;
             } catch (err) {
-                console.error('Erro estatísticas:', err);
-                document.getElementById('totalPedidos').innerText = 'ERR';
-                document.getElementById('pendentes').innerText = '--';
-                document.getElementById('producao').innerText = '--';
-                document.getElementById('concluidos').innerText = '--';
+                console.error('[Estatísticas]', err);
+                ['totalPedidos','pendentes','producao','concluidos']
+                    .forEach(id => document.getElementById(id).textContent = 'ERR');
+                mostrarErro('Não foi possível carregar os pedidos: ' + err.message);
             }
         }
 
-        // 2. ESTOQUE (28 posições)
+        // ─── 2. Estoque (28 posições) ─────────────────────────────────────────
         async function carregarEstoque() {
-            const grid = document.getElementById('stockGrid');
-            const contadorSpan = document.getElementById('estoqueContador');
+            const grid    = document.getElementById('stockGrid');
+            const contador = document.getElementById('estoqueContador');
             try {
                 const items = await fetchAPI('/api/estoque/listar');
+
+                // Monta mapa posição → cor
+                // CORREÇÃO: o DTO retorna "posicaoEstoque", não "posicao"
                 const posMap = new Map();
                 items.forEach(item => {
-                    if (item.posicao && item.cor !== undefined) {
-                        posMap.set(item.posicao, item.cor);
+                    if (item.posicaoEstoque != null) {
+                        posMap.set(item.posicaoEstoque, item.cor ?? 0);
                     }
                 });
 
                 let ocupadas = 0;
                 let html = '';
                 for (let pos = 1; pos <= 28; pos++) {
-                    const cor = posMap.has(pos) ? posMap.get(pos) : 0;
-                    const corClass = corEstoqueMap[cor] || 'vazio';
+                    const cor      = posMap.has(pos) ? posMap.get(pos) : 0;
+                    const classe   = COR_CLASS[cor] ?? 'vazio';
+                    const rotulo   = COR_LABEL[cor] ?? '';
+                    const corNome  = { 1: 'Preto', 2: 'Vermelho', 3: 'Azul', 0: 'Vazio' }[cor] || 'Vazio';
                     if (cor !== 0) ocupadas++;
-                    const corNome = { 1: 'PTR', 2: 'VRM', 3: 'AZL', 0: '' }[cor] || '';
+
                     html += `
-                        <div class="stock-cell ${corClass}" title="Posição ${pos} - ${cor === 1 ? 'Preto' : cor === 2 ? 'Vermelho' : cor === 3 ? 'Azul' : 'Vazio'}">
+                        <div class="stock-cell ${classe}"
+                             title="Posição ${pos} — ${corNome}">
                             <div class="cell-number">${String(pos).padStart(2, '0')}</div>
-                            <div class="cell-label">${corNome}</div>
-                        </div>
-                    `;
+                            <div class="cell-label">${rotulo}</div>
+                        </div>`;
                 }
                 grid.innerHTML = html;
-                contadorSpan.innerText = `${ocupadas}/28 ocupadas`;
+                contador.textContent = `${ocupadas}/28 ocupadas`;
             } catch (err) {
-                console.error('Erro ao carregar estoque:', err);
-                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;">Erro ao carregar estoque</div>';
-                contadorSpan.innerText = 'ERRO';
+                console.error('[Estoque]', err);
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#f87171;">Erro ao carregar estoque</div>';
+                contador.textContent = 'ERRO';
+                mostrarErro('Não foi possível carregar o estoque: ' + err.message);
             }
         }
 
-        // 3. EXPEDIÇÃO (12 posições)
+        // ─── 3. Expedição (12 posições) ───────────────────────────────────────
         async function carregarExpedicao() {
-            const grid = document.getElementById('expGrid');
-            const contadorSpan = document.getElementById('expedicaoContador');
+            const grid    = document.getElementById('expGrid');
+            const contador = document.getElementById('expedicaoContador');
             try {
                 const expedicoes = await fetchAPI('/api/expedicao/listar');
+
+                // Monta mapa posição → ordemProducao
+                // Considera ocupada apenas a expedição onde saidaEm é null
+                // (o bloco ainda não saiu do armazém de expedição)
                 const posMap = new Map();
                 expedicoes.forEach(exp => {
-                    if (exp.posicaoExpedicao && exp.ordemProducao) {
-                        posMap.set(exp.posicaoExpedicao, exp.ordemProducao);
-                    } else if (exp.posicaoExpedicao) {
-                        posMap.set(exp.posicaoExpedicao, 'OP');
-                    }
+                    const posicao = exp.posicaoExpedicao;
+                    const op      = exp.ordemProducao;
+                    const saiu    = exp.saidaEm != null;   // já foi expedida?
+
+                    if (posicao == null || saiu) return;   // posição inválida ou já liberada
+
+                    posMap.set(posicao, op ?? 'OP');
                 });
 
                 let ocupadas = 0;
@@ -544,53 +609,52 @@
                     const op = posMap.get(i);
                     if (op) {
                         ocupadas++;
+                        const opExibida = op.length > 14 ? op.slice(0, 12) + '…' : op;
                         html += `
-                            <div class="exp-cell occupied" title="Posição ${i} - Pedido: ${op}">
+                            <div class="exp-cell occupied"
+                                 title="Posição ${i} — Pedido: ${op}">
                                 <div class="exp-pos">${String(i).padStart(2, '0')}</div>
-                                <div class="exp-op">${op.length > 14 ? op.slice(0, 12) + '…' : op}</div>
-                            </div>
-                        `;
+                                <div class="exp-op">${opExibida}</div>
+                            </div>`;
                     } else {
                         html += `
-                            <div class="exp-cell empty">
+                            <div class="exp-cell empty"
+                                 title="Posição ${i} — Livre">
                                 <div class="exp-pos">${String(i).padStart(2, '0')}</div>
                                 <div class="exp-op" style="color:#5b6e8c;">─ vago ─</div>
-                            </div>
-                        `;
+                            </div>`;
                     }
                 }
                 grid.innerHTML = html;
-                contadorSpan.innerText = `${ocupadas}/12 ocupadas`;
+                contador.textContent = `${ocupadas}/12 ocupadas`;
             } catch (err) {
-                console.error('Erro ao carregar expedição:', err);
-                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;">Falha ao carregar expedição</div>';
-                contadorSpan.innerText = 'ERRO';
+                console.error('[Expedição]', err);
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#f87171;">Falha ao carregar expedição</div>';
+                contador.textContent = 'ERRO';
+                mostrarErro('Não foi possível carregar a expedição: ' + err.message);
             }
         }
 
-        // CARREGAR TUDO
+        // ─── Disparo principal ────────────────────────────────────────────────
         async function carregarTodosDados() {
             const btn = document.querySelector('.refresh-btn');
-            const originalText = btn.innerText;
-            btn.innerText = 'Atualizando...';
+            btn.textContent = '↻ Atualizando...';
+            btn.disabled = true;
             try {
                 await Promise.all([
                     carregarEstatisticas(),
                     carregarEstoque(),
                     carregarExpedicao()
                 ]);
-            } catch (err) {
-                console.warn('Falha em alguma requisição:', err);
             } finally {
-                btn.innerText = originalText;
+                btn.textContent = '↻ Atualizar dashboard';
+                btn.disabled = false;
             }
         }
 
-        // Inicialização e atualização automática a cada 30s
+        // Carga inicial + auto-refresh a cada 30 s
         carregarTodosDados();
-        setInterval(() => {
-            carregarTodosDados();
-        }, 30000);
+        setInterval(carregarTodosDados, 30_000);
     </script>
 </body>
 </html>
