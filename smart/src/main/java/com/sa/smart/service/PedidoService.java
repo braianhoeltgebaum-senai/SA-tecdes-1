@@ -3,11 +3,14 @@ package com.sa.smart.service;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import com.sa.smart.dto.BlocoDTO;
@@ -31,13 +34,11 @@ public class PedidoService {
     public PedidoService(
             PedidoRepository pedidoRepository,
             EstoqueRepository estoqueRepository) {
-
         this.pedidoRepository = pedidoRepository;
         this.estoqueRepository = estoqueRepository;
     }
 
-    // ─── Mapeamento auxiliar ────────────────────────────────────────────────────
-
+    // ─── Mapeamento auxiliar ──────────────────────────────────────────────────
     private List<LaminaDTO> toLaminaDTOList(List<Lamina> laminas) {
         return laminas.stream()
                 .map(l -> new LaminaDTO(
@@ -50,17 +51,21 @@ public class PedidoService {
     }
 
     // ─── CRUD básico ──────────────────────────────────────────────────────────
-
     public List<Pedido> listarTodos() {
         return pedidoRepository.findAll();
     }
 
     /**
-     * Cria um novo pedido a partir do objeto Pedido recebido.
-     * Valida se pedidos triplos têm exatamente 3 blocos,
-     * atribui status Pendente (1) e associa cada bloco a uma posição de estoque
-     * disponível.
+     * Cria um novo pedido.
+     *
+     * Para cada bloco, busca a PRIMEIRA posição de estoque que contenha um bloco
+     * da cor solicitada (ordenado por posicaoEstoque ASC), evitando reutilizar
+     * posições já atribuídas a blocos anteriores do mesmo pedido.
+     *
+     * Após atribuir a posição ao bloco, marca o estoque como vazio (cor=0)
+     * para que o robô saiba que foi o sistema quem reservou aquela saída.
      */
+    @Transactional
     public Pedido criarPedido(Pedido pedido) {
         if (pedido.getTipoPedido() == 3 &&
                 (pedido.getBlocos() == null || pedido.getBlocos().size() != 3)) {
@@ -70,21 +75,39 @@ public class PedidoService {
         pedido.setStatusPedido(1); // Pendente
 
         if (pedido.getBlocos() != null) {
+            // Rastreia as posições físicas já alocadas neste pedido para não
+            // atribuir a mesma posição a dois blocos (ex.: triplo com 2 pretos)
+            Set<Integer> posicoesJaUsadas = new HashSet<>();
+
             for (Bloco bloco : pedido.getBlocos()) {
                 bloco.setPedido(pedido);
                 bloco.setCriadoEm(LocalDateTime.now());
 
                 Integer corBloco = bloco.getCorBloco();
-                if (corBloco == null) {
-                    throw new RuntimeException("Cor do bloco não informada.");
+                if (corBloco == null || corBloco == 0) {
+                    throw new RuntimeException("Cor do bloco não informada ou inválida.");
                 }
 
-                Estoque estoque = estoqueRepository.findFirstByCorOrderByPosicaoEstoqueAsc(corBloco)
+                // Busca TODAS as posições com a cor pedida (ordenadas pela posição física)
+                // e pega a primeira que ainda não foi alocada neste pedido.
+                Estoque estoque = estoqueRepository
+                        .findByCorOrderByPosicaoEstoqueAsc(corBloco)
+                        .stream()
+                        .filter(e -> !posicoesJaUsadas.contains(e.getPosicaoEstoque()))
+                        .findFirst()
                         .orElseThrow(() -> new RuntimeException(
-                                "Nenhuma posição de estoque disponível com a cor: " + corBloco));
+                                "Nenhuma posição de estoque disponível com a cor: " + corBloco
+                                + ". Posições já usadas: " + posicoesJaUsadas));
 
+                System.out.printf("[criarPedido] Bloco cor=%d → estoque id=%d, posicao=%d%n",
+                        corBloco, estoque.getId(), estoque.getPosicaoEstoque());
+
+                posicoesJaUsadas.add(estoque.getPosicaoEstoque());
                 bloco.setEstoque(estoque);
-                estoque.setCor(0); // marca como ocupado
+
+                // Marca a posição como "vazia" no banco para não ser reatribuída
+                // a outro pedido. O robô vai buscar o bloco nessa posição.
+                estoque.setCor(0);
                 estoqueRepository.save(estoque);
             }
         }
@@ -103,7 +126,6 @@ public class PedidoService {
     public Pedido atualizarParcial(Long id, Map<String, Object> campos) {
         Pedido pedidoAtual = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
-
         campos.forEach((nomeCampo, valorCampo) -> {
             Field field = ReflectionUtils.findField(Pedido.class, nomeCampo);
             if (field != null) {
@@ -111,7 +133,6 @@ public class PedidoService {
                 ReflectionUtils.setField(field, pedidoAtual, valorCampo);
             }
         });
-
         return pedidoRepository.save(pedidoAtual);
     }
 
@@ -126,6 +147,10 @@ public class PedidoService {
 
     // ─── Geração de config e info para o CLP ──────────────────────────────────
 
+    /**
+     * Gera o DTO de configuração do pedido (cabeçalho + lista de blocos + IP do CLP).
+     */
+    @Transactional(readOnly = true)
     public PedidoConfigDTO gerarConfig(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
@@ -141,25 +166,29 @@ public class PedidoService {
         List<BlocoDTO> blocosDTO = new java.util.ArrayList<>();
         for (int i = 0; i < blocos.size(); i++) {
             Bloco bloco = blocos.get(i);
-            // Obtém o andar (i+1) e converte a cor para EnumCorBloco
             EnumCorBloco enumCor = EnumCorBloco.fromCodigo(bloco.getCorBloco());
             BlocoDTO blocoDTO = new BlocoDTO(
                     bloco.getIdBloco(),
-                    i + 1, // andar
-                    enumCor, // corBloco (Enum)
-                    toLaminaDTOList(bloco.getLaminas()), // lâminas
+                    i + 1,
+                    enumCor,
+                    toLaminaDTOList(bloco.getLaminas()),
                     bloco.getCriadoEm(),
                     bloco.getEstoque() != null ? bloco.getEstoque().getId() : null,
                     pedido.getIdPedido());
             blocosDTO.add(blocoDTO);
         }
         dto.setBlocos(blocosDTO);
-        // IP padrão (pode ser sobrescrito pelo frontend)
         dto.setIpClp("10.74.241.10");
-
         return dto;
     }
 
+    /**
+     * Gera o DTO de informações do pedido para envio ao CLP.
+     *
+     * Os campos posicaoEstoqueAndar* são preenchidos com a posição física
+     * (posicaoEstoque) do estoque vinculado a cada bloco quando o pedido foi criado.
+     */
+    @Transactional(readOnly = true)
     public PedidoInfoDTO gerarInfo(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
@@ -173,9 +202,21 @@ public class PedidoService {
         List<Bloco> blocos = pedido.getBlocos();
         for (int i = 0; i < blocos.size() && i < 3; i++) {
             Bloco bloco = blocos.get(i);
+
+            // Valida que o bloco tem estoque vinculado (deve ter sido atribuído em criarPedido)
+            if (bloco.getEstoque() == null) {
+                throw new RuntimeException(
+                        "Bloco " + bloco.getIdBloco() + " não tem posição de estoque vinculada.");
+            }
+
+            int posicao = bloco.getEstoque().getPosicaoEstoque();
+            System.out.printf("[gerarInfo] Andar %d → bloco=%d, cor=%d, posicaoEstoque=%d%n",
+                    i + 1, bloco.getIdBloco(), bloco.getCorBloco(), posicao);
+
             List<Lamina> laminas = bloco.getLaminas().stream()
                     .sorted(Comparator.comparing(Lamina::getPosicaoNoBloco))
                     .toList();
+
             preencherAndar(dto, bloco, laminas, i + 1);
         }
 
@@ -183,7 +224,6 @@ public class PedidoService {
     }
 
     // ─── Preenchimento dos andares ────────────────────────────────────────────
-
     private void preencherAndar(PedidoInfoDTO dto, Bloco bloco, List<Lamina> laminas, int andar) {
         switch (andar) {
             case 1 -> {
@@ -208,48 +248,21 @@ public class PedidoService {
     }
 
     private void preencherLaminasAndar1(PedidoInfoDTO dto, List<Lamina> laminas) {
-        if (laminas.size() > 0) {
-            dto.setCorLamina1Andar1(laminas.get(0).getCor());
-            dto.setPadraoLamina1Andar1(laminas.get(0).getPadrao());
-        }
-        if (laminas.size() > 1) {
-            dto.setCorLamina2Andar1(laminas.get(1).getCor());
-            dto.setPadraoLamina2Andar1(laminas.get(1).getPadrao());
-        }
-        if (laminas.size() > 2) {
-            dto.setCorLamina3Andar1(laminas.get(2).getCor());
-            dto.setPadraoLamina3Andar1(laminas.get(2).getPadrao());
-        }
+        if (laminas.size() > 0) { dto.setCorLamina1Andar1(laminas.get(0).getCor()); dto.setPadraoLamina1Andar1(laminas.get(0).getPadrao()); }
+        if (laminas.size() > 1) { dto.setCorLamina2Andar1(laminas.get(1).getCor()); dto.setPadraoLamina2Andar1(laminas.get(1).getPadrao()); }
+        if (laminas.size() > 2) { dto.setCorLamina3Andar1(laminas.get(2).getCor()); dto.setPadraoLamina3Andar1(laminas.get(2).getPadrao()); }
     }
 
     private void preencherLaminasAndar2(PedidoInfoDTO dto, List<Lamina> laminas) {
-        if (laminas.size() > 0) {
-            dto.setCorLamina1Andar2(laminas.get(0).getCor());
-            dto.setPadraoLamina1Andar2(laminas.get(0).getPadrao());
-        }
-        if (laminas.size() > 1) {
-            dto.setCorLamina2Andar2(laminas.get(1).getCor());
-            dto.setPadraoLamina2Andar2(laminas.get(1).getPadrao());
-        }
-        if (laminas.size() > 2) {
-            dto.setCorLamina3Andar2(laminas.get(2).getCor());
-            dto.setPadraoLamina3Andar2(laminas.get(2).getPadrao());
-        }
+        if (laminas.size() > 0) { dto.setCorLamina1Andar2(laminas.get(0).getCor()); dto.setPadraoLamina1Andar2(laminas.get(0).getPadrao()); }
+        if (laminas.size() > 1) { dto.setCorLamina2Andar2(laminas.get(1).getCor()); dto.setPadraoLamina2Andar2(laminas.get(1).getPadrao()); }
+        if (laminas.size() > 2) { dto.setCorLamina3Andar2(laminas.get(2).getCor()); dto.setPadraoLamina3Andar2(laminas.get(2).getPadrao()); }
     }
 
     private void preencherLaminasAndar3(PedidoInfoDTO dto, List<Lamina> laminas) {
-        if (laminas.size() > 0) {
-            dto.setCorLamina1Andar3(laminas.get(0).getCor());
-            dto.setPadraoLamina1Andar3(laminas.get(0).getPadrao());
-        }
-        if (laminas.size() > 1) {
-            dto.setCorLamina2Andar3(laminas.get(1).getCor());
-            dto.setPadraoLamina2Andar3(laminas.get(1).getPadrao());
-        }
-        if (laminas.size() > 2) {
-            dto.setCorLamina3Andar3(laminas.get(2).getCor());
-            dto.setPadraoLamina3Andar3(laminas.get(2).getPadrao());
-        }
+        if (laminas.size() > 0) { dto.setCorLamina1Andar3(laminas.get(0).getCor()); dto.setPadraoLamina1Andar3(laminas.get(0).getPadrao()); }
+        if (laminas.size() > 1) { dto.setCorLamina2Andar3(laminas.get(1).getCor()); dto.setPadraoLamina2Andar3(laminas.get(1).getPadrao()); }
+        if (laminas.size() > 2) { dto.setCorLamina3Andar3(laminas.get(2).getCor()); dto.setPadraoLamina3Andar3(laminas.get(2).getPadrao()); }
     }
 
     private void registrarNaExpedicao(Pedido pedido) {
