@@ -196,6 +196,33 @@
         .connector.active { background: var(--blue); }
         .connector.done   { background: var(--green); }
 
+        /* IMAGEM DA BANCADA */
+        .bancada-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .bancada-titulo {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            color: var(--text-dim);
+            align-self: flex-start;
+        }
+        .bancada-wrap img {
+            width: 100%;
+            max-width: 860px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            object-fit: contain;
+        }
+
         /* RODAPÉ */
         .footer-bar {
             display: flex;
@@ -295,6 +322,12 @@
             <span class="s-op">OP: <b id="op-expedicao">—</b></span>
         </div>
 
+    </div>
+
+    <!-- IMAGEM DA BANCADA -->
+    <div class="bancada-wrap">
+        <span class="bancada-titulo">Bancada Smart 4.0</span>
+        <img src="../assets/bancada/Smart40.png" alt="Bancada Smart 4.0" />
     </div>
 
     <div class="footer-bar">
