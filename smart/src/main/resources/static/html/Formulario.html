@@ -265,12 +265,11 @@
       }
 
       .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-      }
-
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
       /* ==========================================================================
    SISTEMA DE PREVIEW ISOMÉTRICO
    ========================================================================== */
@@ -658,7 +657,8 @@
           "previewTampa"
         ).style.backgroundImage = `url('../assets/bloco/rTampa${corTampa}.png')`;
 
-        document.querySelectorAll(".bloco").forEach((bloco, index) => {
+      const blocos = [...document.querySelectorAll(".bloco")].reverse();
+      blocos.forEach((bloco, index) => {
           const corBloco = bloco.querySelector(".corBloco").value;
           const blocoPreview = document.createElement("div");
           blocoPreview.className = "bloco-preview";
