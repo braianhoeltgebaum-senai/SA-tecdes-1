@@ -65,7 +65,7 @@ public class EstoqueService {
         validarCor(dto.cor());
 
         Estoque e = new Estoque();
-        e.setPosicaoEstoque(dto.posicao());
+        e.setPosicaoEstoque(dto.posicaoEstoque());
         e.setCor(dto.cor());
 
         Estoque saved = repository.save(e);
@@ -89,7 +89,7 @@ public class EstoqueService {
         Estoque e = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
-        e.setPosicaoEstoque(dto.posicao());
+        e.setPosicaoEstoque(dto.posicaoEstoque());
         e.setCor(dto.cor());
 
         return toDTO(repository.save(e));
@@ -99,8 +99,8 @@ public class EstoqueService {
         Estoque e = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
-        if (dto.posicao() != null) {
-            e.setPosicaoEstoque(dto.posicao());
+        if (dto.posicaoEstoque() != null) {
+            e.setPosicaoEstoque(dto.posicaoEstoque());
         }
         if (dto.cor() != null) {
             validarCor(dto.cor());
