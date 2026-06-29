@@ -89,6 +89,47 @@
             color: #f8fafc;
         }
 
+        /* --- BARRA DE IP DO CLP --- */
+        .clp-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #111c30;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+        }
+
+        .clp-bar label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            white-space: nowrap;
+        }
+
+        .clp-bar input {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #f8fafc;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            width: 200px;
+            transition: border-color 0.2s;
+        }
+
+        .clp-bar input:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+
+        .clp-status {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-style: italic;
+        }
+
         /* --- FILTROS DE STATUS --- */
         .filters-container {
             display: flex;
@@ -182,9 +223,9 @@
             letter-spacing: 0.05em;
         }
 
-        .status-1 { background: rgba(234, 179, 8, 0.1); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.2); } /* Pendente */
-        .status-2 { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); } /* Em Produção */
-        .status-3 { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); } /* Concluído */
+        .status-1 { background: rgba(234, 179, 8, 0.1); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.2); }
+        .status-2 { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .status-3 { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
 
         /* Informações Gerais do Pedido */
         .pedido-info {
@@ -230,11 +271,11 @@
         }
 
         /* Cores Dinâmicas para Texto de Referência */
-        .cor-txt-1 { color: #ffffff !important; font-weight: bold; } /* Preto/Branco no tema escuro */
-        .cor-txt-2 { color: #f87171 !important; font-weight: bold; } /* Vermelho */
-        .cor-txt-3 { color: #60a5fa !important; font-weight: bold; } /* Azul */
-        .cor-txt-4 { color: #4ade80 !important; font-weight: bold; } /* Verde */
-        .cor-txt-5 { color: #fbbf24 !important; font-weight: bold; } /* Amarelo */
+        .cor-txt-1 { color: #ffffff !important; font-weight: bold; }
+        .cor-txt-2 { color: #f87171 !important; font-weight: bold; }
+        .cor-txt-3 { color: #60a5fa !important; font-weight: bold; }
+        .cor-txt-4 { color: #4ade80 !important; font-weight: bold; }
+        .cor-txt-5 { color: #fbbf24 !important; font-weight: bold; }
 
         /* Botão de Ação do Card */
         .btn-card-action {
@@ -249,13 +290,20 @@
             margin-top: auto;
         }
 
+        /* Botão de produção — com indicador de loading */
         .btn-producao {
             background: #2563eb;
             color: white;
+            position: relative;
         }
 
-        .btn-producao:hover {
+        .btn-producao:hover:not(:disabled) {
             background: #1d4ed8;
+        }
+
+        .btn-producao:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .btn-concluir {
@@ -266,6 +314,90 @@
         .btn-concluir:hover {
             background: #047857;
         }
+
+        /* --- MODAL DE CONFIRMAÇÃO DE IP --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #111c30;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 420px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .modal-box h3 {
+            font-size: 1.1rem;
+            color: #f8fafc;
+        }
+
+        .modal-box p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .modal-box input {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #f8fafc;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        .modal-box input:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-modal-cancel {
+            background: #1e293b;
+            color: #94a3b8;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-modal-confirm {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-modal-confirm:hover { background: #1d4ed8; }
+        .btn-modal-cancel:hover { background: #334155; color: #f8fafc; }
 
         /* --- NOTIFICAÇÃO TOAST --- */
         #toast {
@@ -291,11 +423,12 @@
 
         #toast.success { background: #065f46; border: 1px solid #059669; color: #34d399; }
         #toast.error { background: #991b1b; border: 1px solid #dc2626; color: #fca5a5; }
+        #toast.info { background: #1e3a5f; border: 1px solid #2563eb; color: #93c5fd; }
     </style>
 </head>
 <body>
 
-    <!-- Menu de Navegação Superior Integrado -->
+    <!-- Menu de Navegação Superior -->
     <nav>
         <div class="nav-logo">
             <h1>SMART 4.0 · Planta Digital</h1>
@@ -305,11 +438,19 @@
             <li><a href="#">Início</a></li>
             <li><a href="Formulario.html">Criar Pedido</a></li>
             <li><a href="gestor.html" class="active">Gestor</a></li>
-            <li><a href="Dashboard_simples">Monitoramento</a></li>
+            <li><a href="Dashboard_simples.html">Monitoramento</a></li>
         </ul>
     </nav>
 
     <div class="main-container">
+
+        <!-- Barra de configuração do IP do CLP -->
+        <div class="clp-bar">
+            <label>🔌 IP do CLP da Bancada:</label>
+            <input type="text" id="ipCLP" placeholder="192.168.1.10" />
+            <span class="clp-status">Preenchido aqui, usado ao enviar para produção.</span>
+        </div>
+
         <!-- Cabeçalho com Filtros rápidos -->
         <div class="page-header">
             <h2>Pedidos Cadastrados</h2>
@@ -325,8 +466,19 @@
         </div>
 
         <!-- Grid de renderização dos Cards -->
-        <div id="gridPedidos" class="grid-pedidos">
-            <!-- Os cards serão inseridos dinamicamente aqui -->
+        <div id="gridPedidos" class="grid-pedidos"></div>
+    </div>
+
+    <!-- Modal de confirmação quando IP não está preenchido -->
+    <div class="modal-overlay" id="modalIP">
+        <div class="modal-box">
+            <h3>⚠️ IP do CLP não informado</h3>
+            <p>Informe o endereço IP da bancada para enviar o pedido ao CLP e iniciar a produção.</p>
+            <input type="text" id="modalIpInput" placeholder="Ex: 192.168.1.10" />
+            <div class="modal-actions">
+                <button class="btn-modal-cancel" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-modal-confirm" onclick="confirmarEnvioComIP()">Confirmar e Enviar</button>
+            </div>
         </div>
     </div>
 
@@ -338,7 +490,10 @@
         let todosPedidos = [];
         let filtroAtivo = 'todos';
 
-        // Mapeamentos de Códigos de Banco para Texto/Estilos
+        // ID do pedido aguardando confirmação de IP no modal
+        let pedidoPendenteCLP = null;
+
+        // Mapeamentos
         const mapaStatus = {
             1: { nome: "Pendente", classe: "status-1" },
             2: { nome: "Em Produção", classe: "status-2" },
@@ -374,8 +529,7 @@
             3: "Estrela"
         };
 
-        // --- DADOS DE BACKUP (FALLBACK) ---
-        // Utilizado caso o backend esteja offline para exibição visual do projeto
+        // Fallback para demonstração offline
         const dadosMockFallback = [
             {
                 id: 1,
@@ -436,12 +590,10 @@
             }
         ];
 
-        // Inicialização automática ao carregar a página
         document.addEventListener("DOMContentLoaded", () => {
             obterPedidos();
         });
 
-        // Carrega os dados da API com fallback
         async function obterPedidos() {
             try {
                 const response = await fetch(API);
@@ -462,13 +614,134 @@
             exibirToast("Exibindo dados de teste (Backend desconectado)", "error");
         }
 
-        // Renderização dinâmica dos cards
+        // =========================================================================
+        // ENVIAR PARA PRODUÇÃO — chama CLP antes de mudar o status
+        // =========================================================================
+        async function enviarParaProducao(idPedido) {
+            const ip = document.getElementById("ipCLP").value.trim();
+
+            if (!ip) {
+                // Abre modal para solicitar o IP
+                pedidoPendenteCLP = idPedido;
+                document.getElementById("modalIpInput").value = "";
+                document.getElementById("modalIP").classList.add("open");
+                return;
+            }
+
+            await executarEnvioProducao(idPedido, ip);
+        }
+
+        async function executarEnvioProducao(idPedido, ip) {
+            // Desabilita o botão do card enquanto processa
+            const btn = document.getElementById(`btn-producao-${idPedido}`);
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = "Enviando ao CLP...";
+            }
+
+            try {
+                // PASSO 1 — Comunicar com o CLP
+                exibirToast("Comunicando com o CLP...", "info");
+
+                const urlIniciar = `${API}/${idPedido}/iniciar?ip=${encodeURIComponent(ip)}`;
+                const resCLP = await fetch(urlIniciar, { method: "POST" });
+
+                if (!resCLP.ok) {
+                    const erroCLP = await resCLP.text();
+                    throw new Error(`Erro na comunicação com o CLP: ${erroCLP}`);
+                }
+
+                // PASSO 2 — Atualiza o status para "Em Produção" (2)
+                const resStatus = await fetch(`${API}/${idPedido}/status`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(2)
+                });
+
+                if (resStatus.ok) {
+                    exibirToast(`✔ Pedido #${idPedido} enviado ao CLP (${ip}) e em produção!`, "success");
+                    obterPedidos();
+                } else {
+                    // CLP recebeu, mas falha ao salvar status — atualiza localmente
+                    const index = todosPedidos.findIndex(p => p.id === idPedido);
+                    if (index !== -1) todosPedidos[index].statusPedido = 2;
+                    renderizarCards();
+                    exibirToast(`✔ CLP recebeu o pedido #${idPedido}. Status atualizado localmente.`, "success");
+                }
+
+            } catch (error) {
+                console.error(error);
+                exibirToast("✘ " + error.message, "error");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = "Enviar para Produção";
+                }
+            }
+        }
+
+        // Modal: confirmar IP e retomar envio
+        function confirmarEnvioComIP() {
+            const ip = document.getElementById("modalIpInput").value.trim();
+            if (!ip) {
+                alert("Informe o IP do CLP.");
+                return;
+            }
+            // Persiste o IP na barra global para próximas ações
+            document.getElementById("ipCLP").value = ip;
+            fecharModal();
+            executarEnvioProducao(pedidoPendenteCLP, ip);
+            pedidoPendenteCLP = null;
+        }
+
+        function fecharModal() {
+            document.getElementById("modalIP").classList.remove("open");
+        }
+
+        // =========================================================================
+        // CONCLUIR MONTAGEM — apenas muda status, sem CLP
+        // =========================================================================
+        async function alterarStatus(id, novoStatus) {
+            try {
+                const response = await fetch(`${API}/${id}/status`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(novoStatus)
+                });
+
+                if (response.ok) {
+                    exibirToast(`Status do pedido #${id} atualizado com sucesso!`, "success");
+                    obterPedidos();
+                } else {
+                    const index = todosPedidos.findIndex(p => p.id === id);
+                    if (index !== -1) {
+                        todosPedidos[index].statusPedido = novoStatus;
+                        renderizarCards();
+                        exibirToast(`[Simulação] Pedido #${id} alterado localmente.`, "success");
+                    } else {
+                        exibirToast("Não foi possível alterar o status do pedido.", "error");
+                    }
+                }
+            } catch (error) {
+                const index = todosPedidos.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    todosPedidos[index].statusPedido = novoStatus;
+                    renderizarCards();
+                    exibirToast(`[Offline] Status simulado para teste local.`, "success");
+                } else {
+                    exibirToast("Falha na comunicação com o servidor.", "error");
+                }
+            }
+        }
+
+        // =========================================================================
+        // RENDERIZAÇÃO DOS CARDS
+        // =========================================================================
         function renderizarCards() {
             const grid = document.getElementById("gridPedidos");
             grid.innerHTML = "";
 
             const pedidosFiltrados = todosPedidos.filter(p => {
-                if (filtroAtivo === 'todos') return true;
+                if (filtroAtivo === "todos") return true;
                 return p.statusPedido === filtroAtivo;
             });
 
@@ -485,7 +758,7 @@
                 if (pedido.blocos && pedido.blocos.length > 0) {
                     pedido.blocos.forEach((bloco, idx) => {
                         const corBlocoInfo = mapaCores[bloco.corBloco] || { nome: "Indefinida", classe: "" };
-                        
+
                         let laminasHTML = "";
                         if (bloco.laminas && bloco.laminas.length > 0) {
                             bloco.laminas.forEach((lamina, lamIdx) => {
@@ -505,24 +778,47 @@
 
                         blocosHTML += `
                             <div class="bloco-card-detalhe">
-                                <div class="bloco-title">Bloco ${idx + 1} - Cor: <span class="${corBlocoInfo.classe}">${corBlocoInfo.nome}</span></div>
+                                <div class="bloco-title">Bloco ${idx + 1} — Cor: <span class="${corBlocoInfo.classe}">${corBlocoInfo.nome}</span></div>
                                 <div style="font-size: 0.75rem; margin-bottom: 5px; color: #64748b;">Posição Estoque: ${bloco.estoque?.id || 'Não alocado'}</div>
-                                <ul class="lamina-lista">
-                                    ${laminasHTML}
-                                </ul>
+                                <ul class="lamina-lista">${laminasHTML}</ul>
                             </div>
                         `;
                     });
                 }
 
-                // Determina o botão de ação baseado no fluxo do status
+                // Botão de ação baseado no status
                 let acaoBotaoHTML = "";
                 if (pedido.statusPedido === 1) {
-                    acaoBotaoHTML = `<button class="btn-card-action btn-producao" onclick="alterarStatus(${pedido.id}, 2)">Enviar para Produção</button>`;
+                    // Pendente → envia ao CLP e muda para Em Produção
+                    acaoBotaoHTML = `
+                        <button
+                            id="btn-producao-${pedido.id}"
+                            class="btn-card-action btn-producao"
+                            onclick="enviarParaProducao(${pedido.id})"
+                        >
+                            ▶ Enviar para Produção
+                        </button>
+                    `;
                 } else if (pedido.statusPedido === 2) {
-                    acaoBotaoHTML = `<button class="btn-card-action btn-concluir" onclick="alterarStatus(${pedido.id}, 3)">Concluir Montagem</button>`;
+                    // Em Produção → apenas muda status para Concluído
+                    acaoBotaoHTML = `
+                        <button
+                            class="btn-card-action btn-concluir"
+                            onclick="alterarStatus(${pedido.id}, 3)"
+                        >
+                            ✔ Concluir Montagem
+                        </button>
+                    `;
                 } else {
-                    acaoBotaoHTML = `<button class="btn-card-action" style="background:#1e293b; color:#64748b; cursor:default;" disabled>Concluído e Enviado para Expedição</button>`;
+                    acaoBotaoHTML = `
+                        <button
+                            class="btn-card-action"
+                            style="background:#1e293b; color:#64748b; cursor:default;"
+                            disabled
+                        >
+                            Concluído e Enviado para Expedição
+                        </button>
+                    `;
                 }
 
                 const card = document.createElement("div");
@@ -537,69 +833,25 @@
                         <div class="info-item">Tipo: <span>${mapaTipo[pedido.tipoPedido] || 'Simples'}</span></div>
                         <div class="info-item" style="grid-column: span 2;">Tampa: <span class="${tampaInfo.classe}">${tampaInfo.nome}</span></div>
                     </div>
-                    <div class="bloco-container">
-                        ${blocosHTML}
-                    </div>
+                    <div class="bloco-container">${blocosHTML}</div>
                     ${acaoBotaoHTML}
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Alteração de Status integrada via PUT
-        async function alterarStatus(id, novoStatus) {
-            try {
-                const response = await fetch(`${API}/${id}/status`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(novoStatus)
-                });
-
-                if (response.ok) {
-                    exibirToast(`Status do pedido #${id} atualizado com sucesso!`, 'success');
-                    obterPedidos();
-                } else {
-                    // Simulação local caso a requisição falhe por falta de banco físico ativo
-                    const index = todosPedidos.findIndex(p => p.id === id);
-                    if (index !== -1) {
-                        todosPedidos[index].statusPedido = novoStatus;
-                        renderizarCards();
-                        exibirToast(`[Simulação] Pedido #${id} alterado localmente.`, 'success');
-                    } else {
-                        exibirToast('Não foi possível alterar o status do pedido.', 'error');
-                    }
-                }
-            } catch (error) {
-                // Simulação local de backup em caso de erro de conexão
-                const index = todosPedidos.findIndex(p => p.id === id);
-                if (index !== -1) {
-                    todosPedidos[index].statusPedido = novoStatus;
-                    renderizarCards();
-                    exibirToast(`[Offline] Status simulado para teste local.`, 'success');
-                } else {
-                    exibirToast('Falha na comunicação com o servidor.', 'error');
-                }
-            }
-        }
-
-        // Filtro local dinâmico
         function filtrarStatus(status, elemento) {
             filtroAtivo = status;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            elemento.classList.add('active');
+            document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+            elemento.classList.add("active");
             renderizarCards();
         }
 
-        // Toast feedback
         function exibirToast(mensagem, tipo) {
-            const toast = document.getElementById('toast');
-            toast.className = 'show';
+            const toast = document.getElementById("toast");
+            toast.className = "show " + tipo;
             toast.innerText = mensagem;
-            toast.classList.add(tipo);
-
-            setTimeout(() => {
-                toast.className = '';
-            }, 3500);
+            setTimeout(() => { toast.className = ""; }, 3500);
         }
     </script>
 </body>

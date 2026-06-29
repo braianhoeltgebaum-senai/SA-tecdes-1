@@ -312,18 +312,6 @@
         position: relative;
       }
 
-      /* CONTAINER DE CONTROLE DO CLP */
-      .acoes-clp {
-        margin: 20px 0;
-        padding: 15px;
-        background: rgba(56, 189, 248, 0.05);
-        border: 1px dashed rgba(56, 189, 248, 0.3);
-        border-radius: 14px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
       /* Status de envio */
       .status-envio {
         margin-top: 12px;
@@ -390,58 +378,52 @@
         .tampa-global {
           width: 100%;
         }
-
-        .acoes-clp {
-          flex-direction: column;
-          gap: 10px;
-          text-align: center;
-        }
       }
 
       nav {
-            width: 100%;
-            background: #111c30;
-            border-bottom: 1px solid #1e293b;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        width: 100%;
+        background: #111c30;
+        border-bottom: 1px solid #1e293b;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        .nav-logo {
-            display: flex;
-            flex-direction: column;
-        }
+      .nav-logo {
+        display: flex;
+        flex-direction: column;
+      }
 
-        .nav-logo h1 {
-            font-size: 1.2rem;
-            color: #38bdf8;
-            font-weight: 700;
-        }
+      .nav-logo h1 {
+        font-size: 1.2rem;
+        color: #38bdf8;
+        font-weight: 700;
+      }
 
-        .nav-logo span {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
+      .nav-logo span {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
 
-        .nav-menu {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-        }
+      .nav-menu {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+      }
 
-        .nav-menu a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
+      .nav-menu a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
 
-        .nav-menu a:hover,
-        .nav-menu a.active {
-            color: #38bdf8;
-        }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        color: #38bdf8;
+      }
     </style>
   </head>
 
@@ -464,7 +446,8 @@
       <!-- PAINEL ESQUERDO: FORMULÁRIO -->
       <div class="painel-form">
         <form id="formPedido">
-          <!-- LINHA 1: Ordem, Tipo, Cor Tampa, IP -->
+          <!-- LINHA 1: Ordem, Tipo, Cor Tampa -->
+          <!-- IP do CLP foi movido para o Gestor de Pedidos -->
           <div class="top-grid">
             <div class="field">
               <label>Ordem de Produção</label>
@@ -489,14 +472,9 @@
                 <option value="3">Azul</option>
               </select>
             </div>
-
-            <div class="field">
-              <label>Endereço IP do CLP</label>
-              <input type="text" id="ipCLP" placeholder="192.168.1.10" />
-            </div>
           </div>
 
-          <!-- LINHA 2: Expedição (CORRIGIDO — estava fora do form) -->
+          <!-- LINHA 2: Expedição -->
           <div class="mid-grid">
             <div class="field">
               <label>Posição da Expedição</label>
@@ -516,27 +494,6 @@
                 <option value="12">Posição 12</option>
               </select>
             </div>
-          </div>
-
-          <!-- BARRA DE CONTROLE CLP -->
-          <div class="acoes-clp">
-            <div style="font-size: 14px; color: #94a3b8">
-              Controle de Automação da Fábrica
-            </div>
-            <button
-              type="button"
-              class="btn"
-              id="btnStartCLP"
-              style="
-                background: linear-gradient(135deg, #22c55e, #16a34a);
-                color: white;
-                padding: 10px 25px;
-                box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
-              "
-              onclick="iniciarProcessoCLP()"
-            >
-              ▶ START PROCESSO
-            </button>
           </div>
 
           <!-- BLOCOS DINÂMICOS -->
@@ -579,18 +536,6 @@
       tipoPedido.addEventListener("change", () => {
         criarBlocos(Number(tipoPedido.value));
       });
-
-      // =========================================================================
-      // CLP — START MANUAL (botão separado do salvar)
-      // =========================================================================
-      function iniciarProcessoCLP() {
-        const ip = document.getElementById("ipCLP").value.trim();
-        if (!ip) {
-          alert("Informe o IP do CLP antes de iniciar.");
-          return;
-        }
-        alert("Processo iniciado no CLP: " + ip);
-      }
 
       // =========================================================================
       // BLOCOS
@@ -799,7 +744,8 @@
       }
 
       // =========================================================================
-      // SUBMIT: SALVAR PEDIDO + ENVIAR AO CLP
+      // SUBMIT: APENAS SALVAR PEDIDO
+      // O envio ao CLP acontece no Gestor de Pedidos, via botão "Enviar para Produção"
       // =========================================================================
       document
         .getElementById("formPedido")
@@ -833,28 +779,23 @@
             });
           });
 
-          // --- Lê posicaoExpedicao (CORRIGIDO: agora dentro do form) ---
-          const posicaoExpedicaoEl =
-            document.getElementById("posicaoExpedicao");
+          // --- Lê posicaoExpedicao ---
+          const posicaoExpedicaoEl = document.getElementById("posicaoExpedicao");
           const posicaoExpedicao = posicaoExpedicaoEl.value
             ? Number(posicaoExpedicaoEl.value)
             : null;
 
           // --- Monta payload do pedido ---
           const pedido = {
-            ordemProducao: document
-              .getElementById("ordemProducao")
-              .value.trim(),
+            ordemProducao: document.getElementById("ordemProducao").value.trim(),
             tipoPedido: Number(tipoPedido.value),
             corTampa: Number(document.getElementById("corTampa").value),
             posicaoExpedicao: posicaoExpedicao,
             blocos: blocos,
           };
 
-          const ip = document.getElementById("ipCLP").value.trim();
-
           try {
-            // PASSO 1 — Salva o pedido no banco
+            // Salva o pedido no banco — sem enviar ao CLP
             const response = await fetch("http://localhost:8088/pedidos", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -869,31 +810,11 @@
             const data = await response.json();
             console.log("Pedido salvo:", data);
 
-            // PASSO 2 — Envia ao CLP (se IP informado)
-            if (ip) {
-              mostrarStatus("Comunicando com o CLP...", "carregando");
+            mostrarStatus(
+              `✔ Pedido #${data.idPedido} salvo com sucesso! Acesse o Gestor de Pedidos para enviar à produção.`,
+              "sucesso"
+            );
 
-              const urlIniciar = `http://localhost:8088/pedidos/${
-                data.idPedido
-              }/iniciar?ip=${encodeURIComponent(ip)}`;
-
-              const resCLP = await fetch(urlIniciar, { method: "POST" });
-
-              if (!resCLP.ok) {
-                const erroCLP = await resCLP.text();
-                throw new Error(`Pedido salvo, mas erro no CLP: ${erroCLP}`);
-              }
-
-              mostrarStatus(
-                `✔ Pedido #${data.idPedido} salvo e enviado ao CLP (${ip})`,
-                "sucesso"
-              );
-            } else {
-              mostrarStatus(
-                `✔ Pedido #${data.idPedido} salvo. (IP não informado — não enviado ao CLP)`,
-                "sucesso"
-              );
-            }
           } catch (error) {
             console.error(error);
             mostrarStatus("✘ " + error.message, "erro");
