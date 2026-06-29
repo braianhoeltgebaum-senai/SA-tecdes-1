@@ -29,7 +29,7 @@
             flex-direction: column;
         }
 
-        /* ── NAV ── */
+        /* NAV */
         nav {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
@@ -44,8 +44,8 @@
         .nav-menu a { color: var(--text-dim); text-decoration: none; font-size: 0.88rem; transition: color .2s; }
         .nav-menu a:hover, .nav-menu a.active { color: var(--blue); }
 
-        /* ── LAYOUT ── */
-        .container { max-width: 1300px; margin: 28px auto; padding: 0 22px; flex: 1; }
+        /* LAYOUT */
+        .container { max-width: 1100px; margin: 32px auto; padding: 0 22px; flex: 1; }
 
         .page-header {
             display: flex;
@@ -53,19 +53,16 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 14px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
         .page-header h2 {
-            font-size: 1.55rem;
+            font-size: 1.45rem;
             font-weight: 600;
-            background: linear-gradient(120deg, #a8d4f8, #60a5fa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: var(--text);
         }
-        .page-header .sub { font-size: 0.8rem; color: var(--text-dim); margin-top: 3px; }
+        .page-header .sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 3px; }
 
-        /* ── PEDIDO EM CURSO ── */
+        /* PILL */
         .pill-pedido {
             display: flex;
             align-items: center;
@@ -76,17 +73,16 @@
             padding: 7px 18px;
         }
         .pill-pedido .lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text-dim); }
-        .pill-pedido .val { font-size: 1.1rem; font-weight: 700; }
-        .val.em-curso { color: var(--green); }
-        .val.parado   { color: var(--red);   }
+        .pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
+        .pill-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .pill-val { font-size: 0.95rem; font-weight: 700; color: var(--text); }
 
-        /* ── AÇÕES ── */
+        /* AÇÕES */
         .acoes {
             display: flex;
             gap: 10px;
-            justify-content: center;
+            margin-bottom: 28px;
             flex-wrap: wrap;
-            margin-bottom: 22px;
         }
         .btn {
             border: none;
@@ -95,170 +91,134 @@
             font-weight: 600;
             font-size: 0.84rem;
             cursor: pointer;
-            transition: transform .15s, box-shadow .15s;
-        }
-        .btn:hover { transform: translateY(-2px); }
-        .btn-start { background: linear-gradient(135deg,#22c55e,#16a34a); color:#fff; box-shadow: 0 4px 14px rgba(34,197,94,.25); }
-        .btn-stop  { background: linear-gradient(135deg,#ef4444,#dc2626); color:#fff; box-shadow: 0 4px 14px rgba(239,68,68,.25); }
-        .btn-debug { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-
-        /* ── STEPPER ── */
-        .stepper {
+            transition: opacity .15s, transform .15s;
             display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            gap: 0;
+            align-items: center;
+            gap: 7px;
+        }
+        .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-start { background: #22c55e; color: #fff; }
+        .btn-stop  { background: #ef4444; color: #fff; }
+        .btn-force { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+        /* STEPPER */
+        .stepper {
+            display: grid;
+            grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr;
+            align-items: center;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 22px 28px;
-            margin-bottom: 26px;
-            position: relative;
+            padding: 28px 32px;
+            margin-bottom: 28px;
         }
 
-        /* linha conectora */
-        .stepper::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 80px;
-            right: 80px;
-            height: 2px;
-            background: var(--border);
-            z-index: 0;
-            transform: translateY(-50%);
-        }
-
-        .step {
+        .station {
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex: 1;
-            position: relative;
-            z-index: 1;
-            gap: 5px;
+            gap: 8px;
         }
 
-        .step .circle {
-            width: 56px;
-            height: 56px;
+        /* Círculo da estação */
+        .circle {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            font-size: 1rem;
-            background: var(--bg);
+            font-size: 1.5rem;
             border: 2px solid var(--muted);
+            background: var(--bg);
             color: var(--muted);
-            transition: all .35s;
-            margin-bottom: 2px;
+            transition: all 0.4s ease;
+            position: relative;
         }
-        .step .circle.ativo {
+
+        /* Estado: aguardando (padrão) */
+        .circle.waiting {
+            border-color: var(--muted);
+            color: var(--muted);
+        }
+
+        /* Estado: em andamento */
+        .circle.active {
             border-color: var(--blue);
             background: #071e35;
             color: var(--blue);
-            box-shadow: 0 0 18px rgba(56,189,248,.3);
         }
-        .step .circle.concluido {
+        .circle.active::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid var(--blue);
+            animation: pulse 1.8s ease-out infinite;
+            opacity: 0;
+        }
+        @keyframes pulse {
+            0%   { opacity: 0.6; transform: scale(1);   }
+            100% { opacity: 0;   transform: scale(1.45); }
+        }
+
+        /* Estado: concluído */
+        .circle.done {
             border-color: var(--green);
             background: #062010;
             color: var(--green);
-            box-shadow: 0 0 18px rgba(74,222,128,.25);
-        }
-        .step .circle.aguardando {
-            border-color: var(--yellow);
-            background: #1f1a06;
-            color: var(--yellow);
-            box-shadow: 0 0 14px rgba(250,204,21,.15);
         }
 
-        .step .nome { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+        .s-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
 
-        .step .status-badge {
+        .s-badge {
             font-size: 0.68rem;
             font-weight: 600;
-            padding: 2px 9px;
+            padding: 3px 11px;
             border-radius: 20px;
             background: var(--border);
             color: var(--text-dim);
+            transition: all 0.3s;
         }
-        .step .status-badge.ativo      { background:#0b2a42; color:var(--blue); }
-        .step .status-badge.concluido  { background:#062010; color:var(--green); }
-        .step .status-badge.aguardando { background:#1f1a06; color:var(--yellow); }
+        .s-badge.active  { background: #0b2a42; color: var(--blue); }
+        .s-badge.done    { background: #062010; color: var(--green); }
 
-        .step .dado {
-            font-size: 0.7rem;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2px 10px;
-            color: var(--text-dim);
-        }
-        .step .dado b { color: var(--text); }
+        .s-op { font-size: 0.7rem; color: var(--text-dim); }
+        .s-op b { color: var(--text); }
 
-        .step .meta { font-size: 0.62rem; color: var(--text-dim); }
+        /* Linha conectora */
+        .connector {
+            height: 2px;
+            background: var(--muted);
+            transition: background 0.4s;
+        }
+        .connector.active { background: var(--blue); }
+        .connector.done   { background: var(--green); }
 
-        /* ── CARDS DE DEBUG ── */
-        .detalhes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 16px;
-        }
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px 18px;
-        }
-        .card h4 {
-            font-size: 0.88rem;
-            color: var(--text-dim);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .badge-sz {
-            background: var(--border);
-            border-radius: 20px;
-            padding: 2px 10px;
-            font-size: 0.68rem;
-            color: var(--text-dim);
-        }
-        .hex-box {
-            font-family: 'Courier New', monospace;
-            font-size: 0.63rem;
-            color: #7aadcc;
-            background: var(--bg);
-            border-radius: 10px;
-            padding: 8px 10px;
-            max-height: 110px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
-        /* ── RODAPÉ ── */
+        /* RODAPÉ */
         .footer-bar {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 14px;
-            padding: 16px;
-            font-size: 0.75rem;
+            gap: 10px;
+            font-size: 0.74rem;
             color: var(--text-dim);
-            margin-top: 10px;
+            margin-top: 8px;
         }
-        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-        .dot.online  { background: var(--green); box-shadow: 0 0 8px var(--green); }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
+        .dot.online  { background: var(--green); box-shadow: 0 0 6px var(--green); }
         .dot.offline { background: var(--red); }
 
-        @media (max-width: 700px) {
-            .stepper { flex-direction: column; padding: 18px; }
-            .stepper::before { display: none; }
-            .step { flex-direction: row; justify-content: flex-start; }
-            .step .circle { width: 42px; height: 42px; font-size: 0.8rem; }
+        /* ícones simples via unicode — sem dependência externa */
+        .ico { font-style: normal; }
+
+        @media (max-width: 680px) {
+            .stepper {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                gap: 12px;
+            }
+            .connector { width: 2px; height: 28px; margin: 0 auto; }
         }
     </style>
 </head>
@@ -283,77 +243,58 @@
     <div class="page-header">
         <div>
             <h2>Acompanhamento do Pedido</h2>
-            <div class="sub">Atualização a cada 1,5s via polling · CLPs S7 (ISO-TCP porta 102)</div>
+            <div class="sub">Atualização a cada 1,5 s via polling · CLPs S7 (ISO-TCP porta 102)</div>
         </div>
         <div class="pill-pedido">
+            <span class="pill-dot" id="pillDot"></span>
             <span class="lbl">Pedido em curso</span>
-            <span class="val parado" id="pedidoEmCurso">⏸ Parado</span>
+            <span class="pill-val" id="pillVal">—</span>
         </div>
     </div>
 
     <div class="acoes">
         <button class="btn btn-start" id="btnStart">▶ Iniciar</button>
         <button class="btn btn-stop"  id="btnStop">⏹ Parar</button>
-        <button class="btn btn-debug" id="btnForce">🔍 Forçar leitura</button>
+        <button class="btn btn-force" id="btnForce">↺ Atualizar agora</button>
     </div>
 
     <!-- STEPPER -->
     <div class="stepper">
 
-        <div class="step" id="step-estoque">
-            <div class="circle" id="circle-estoque">E</div>
-            <div class="nome">Estoque</div>
-            <div class="status-badge" id="badge-estoque">Aguardando</div>
-            <div class="dado">OP: <b id="op-estoque">—</b></div>
-            <div class="dado">Pos: <b id="pos-estoque">—</b></div>
-            <div class="meta" id="meta-estoque">0 leituras</div>
+        <div class="station">
+            <div class="circle waiting" id="ci-estoque">📦</div>
+            <span class="s-name">Estoque</span>
+            <span class="s-badge" id="ba-estoque">Aguardando</span>
+            <span class="s-op">OP: <b id="op-estoque">—</b></span>
         </div>
 
-        <div class="step" id="step-processo">
-            <div class="circle" id="circle-processo">P</div>
-            <div class="nome">Processo</div>
-            <div class="status-badge" id="badge-processo">Aguardando</div>
-            <div class="dado">OP: <b id="op-processo">—</b></div>
-            <div class="meta" id="meta-processo">0 leituras</div>
+        <div class="connector" id="conn-1"></div>
+
+        <div class="station">
+            <div class="circle waiting" id="ci-processo">⚙️</div>
+            <span class="s-name">Processo</span>
+            <span class="s-badge" id="ba-processo">Aguardando</span>
+            <span class="s-op">OP: <b id="op-processo">—</b></span>
         </div>
 
-        <div class="step" id="step-montagem">
-            <div class="circle" id="circle-montagem">M</div>
-            <div class="nome">Montagem</div>
-            <div class="status-badge" id="badge-montagem">Aguardando</div>
-            <div class="dado">OP: <b id="op-montagem">—</b></div>
-            <div class="meta" id="meta-montagem">0 leituras</div>
+        <div class="connector" id="conn-2"></div>
+
+        <div class="station">
+            <div class="circle waiting" id="ci-montagem">🔧</div>
+            <span class="s-name">Montagem</span>
+            <span class="s-badge" id="ba-montagem">Aguardando</span>
+            <span class="s-op">OP: <b id="op-montagem">—</b></span>
         </div>
 
-        <div class="step" id="step-expedicao">
-            <div class="circle" id="circle-expedicao">X</div>
-            <div class="nome">Expedição</div>
-            <div class="status-badge" id="badge-expedicao">Aguardando</div>
-            <div class="dado">OP: <b id="op-expedicao">—</b></div>
-            <div class="dado">Pos: <b id="pos-expedicao">—</b></div>
-            <div class="meta" id="meta-expedicao">0 leituras</div>
+        <div class="connector" id="conn-3"></div>
+
+        <div class="station">
+            <div class="circle waiting" id="ci-expedicao">🚚</div>
+            <span class="s-name">Expedição</span>
+            <span class="s-badge" id="ba-expedicao">Aguardando</span>
+            <span class="s-op">OP: <b id="op-expedicao">—</b></span>
         </div>
 
-    </div>
-
-    <!-- CARDS DE BYTES (DEBUG) -->
-    <div class="detalhes">
-        <div class="card">
-            <h4>📦 Estoque (CLP 1) <span class="badge-sz" id="sz-clp1">0 bytes</span></h4>
-            <div class="hex-box" id="hex-clp1">Aguardando dados…</div>
-        </div>
-        <div class="card">
-            <h4>⚙️ Processo (CLP 2) <span class="badge-sz" id="sz-clp2">0 bytes</span></h4>
-            <div class="hex-box" id="hex-clp2">Aguardando dados…</div>
-        </div>
-        <div class="card">
-            <h4>🔧 Montagem (CLP 3) <span class="badge-sz" id="sz-clp3">0 bytes</span></h4>
-            <div class="hex-box" id="hex-clp3">Aguardando dados…</div>
-        </div>
-        <div class="card">
-            <h4>🚚 Expedição (CLP 4) <span class="badge-sz" id="sz-clp4">0 bytes</span></h4>
-            <div class="hex-box" id="hex-clp4">Aguardando dados…</div>
-        </div>
     </div>
 
     <div class="footer-bar">
@@ -369,8 +310,8 @@
 // =============================================================================
 // CONFIGURAÇÃO
 // =============================================================================
-const API_BASE     = 'http://localhost:8088';
-const POLL_MS      = 1500;
+const API_BASE = 'http://localhost:8088';
+const POLL_MS  = 1500;
 
 const CLP_IPS = {
     estoque:   '10.74.241.10',
@@ -379,229 +320,120 @@ const CLP_IPS = {
     expedicao: '10.74.241.40'
 };
 
-// STATUS_MAP: 0=aguardando, 1=ativo, 2=concluido
-const STATUS = {
-    0: { texto: 'Aguardando', classe: 'aguardando' },
-    1: { texto: 'Em andamento', classe: 'ativo' },
-    2: { texto: 'Concluído',   classe: 'concluido' }
+// =============================================================================
+// MAPA DE ESTADOS
+// =============================================================================
+const STATUS_MAP = {
+    0: { label: 'Aguardando', cls: '' },
+    1: { label: 'Em andamento', cls: 'active' },
+    2: { label: 'Concluído',    cls: 'done'   }
 };
 
 // =============================================================================
-// CONTADORES POR ESTAÇÃO
+// ATUALIZAÇÃO VISUAL DE UMA ESTAÇÃO
 // =============================================================================
-const contadores = { estoque: 0, processo: 0, montagem: 0, expedicao: 0 };
+function applyStation(name, status, op) {
+    const s = STATUS_MAP[status] ?? STATUS_MAP[0];
 
-// =============================================================================
-// HELPERS
-// =============================================================================
+    const ci = document.getElementById('ci-' + name);
+    ci.className = 'circle ' + (s.cls || 'waiting');
 
-/** Converte hex string ("00 1A FF") → Uint8Array */
-function hexToBytes(hex) {
-    if (!hex || hex.includes('Ainda não')) return null;
-    const tokens = hex.trim().split(/\s+/);
-    const arr = new Uint8Array(tokens.length);
-    tokens.forEach((t, i) => arr[i] = parseInt(t, 16));
-    return arr;
-}
+    const ba = document.getElementById('ba-' + name);
+    ba.className   = 's-badge ' + s.cls;
+    ba.textContent = s.label;
 
-/** Lê int16 big-endian */
-function int16(bytes, off) {
-    if (!bytes || off + 1 >= bytes.length) return 0;
-    return ((bytes[off] & 0xFF) << 8) | (bytes[off + 1] & 0xFF);
-}
-
-/** Lê bit de um byte */
-function bit(bytes, off, bitN) {
-    if (!bytes || off >= bytes.length) return false;
-    return (bytes[off] & (1 << bitN)) !== 0;
-}
-
-/** Formata hex para exibição */
-function formatHex(bytes) {
-    if (!bytes || bytes.length === 0) return 'Sem dados';
-    let s = '';
-    bytes.forEach((b, i) => {
-        s += b.toString(16).padStart(2, '0').toUpperCase() + ' ';
-        if ((i + 1) % 16 === 0) s += '\n';
-    });
-    return s.trim();
+    const opEl = document.getElementById('op-' + name);
+    if (opEl) opEl.textContent = (op && op > 0) ? op : '—';
 }
 
 // =============================================================================
-// ATUALIZAÇÃO DA UI DE UMA ESTAÇÃO
+// ATUALIZAÇÃO DAS LINHAS CONECTORAS
 // =============================================================================
-function atualizarEstacao(nome, { status, op, pos }) {
-    const s = STATUS[status] || STATUS[0];
-
-    document.getElementById(`circle-${nome}`).className = `circle ${s.classe}`;
-
-    const badge = document.getElementById(`badge-${nome}`);
-    badge.textContent = s.texto;
-    badge.className   = `status-badge ${s.classe}`;
-
-    if (op  !== undefined) document.getElementById(`op-${nome}`).textContent  = op  > 0 ? op  : '—';
-    if (pos !== undefined) document.getElementById(`pos-${nome}`).textContent = pos > 0 ? pos : '—';
-
-    contadores[nome]++;
-    document.getElementById(`meta-${nome}`).textContent = `${contadores[nome]} leituras`;
-}
-
-function atualizarHex(sufixo, bytes) {
-    const el   = document.getElementById(`hex-${sufixo}`);
-    const szEl = document.getElementById(`sz-${sufixo}`);
-    if (!bytes || bytes.length === 0) {
-        el.textContent  = 'Sem dados';
-        szEl.textContent = '0 bytes';
-        return;
-    }
-    el.textContent   = formatHex(bytes);
-    szEl.textContent = bytes.length + ' bytes';
+function applyConnector(id, statusLeft) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (statusLeft === 2)      el.className = 'connector done';
+    else if (statusLeft === 1) el.className = 'connector active';
+    else                       el.className = 'connector';
 }
 
 // =============================================================================
-// PROCESSAMENTO DOS BYTES POR CLP
+// FETCH DO ENDPOINT /status
+// O backend já interpreta os bytes e devolve JSON com os estados de cada estação.
 // =============================================================================
-
-/**
- * CLP 1 – Estoque
- * O DB do Estoque contém, nos últimos 6 bytes:
- *   [n-6] statusEstoque | [n-5] statusProcesso | [n-4] statusMontagem
- *   [n-3] statusExpedicao | [n-2] (reservado) | [n-1] pedidoEmCurso (1=sim)
- * OP em offset 96-97 (int16 BE)
- * Posição em offset 66-67 (int16 BE)
- */
-function processarClp1(bytes) {
-    atualizarHex('clp1', bytes);
-    if (!bytes || bytes.length < 100) return;
-
-    const len = bytes.length;
-    const sEst = bytes[len - 6];
-    const sPro = bytes[len - 5];
-    const sMon = bytes[len - 4];
-    const sExp = bytes[len - 3];
-    const emCurso = bytes[len - 1] === 1;
-
-    // Atualiza o indicador global de pedido em curso
-    const elCurso = document.getElementById('pedidoEmCurso');
-    elCurso.textContent = emCurso ? '✅ Em curso' : '⏸ Parado';
-    elCurso.className   = 'val ' + (emCurso ? 'em-curso' : 'parado');
-
-    // Cada estação é atualizada com o status que o Estoque enxerga
-    atualizarEstacao('estoque',   { status: sEst, op: int16(bytes, 96), pos: int16(bytes, 66) });
-
-    // Os status das demais estações vindos do CLP do Estoque servem de fallback.
-    // Os CLPs individuais sobrescrevem com dados mais precisos (ver clp2, 3, 4).
-    // Descomente caso queira usar o Estoque como fonte única de status global:
-    // atualizarEstacao('processo',  { status: sPro });
-    // atualizarEstacao('montagem',  { status: sMon });
-    // atualizarEstacao('expedicao', { status: sExp });
-}
-
-/**
- * CLP 2 – Processo
- * Offset 2-3: OP (int16 BE)
- * Offset 4 bit 2 (0x04): start | bit 1 (0x02): finish
- */
-function processarClp2(bytes) {
-    atualizarHex('clp2', bytes);
-    if (!bytes || bytes.length < 6) return;
-    const start  = (bytes[4] & 0x04) !== 0;
-    const finish = (bytes[4] & 0x02) !== 0;
-    atualizarEstacao('processo', {
-        status: start ? 1 : finish ? 2 : 0,
-        op: int16(bytes, 2)
-    });
-}
-
-/**
- * CLP 3 – Montagem
- * Mesma estrutura do Processo
- */
-function processarClp3(bytes) {
-    atualizarHex('clp3', bytes);
-    if (!bytes || bytes.length < 6) return;
-    const start  = (bytes[4] & 0x04) !== 0;
-    const finish = (bytes[4] & 0x02) !== 0;
-    atualizarEstacao('montagem', {
-        status: start ? 1 : finish ? 2 : 0,
-        op: int16(bytes, 2)
-    });
-}
-
-/**
- * CLP 4 – Expedição  (bytes = DB4 ++ DB5 concatenados pelo MultDB)
- * Offset 30-31: OP (int16 BE)
- * Offset 32 bit 2: start | bit 1: finish
- * Offset 4-5: posição (int16 BE) — vem do segundo bloco concatenado
- */
-function processarClp4(bytes) {
-    atualizarHex('clp4', bytes);
-    if (!bytes || bytes.length < 36) return;
-    const start  = (bytes[32] & 0x04) !== 0;
-    const finish = (bytes[32] & 0x02) !== 0;
-    atualizarEstacao('expedicao', {
-        status: start ? 1 : finish ? 2 : 0,
-        op:  int16(bytes, 30),
-        pos: int16(bytes, 4)
-    });
-}
-
-// =============================================================================
-// FETCH DE CADA ENDPOINT
-// =============================================================================
-async function lerClp(endpoint, processar, label) {
+async function fetchStatus() {
     try {
-        const r = await fetch(API_BASE + endpoint, { signal: AbortSignal.timeout(2000) });
-        if (!r.ok) { console.warn(`[${label}] HTTP ${r.status}`); return; }
-        const txt = await r.text();
-        const bytes = hexToBytes(txt);
-        processar(bytes);
+        const r = await fetch(API_BASE + '/status', {
+            signal: AbortSignal.timeout(2000)
+        });
+        if (!r.ok) return;
+
+        const data = await r.json();
+
+        // Estoque: statusEstoque vem dentro de data.estoque
+        const sE = data.estoque?.statusEstoque   ?? 0;
+        // Processo/Montagem/Expedição: campo "status" de cada objeto
+        // Fallback para o valor que o CLP do Estoque enxerga (statusProcesso etc.)
+        const sP = data.processo?.status  ?? data.estoque?.statusProcesso  ?? 0;
+        const sM = data.montagem?.status  ?? data.estoque?.statusMontagem  ?? 0;
+        const sX = data.expedicao?.status ?? data.estoque?.statusExpedicao ?? 0;
+
+        const emCurso = data.estoque?.pedidoEmCurso ?? false;
+
+        // Atualiza cada estação
+        applyStation('estoque',   sE, data.estoque?.op);
+        applyStation('processo',  sP, data.processo?.op);
+        applyStation('montagem',  sM, data.montagem?.op);
+        applyStation('expedicao', sX, data.expedicao?.op);
+
+        // Conectores
+        applyConnector('conn-1', sE);
+        applyConnector('conn-2', sP);
+        applyConnector('conn-3', sM);
+
+        // Pill de pedido em curso
+        document.getElementById('pillDot').className = 'pill-dot' + (emCurso ? ' active' : '');
+        document.getElementById('pillVal').textContent = emCurso ? 'Em curso' : 'Parado';
+
     } catch (e) {
-        if (e.name !== 'AbortError') console.warn(`[${label}] erro:`, e.message);
+        // timeout ou CLP offline — mantém último estado na tela
     }
 }
 
-function lerTudo() {
-    lerClp('/data/clp1', processarClp1, 'Estoque');
-    lerClp('/data/clp2', processarClp2, 'Processo');
-    lerClp('/data/clp3', processarClp3, 'Montagem');
-    lerClp('/data/clp4', processarClp4, 'Expedição');
-}
-
 // =============================================================================
-// POLLING
+// CONTROLE DE POLLING
 // =============================================================================
 let timer = null;
 
-function setStatus(online, txt) {
-    document.getElementById('dotStatus').className = `dot ${online ? 'online' : 'offline'}`;
+function setStatusBar(online, txt) {
+    document.getElementById('dotStatus').className = 'dot ' + (online ? 'online' : 'offline');
     document.getElementById('txtStatus').textContent = txt;
 }
 
 async function iniciar() {
     if (timer) { clearInterval(timer); timer = null; }
 
+    // Avisa o backend para abrir conexões com os CLPs
     try {
         await fetch(API_BASE + '/start-readings', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify(CLP_IPS)
         });
-        console.log('[Smart] Leituras iniciadas:', CLP_IPS);
     } catch (e) {
-        console.warn('[Smart] Não foi possível enviar /start-readings:', e.message);
+        console.warn('[Smart] /start-readings indisponível:', e.message);
     }
 
-    lerTudo();
-    timer = setInterval(lerTudo, POLL_MS);
-    setStatus(true, 'Polling ativo — atualização a cada 1,5 s');
+    fetchStatus();
+    timer = setInterval(fetchStatus, POLL_MS);
+    setStatusBar(true, 'Polling ativo — atualização a cada 1,5 s');
     document.getElementById('btnStart').textContent = '▶ Reiniciar';
 }
 
 function parar() {
     if (timer) { clearInterval(timer); timer = null; }
     fetch(API_BASE + '/stop-readings', { method: 'POST' }).catch(() => {});
-    setStatus(false, 'Polling parado');
+    setStatusBar(false, 'Polling parado');
     document.getElementById('btnStart').textContent = '▶ Iniciar';
 }
 
@@ -613,14 +445,14 @@ document.getElementById('btnStop').addEventListener('click', parar);
 
 document.getElementById('btnForce').addEventListener('click', async function () {
     this.disabled = true;
-    this.textContent = '⏳…';
-    await lerTudo();
+    this.textContent = '↺ Atualizando…';
+    await fetchStatus();
     this.disabled = false;
-    this.textContent = '🔍 Forçar leitura';
+    this.textContent = '↺ Atualizar agora';
 });
 
 // =============================================================================
-// INICIALIZAÇÃO AUTOMÁTICA
+// AUTO-START
 // =============================================================================
 iniciar();
 </script>

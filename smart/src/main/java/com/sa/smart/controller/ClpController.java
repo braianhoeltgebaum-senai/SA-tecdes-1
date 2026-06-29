@@ -33,8 +33,6 @@ import com.sa.smart.service.MontagemService;
 import com.sa.smart.service.ProcessoService;
 import com.sa.smart.service.SmartService;
 
-
-
 @RestController
 public class ClpController {
 
@@ -65,6 +63,9 @@ public class ClpController {
     @Autowired
     private ExpedicaoService expedicaoService;
 
+    // =========================================================================
+    // POST /start-readings
+    // =========================================================================
     @PostMapping("/start-readings")
     public ResponseEntity<String> startReadings(@RequestBody Map<String, String> ips) {
         ips.forEach((nome, ip) -> {
@@ -72,12 +73,12 @@ public class ClpController {
                 PlcConnector plcConnector = plcConnectionService.getConnection(ip);
                 if (plcConnector == null) {
                     System.err.println("Erro ao obter conexão com o CLP: " + ip);
-                    return; // ignora esse CLP e continua com os demais
+                    return;
                 }
 
                 PlcReaderDB task = null;
                 PlcReaderMultDB taskMult = null;
-                long delayMs = 600; // valor padrão
+                long delayMs = 600;
 
                 switch (nome.toLowerCase()) {
                     case "estoque" -> {
@@ -87,17 +88,15 @@ public class ClpController {
                                 new PlcReaderMultDB.PlcReadRequest(9, 0, 111),
                                 new PlcReaderMultDB.PlcReadRequest(6, 0, 60),
                                 new PlcReaderMultDB.PlcReadRequest(0, 0, 0),
-                                new PlcReaderMultDB.PlcReadRequest(0, 0, 0), // Ignorado (db == 0)
+                                new PlcReaderMultDB.PlcReadRequest(0, 0, 0),
                                 new PlcReaderMultDB.PlcReadRequest(0, 0, 0),
                                 dados -> {
                                     ClpController.dataClp1 = dados;
-                                    //smartService.clpEstoque(ip, dados);
                                     estoqueService.processData(ip, dados);
                                     updateCache("estoque", dados);
                                 });
-                        delayMs = 600; // Delay personalizado para ESTOQUE
+                        delayMs = 600;
                     }
-
                     case "processo" -> {
                         task = new PlcReaderDB(plcConnector, nome, 2, 0, 9, dados -> {
                             ClpController.dataClp2 = dados;
@@ -106,7 +105,6 @@ public class ClpController {
                         });
                         delayMs = 400;
                     }
-
                     case "montagem" -> {
                         taskMult = new PlcReaderMultDB(
                                 plcConnector,
@@ -114,7 +112,7 @@ public class ClpController {
                                 new PlcReaderMultDB.PlcReadRequest(57, 0, 9),
                                 new PlcReaderMultDB.PlcReadRequest(30, 16, 16),
                                 new PlcReaderMultDB.PlcReadRequest(600, 14, 16),
-                                new PlcReaderMultDB.PlcReadRequest(92, 2, 16), // Ignorado (db == 0)
+                                new PlcReaderMultDB.PlcReadRequest(92, 2, 16),
                                 new PlcReaderMultDB.PlcReadRequest(60, 20, 16),
                                 dados -> {
                                     ClpController.dataClp3 = dados;
@@ -123,7 +121,6 @@ public class ClpController {
                                 });
                         delayMs = 400;
                     }
-
                     case "expedicao" -> {
                         task = new PlcReaderDB(plcConnector, nome, 9, 0, 48, dados -> {
                             ClpController.dataClp4 = dados;
@@ -132,7 +129,6 @@ public class ClpController {
                         });
                         delayMs = 600;
                     }
-
                     default -> {
                         System.err.println("Nome de CLP inválido: " + nome);
                         return;
@@ -142,8 +138,7 @@ public class ClpController {
                 Runnable toSchedule = task != null ? task : taskMult;
                 if (toSchedule != null) {
                     ScheduledFuture<?> future = readingExecutor.scheduleWithFixedDelay(
-                            toSchedule, 0, delayMs, TimeUnit.MILLISECONDS
-                    );
+                            toSchedule, 0, delayMs, TimeUnit.MILLISECONDS);
                     readingFutures.put(nome, future);
                 }
             }
@@ -160,19 +155,17 @@ public class ClpController {
         readingsCache.put(nome, sb.toString().trim());
     }
 
+    // =========================================================================
+    // GET /data/{clp}
+    // =========================================================================
     @GetMapping("/data/{clp}")
     public ResponseEntity<String> getData(@PathVariable String clp) {
         byte[] dados = switch (clp.toLowerCase()) {
-            case "clp1" ->
-                dataClp1;
-            case "clp2" ->
-                dataClp2;
-            case "clp3" ->
-                dataClp3;
-            case "clp4" ->
-                dataClp4;
-            default ->
-                null;
+            case "clp1" -> dataClp1;
+            case "clp2" -> dataClp2;
+            case "clp3" -> dataClp3;
+            case "clp4" -> dataClp4;
+            default     -> null;
         };
 
         if (dados == null) {
@@ -183,10 +176,12 @@ public class ClpController {
         for (byte b : dados) {
             builder.append(String.format("%02X ", b));
         }
-
         return ResponseEntity.ok(builder.toString().trim());
     }
 
+    // =========================================================================
+    // POST /stop-readings
+    // =========================================================================
     @PostMapping("/stop-readings")
     public ResponseEntity<String> stopReadings() {
         readingFutures.forEach((nome, future) -> {
@@ -195,12 +190,67 @@ public class ClpController {
         });
         readingFutures.clear();
         plcConnectionService.closeAll();
-
-        // Salvar os eventos acumulados
-        //smartService.salvarEventosEmArquivo();
         return ResponseEntity.ok("Leituras interrompidas e eventos registrados.");
     }
 
+    // =========================================================================
+    // GET /status
+    // JSON com o estado interpretado de cada estação para o frontend de
+    // acompanhamento. Lê os campos estáticos dataClp1..4 já populados pelas
+    // threads de leitura acima — sem abrir novas conexões ou duplicar lógica.
+    //
+    // Convenção de status:  0 = aguardando | 1 = em andamento | 2 = concluído
+    //
+    // Estrutura devolvida:
+    // {
+    //   "estoque":   { "statusEstoque": 0-2, "statusProcesso": 0-2,
+    //                  "statusMontagem": 0-2, "statusExpedicao": 0-2,
+    //                  "pedidoEmCurso": bool },
+    //   "processo":  { "status": 0-2 },
+    //   "montagem":  { "status": 0-2 },
+    //   "expedicao": { "status": 0-2 }
+    // }
+    //
+    // Os status são lidos diretamente de SmartService (variáveis estáticas
+    // atualizadas pelos services de cada estação), que é a fonte de verdade
+    // já existente no projeto — sem replicar parsing de bytes aqui.
+    // =========================================================================
+    @GetMapping("/status")
+    public ResponseEntity<Map<String, Object>> getStatus() {
+        Map<String, Object> resp = new HashMap<>();
+
+        // --- Estoque -----------------------------------------------------------
+        // SmartService mantém os status globais de produção como campos estáticos,
+        // atualizados pelos services (EstoqueService, ProcessoService, etc.)
+        Map<String, Object> estoque = new HashMap<>();
+        estoque.put("statusEstoque",   SmartService.statusEstoque   & 0xFF);
+        estoque.put("statusProcesso",  SmartService.statusProcesso  & 0xFF);
+        estoque.put("statusMontagem",  SmartService.statusMontagem  & 0xFF);
+        estoque.put("statusExpedicao", SmartService.statusExpedicao & 0xFF);
+        estoque.put("pedidoEmCurso",   SmartService.pedidoEmCurso);
+        resp.put("estoque", estoque);
+
+        // --- Processo ----------------------------------------------------------
+        Map<String, Object> processo = new HashMap<>();
+        processo.put("status", SmartService.statusProcesso & 0xFF);
+        resp.put("processo", processo);
+
+        // --- Montagem ----------------------------------------------------------
+        Map<String, Object> montagem = new HashMap<>();
+        montagem.put("status", SmartService.statusMontagem & 0xFF);
+        resp.put("montagem", montagem);
+
+        // --- Expedição ---------------------------------------------------------
+        Map<String, Object> expedicao = new HashMap<>();
+        expedicao.put("status", SmartService.statusExpedicao & 0xFF);
+        resp.put("expedicao", expedicao);
+
+        return ResponseEntity.ok(resp);
+    }
+
+    // =========================================================================
+    // GET /smartstream/{bancada}  — SSE (sem alteração)
+    // =========================================================================
     @GetMapping("/smartstream/{bancada}")
     public SseEmitter smartStream(@PathVariable String bancada) {
         SseEmitter emitter = new SseEmitter(0L);
@@ -211,7 +261,6 @@ public class ClpController {
                 while (true) {
                     byte[] dados = switch (bancada.toLowerCase()) {
                         case "estoque" -> {
-                            // Adiciona dois bytes ao final
                             byte[] extendidoEst = new byte[dataClp1.length + 6];
                             System.arraycopy(dataClp1, 0, extendidoEst, 0, dataClp1.length);
                             extendidoEst[extendidoEst.length - 6] = SmartService.statusEstoque;
@@ -222,14 +271,10 @@ public class ClpController {
                             extendidoEst[extendidoEst.length - 1] = (byte) (SmartService.pedidoEmCurso ? 1 : 0);
                             yield extendidoEst;
                         }
-                        case "processo" ->
-                            dataClp2;
-                        case "montagem" ->
-                            dataClp3;
-                        case "expedicao" ->
-                            dataClp4;
-                        default ->
-                            null;
+                        case "processo"  -> dataClp2;
+                        case "montagem"  -> dataClp3;
+                        case "expedicao" -> dataClp4;
+                        default          -> null;
                     };
 
                     if (dados != null) {
@@ -237,14 +282,10 @@ public class ClpController {
                         for (byte b : dados) {
                             hexBuilder.append(String.format("%02X ", b));
                         }
-
-                        String leituraHex = hexBuilder.toString().trim();
-
                         try {
                             emitter.send(SseEmitter.event()
-                                .name("leitura")
-                                .data(leituraHex));
-                                
+                                    .name("leitura")
+                                    .data(hexBuilder.toString().trim()));
                         } catch (IOException | IllegalStateException ex) {
                             emitter.complete();
                             break;
@@ -266,29 +307,24 @@ public class ClpController {
         return emitter;
     }
 
+    // =========================================================================
+    // Utilitários diversos (sem alteração)
+    // =========================================================================
     @PostMapping("/smart/ping")
     public Map<String, Boolean> pingHosts(@RequestBody Map<String, String> ips) {
         Map<String, Boolean> resultados = new HashMap<>();
-
         ips.forEach((nome, ip) -> {
-            boolean isClpOnline = false;
-
+            boolean online = false;
             try (Socket socket = new Socket()) {
                 SocketAddress address = new InetSocketAddress(ip, 102);
-                socket.connect(address, 2000); // timeout 2 segundos
-
-                // Se conectou, consideramos que é um CLP Siemens
-                isClpOnline = true;
+                socket.connect(address, 2000);
+                online = true;
             } catch (IOException e) {
-                // Porta 102 não está aberta, ou não é um CLP válido
-                isClpOnline = false;
+                online = false;
             }
-
-            System.out.println(nome + ": " + isClpOnline);
-
-            resultados.put(nome, isClpOnline);
+            System.out.println(nome + ": " + online);
+            resultados.put(nome, online);
         });
-
         return resultados;
     }
 
@@ -308,5 +344,4 @@ public class ClpController {
     public boolean getReadOnly() {
         return smartService.isReadOnly();
     }
-
 }
