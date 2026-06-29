@@ -598,7 +598,12 @@
             try {
                 const response = await fetch(API);
                 if (response.ok) {
-                    todosPedidos = await response.json();
+                    const dados = await response.json();
+                    // Normaliza: garante que pedido.id exista independente do nome do campo no backend
+                    todosPedidos = dados.map(p => ({
+                        ...p,
+                        id: p.id ?? p.idPedido ?? p.Id ?? p.IdPedido
+                    }));
                 } else {
                     utilizarFallback("Resposta inválida do servidor.");
                 }

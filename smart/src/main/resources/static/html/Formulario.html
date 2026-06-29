@@ -265,11 +265,12 @@
       }
 
       .stack {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-}
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+
       /* ==========================================================================
    SISTEMA DE PREVIEW ISOMÉTRICO
    ========================================================================== */
@@ -657,8 +658,7 @@
           "previewTampa"
         ).style.backgroundImage = `url('../assets/bloco/rTampa${corTampa}.png')`;
 
-      const blocos = [...document.querySelectorAll(".bloco")].reverse();
-      blocos.forEach((bloco, index) => {
+        document.querySelectorAll(".bloco").forEach((bloco, index) => {
           const corBloco = bloco.querySelector(".corBloco").value;
           const blocoPreview = document.createElement("div");
           blocoPreview.className = "bloco-preview";
@@ -791,6 +791,7 @@
             tipoPedido: Number(tipoPedido.value),
             corTampa: Number(document.getElementById("corTampa").value),
             posicaoExpedicao: posicaoExpedicao,
+            dataPedido: new Date().toISOString(), // timestamp para o banco
             blocos: blocos,
           };
 
@@ -810,8 +811,11 @@
             const data = await response.json();
             console.log("Pedido salvo:", data);
 
+            // A API pode retornar o id como "id" ou "idPedido" dependendo do backend
+            const idSalvo = data.id ?? data.idPedido ?? "—";
+
             mostrarStatus(
-              `✔ Pedido #${data.idPedido} salvo com sucesso! Acesse o Gestor de Pedidos para enviar à produção.`,
+              `✔ Pedido #${idSalvo} salvo com sucesso! Acesse o Gestor de Pedidos para enviar à produção.`,
               "sucesso"
             );
 
