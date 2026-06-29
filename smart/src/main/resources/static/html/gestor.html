@@ -637,7 +637,6 @@
         }
 
         async function executarEnvioProducao(idPedido, ip) {
-            // Desabilita o botão do card enquanto processa
             const btn = document.getElementById(`btn-producao-${idPedido}`);
             if (btn) {
                 btn.disabled = true;
@@ -657,22 +656,25 @@
                 }
 
                 // PASSO 2 — Atualiza o status para "Em Produção" (2)
-                const resStatus = await fetch(`${API}/${idPedido}/status`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(2)
-                });
-
-                if (resStatus.ok) {
-                    exibirToast(`✔ Pedido #${idPedido} enviado ao CLP (${ip}) e em produção!`, "success");
-                    obterPedidos();
-                } else {
-                    // CLP recebeu, mas falha ao salvar status — atualiza localmente
-                    const index = todosPedidos.findIndex(p => p.id === idPedido);
-                    if (index !== -1) todosPedidos[index].statusPedido = 2;
-                    renderizarCards();
-                    exibirToast(`✔ CLP recebeu o pedido #${idPedido}. Status atualizado localmente.`, "success");
+                // Tenta via PUT; independente do resultado, atualiza localmente
+                try {
+                    await fetch(`${API}/${idPedido}/status`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(2)
+                    });
+                } catch (_) {
+                    // Endpoint de status falhou — continua com atualização local
                 }
+
+                // Garante atualização local imediata (número, não string)
+                const index = todosPedidos.findIndex(p => p.id === idPedido);
+                if (index !== -1) todosPedidos[index].statusPedido = 2;
+
+                exibirToast(`✔ Pedido #${idPedido} enviado ao CLP (${ip}) — Em Produção!`, "success");
+
+                // Recarrega do servidor para sincronizar; se falhar, já temos o estado local
+                obterPedidos();
 
             } catch (error) {
                 console.error(error);
@@ -747,7 +749,8 @@
 
             const pedidosFiltrados = todosPedidos.filter(p => {
                 if (filtroAtivo === "todos") return true;
-                return p.statusPedido === filtroAtivo;
+                // Coerção explícita: status pode vir como string ou número do backend
+                return Number(p.statusPedido) === Number(filtroAtivo);
             });
 
             if (pedidosFiltrados.length === 0) {
@@ -756,24 +759,33 @@
             }
 
             pedidosFiltrados.forEach(pedido => {
-                const statusInfo = mapaStatus[pedido.statusPedido] || { nome: "Desconhecido", classe: "status-1" };
-                const tampaInfo = mapaCores[pedido.corTampa] || { nome: "Não definida", classe: "" };
+                // Normaliza statusPedido para número para comparações seguras
+                const statusNum = Number(pedido.statusPedido);
+                const statusInfo = mapaStatus[statusNum] || { nome: "Desconhecido", classe: "status-1" };
+                const tampaInfo = mapaCores[Number(pedido.corTampa)] || { nome: "Não definida", classe: "" };
+
+                // Posição de expedição
+                const expedicao = pedido.posicaoExpedicao
+                    ? `Posição ${pedido.posicaoExpedicao}`
+                    : "Não definida";
 
                 let blocosHTML = "";
                 if (pedido.blocos && pedido.blocos.length > 0) {
                     pedido.blocos.forEach((bloco, idx) => {
-                        const corBlocoInfo = mapaCores[bloco.corBloco] || { nome: "Indefinida", classe: "" };
+                        const corBlocoInfo = mapaCores[Number(bloco.corBloco)] || { nome: "Indefinida", classe: "" };
 
                         let laminasHTML = "";
                         if (bloco.laminas && bloco.laminas.length > 0) {
                             bloco.laminas.forEach((lamina, lamIdx) => {
-                                const corLaminaInfo = mapaCoresLaminas[lamina.cor] || { nome: "Indefinida", classe: "" };
-                                const padraoText = mapaPadrao[lamina.padrao] || "Nenhum";
+                                const corLaminaInfo = mapaCoresLaminas[Number(lamina.cor)] || { nome: "Indefinida", classe: "" };
+                                const padraoText = mapaPadrao[Number(lamina.padrao)] || "Nenhum";
+                                const posicaoLamText = ["—", "Esquerda", "Frente", "Direita"][Number(lamina.posicaoNoBloco)] || "—";
                                 laminasHTML += `
                                     <li>
-                                        Lâmina ${lamIdx + 1}: 
-                                        Cor <span class="${corLaminaInfo.classe}">${corLaminaInfo.nome}</span>, 
-                                        Padrão: <span>${padraoText}</span>
+                                        Lâmina ${lamIdx + 1}:
+                                        Cor <span class="${corLaminaInfo.classe}">${corLaminaInfo.nome}</span>,
+                                        Padrão: <span>${padraoText}</span>,
+                                        Posição: <span>${posicaoLamText}</span>
                                     </li>
                                 `;
                             });
@@ -791,10 +803,9 @@
                     });
                 }
 
-                // Botão de ação baseado no status
+                // Botão de ação baseado no status (usando statusNum para comparação segura)
                 let acaoBotaoHTML = "";
-                if (pedido.statusPedido === 1) {
-                    // Pendente → envia ao CLP e muda para Em Produção
+                if (statusNum === 1) {
                     acaoBotaoHTML = `
                         <button
                             id="btn-producao-${pedido.id}"
@@ -804,8 +815,7 @@
                             ▶ Enviar para Produção
                         </button>
                     `;
-                } else if (pedido.statusPedido === 2) {
-                    // Em Produção → apenas muda status para Concluído
+                } else if (statusNum === 2) {
                     acaoBotaoHTML = `
                         <button
                             class="btn-card-action btn-concluir"
@@ -835,8 +845,9 @@
                     </div>
                     <div class="pedido-info">
                         <div class="info-item">Ordem: <span>${pedido.ordemProducao || 'N/A'}</span></div>
-                        <div class="info-item">Tipo: <span>${mapaTipo[pedido.tipoPedido] || 'Simples'}</span></div>
-                        <div class="info-item" style="grid-column: span 2;">Tampa: <span class="${tampaInfo.classe}">${tampaInfo.nome}</span></div>
+                        <div class="info-item">Tipo: <span>${mapaTipo[Number(pedido.tipoPedido)] || 'Simples'}</span></div>
+                        <div class="info-item">Tampa: <span class="${tampaInfo.classe}">${tampaInfo.nome}</span></div>
+                        <div class="info-item">Expedição: <span style="color:#38bdf8;">${expedicao}</span></div>
                     </div>
                     <div class="bloco-container">${blocosHTML}</div>
                     ${acaoBotaoHTML}
