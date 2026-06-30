@@ -73,7 +73,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 # --- Integração com APIs externas (estoque/expedição) ---
 api.estoque.url=http://<host>:<porta>/api-externa-estoque
 api.expedicao.url=http://<host>:<porta>/api-externa-expedicao
-api.seletor-tampas-present=false
+api.seletor-tampas-present=true
 
 # --- CLPs (opcional, dependendo de como ApiUrlConfig está implementado) ---
 # Os IPs dos CLPs também podem ser enviados diretamente no corpo da requisição
