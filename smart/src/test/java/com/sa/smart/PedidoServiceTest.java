@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sa.smart.model.Bloco;
+import com.sa.smart.model.Lamina;
 import com.sa.smart.model.Pedido;
 import com.sa.smart.repository.PedidoRepository;
 import com.sa.smart.service.PedidoService;
@@ -41,6 +42,7 @@ class PedidoServiceTest {
         pedido.setOrdemProducao("OP001");
         pedido.setTipoPedido(1);
         pedido.setStatusPedido(1);
+        pedido.setCorTampa(1); // valor válido por padrão (intervalo 1-3)
     }
 
     @Test
@@ -95,6 +97,61 @@ class PedidoServiceTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining(
                         "Pedidos triplos exigem exatamente 3 blocos");
+    }
+
+    @Test
+    void deveLancarErroQuandoCorTampaForNula() {
+
+        pedido.setCorTampa(null);
+
+        assertThatThrownBy(() ->
+                pedidoService.criarPedido(pedido))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Cor da tampa inválida");
+    }
+
+    @Test
+    void deveLancarErroQuandoCorTampaForMenorQueOMinimo() {
+
+        pedido.setCorTampa(0);
+
+        assertThatThrownBy(() ->
+                pedidoService.criarPedido(pedido))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Cor da tampa inválida");
+    }
+
+    @Test
+    void deveLancarErroQuandoCorTampaForMaiorQueOMaximo() {
+
+        pedido.setCorTampa(4);
+
+        assertThatThrownBy(() ->
+                pedidoService.criarPedido(pedido))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Cor da tampa inválida");
+    }
+
+    @Test
+    void deveLancarErroQuandoBlocoTemMaisDeTresLaminas() {
+
+        Bloco bloco = new Bloco();
+        bloco.setCorBloco(1);
+
+        Lamina l1 = new Lamina();
+        Lamina l2 = new Lamina();
+        Lamina l3 = new Lamina();
+        Lamina l4 = new Lamina();
+
+        bloco.setLaminas(List.of(l1, l2, l3, l4));
+
+        pedido.setBlocos(List.of(bloco));
+
+        assertThatThrownBy(() ->
+                pedidoService.criarPedido(pedido))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining(
+                        "Bloco excede o limite máximo de 3 lâminas");
     }
 
     @Test

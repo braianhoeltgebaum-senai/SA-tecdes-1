@@ -28,6 +28,10 @@ import com.sa.smart.repository.PedidoRepository;
 @Service
 public class PedidoService {
 
+    private static final int LIMITE_MAXIMO_LAMINAS_POR_BLOCO = 3;
+    private static final int COR_TAMPA_MIN = 1;
+    private static final int COR_TAMPA_MAX = 3;
+
     private final PedidoRepository pedidoRepository;
     private final EstoqueRepository estoqueRepository;
 
@@ -58,6 +62,11 @@ public class PedidoService {
     /**
      * Cria um novo pedido.
      *
+     * Validações de negócio aplicadas:
+     *  - Pedidos triplos (tipoPedido == 3) exigem exatamente 3 blocos.
+     *  - corTampa deve estar no intervalo [1, 3].
+     *  - Cada bloco pode ter no máximo 3 lâminas.
+     *
      * Para cada bloco, busca a PRIMEIRA posição de estoque que contenha um bloco
      * da cor solicitada (ordenado por posicaoEstoque ASC), evitando reutilizar
      * posições já atribuídas a blocos anteriores do mesmo pedido.
@@ -72,6 +81,13 @@ public class PedidoService {
             throw new RuntimeException("Pedidos triplos exigem exatamente 3 blocos.");
         }
 
+        Integer corTampa = pedido.getCorTampa();
+        if (corTampa == null || corTampa < COR_TAMPA_MIN || corTampa > COR_TAMPA_MAX) {
+            throw new RuntimeException(
+                    "Cor da tampa inválida. Valor deve estar entre "
+                            + COR_TAMPA_MIN + " e " + COR_TAMPA_MAX + ".");
+        }
+
         pedido.setStatusPedido(1); // Pendente
 
         if (pedido.getBlocos() != null) {
@@ -82,6 +98,13 @@ public class PedidoService {
             for (Bloco bloco : pedido.getBlocos()) {
                 bloco.setPedido(pedido);
                 bloco.setCriadoEm(LocalDateTime.now());
+
+                if (bloco.getLaminas() != null
+                        && bloco.getLaminas().size() > LIMITE_MAXIMO_LAMINAS_POR_BLOCO) {
+                    throw new RuntimeException(
+                            "Bloco excede o limite máximo de "
+                                    + LIMITE_MAXIMO_LAMINAS_POR_BLOCO + " lâminas.");
+                }
 
                 Integer corBloco = bloco.getCorBloco();
                 if (corBloco == null || corBloco == 0) {
