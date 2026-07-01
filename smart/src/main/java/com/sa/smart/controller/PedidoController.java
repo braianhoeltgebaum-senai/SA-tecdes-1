@@ -137,36 +137,36 @@ public class PedidoController {
     //   → se omitido, usa o IP que estiver salvo no gerarConfig() (10.74.241.10)
     // -------------------------------------------------------------------------
     @PostMapping("/{id}/iniciar")
-    public ResponseEntity<String> iniciar(
-            @PathVariable Long id,
-            @RequestParam(required = false) String ip) {
-        try {
-            PedidoConfigDTO config = pedidoService.gerarConfig(id);
-            PedidoInfoDTO   info   = pedidoService.gerarInfo(id);
+public ResponseEntity<String> iniciar(
+        @PathVariable Long id,
+        @RequestParam(required = false) String ip) {
+    try {
+        PedidoConfigDTO config = pedidoService.gerarConfig(id);
+        PedidoInfoDTO   info   = pedidoService.gerarInfo(id);
 
-            // Usa o IP enviado pelo frontend (se existir)
-            if (ip != null && !ip.isBlank()) {
-                config.setIpClp(ip);
-            }
-
-            // Valida que temos um IP antes de tentar conectar
-            if (config.getIpClp() == null || config.getIpClp().isBlank()) {
-                return ResponseEntity
-                        .badRequest()
-                        .body("IP do CLP não informado.");
-            }
-
-            // SmartService converte os dados em bytes e escreve no CLP via S7
-            smartService.enviarParaProducao(config, info);
-
-            return ResponseEntity.ok(
-                "Pedido #" + id + " enviado ao CLP " + config.getIpClp()
-            );
-
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .internalServerError()
-                    .body("Erro ao iniciar produção: " + e.getMessage());
+        if (ip != null && !ip.isBlank()) {
+            config.setIpClp(ip);
         }
+
+        if (config.getIpClp() == null || config.getIpClp().isBlank()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("IP do CLP não informado.");
+        }
+
+        smartService.enviarParaProducao(config, info);
+
+        // NOVO: persiste a transição de status Pendente → Em Produção
+        pedidoService.atualizarStatusParaEmProducao(id);
+
+        return ResponseEntity.ok(
+            "Pedido #" + id + " enviado ao CLP " + config.getIpClp()
+        );
+
+    } catch (RuntimeException e) {
+        return ResponseEntity
+                .internalServerError()
+                .body("Erro ao iniciar produção: " + e.getMessage());
     }
+}
 }
