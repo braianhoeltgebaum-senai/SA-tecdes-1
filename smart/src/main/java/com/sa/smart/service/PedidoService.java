@@ -72,6 +72,11 @@ public class PedidoService {
             throw new RuntimeException("Pedidos triplos exigem exatamente 3 blocos.");
         }
 
+        // Validação da cor da tampa (1-3)
+        if (pedido.getCorTampa() == null || pedido.getCorTampa() < 1 || pedido.getCorTampa() > 3) {
+            throw new RuntimeException("Cor da tampa inválida. Use 1, 2 ou 3.");
+        }
+
         pedido.setStatusPedido(1); // Pendente
 
         if (pedido.getBlocos() != null) {
@@ -97,7 +102,7 @@ public class PedidoService {
                         .findFirst()
                         .orElseThrow(() -> new RuntimeException(
                                 "Nenhuma posição de estoque disponível com a cor: " + corBloco
-                                + ". Posições já usadas: " + posicoesJaUsadas));
+                                        + ". Posições já usadas: " + posicoesJaUsadas));
 
                 System.out.printf("[criarPedido] Bloco cor=%d → estoque id=%d, posicao=%d%n",
                         corBloco, estoque.getId(), estoque.getPosicaoEstoque());
@@ -148,7 +153,8 @@ public class PedidoService {
     // ─── Geração de config e info para o CLP ──────────────────────────────────
 
     /**
-     * Gera o DTO de configuração do pedido (cabeçalho + lista de blocos + IP do CLP).
+     * Gera o DTO de configuração do pedido (cabeçalho + lista de blocos + IP do
+     * CLP).
      */
     @Transactional(readOnly = true)
     public PedidoConfigDTO gerarConfig(Long id) {
@@ -186,7 +192,8 @@ public class PedidoService {
      * Gera o DTO de informações do pedido para envio ao CLP.
      *
      * Os campos posicaoEstoqueAndar* são preenchidos com a posição física
-     * (posicaoEstoque) do estoque vinculado a cada bloco quando o pedido foi criado.
+     * (posicaoEstoque) do estoque vinculado a cada bloco quando o pedido foi
+     * criado.
      */
     @Transactional(readOnly = true)
     public PedidoInfoDTO gerarInfo(Long id) {
@@ -203,7 +210,8 @@ public class PedidoService {
         for (int i = 0; i < blocos.size() && i < 3; i++) {
             Bloco bloco = blocos.get(i);
 
-            // Valida que o bloco tem estoque vinculado (deve ter sido atribuído em criarPedido)
+            // Valida que o bloco tem estoque vinculado (deve ter sido atribuído em
+            // criarPedido)
             if (bloco.getEstoque() == null) {
                 throw new RuntimeException(
                         "Bloco " + bloco.getIdBloco() + " não tem posição de estoque vinculada.");
@@ -248,21 +256,48 @@ public class PedidoService {
     }
 
     private void preencherLaminasAndar1(PedidoInfoDTO dto, List<Lamina> laminas) {
-        if (laminas.size() > 0) { dto.setCorLamina1Andar1(laminas.get(0).getCor()); dto.setPadraoLamina1Andar1(laminas.get(0).getPadrao()); }
-        if (laminas.size() > 1) { dto.setCorLamina2Andar1(laminas.get(1).getCor()); dto.setPadraoLamina2Andar1(laminas.get(1).getPadrao()); }
-        if (laminas.size() > 2) { dto.setCorLamina3Andar1(laminas.get(2).getCor()); dto.setPadraoLamina3Andar1(laminas.get(2).getPadrao()); }
+        if (laminas.size() > 0) {
+            dto.setCorLamina1Andar1(laminas.get(0).getCor());
+            dto.setPadraoLamina1Andar1(laminas.get(0).getPadrao());
+        }
+        if (laminas.size() > 1) {
+            dto.setCorLamina2Andar1(laminas.get(1).getCor());
+            dto.setPadraoLamina2Andar1(laminas.get(1).getPadrao());
+        }
+        if (laminas.size() > 2) {
+            dto.setCorLamina3Andar1(laminas.get(2).getCor());
+            dto.setPadraoLamina3Andar1(laminas.get(2).getPadrao());
+        }
     }
 
     private void preencherLaminasAndar2(PedidoInfoDTO dto, List<Lamina> laminas) {
-        if (laminas.size() > 0) { dto.setCorLamina1Andar2(laminas.get(0).getCor()); dto.setPadraoLamina1Andar2(laminas.get(0).getPadrao()); }
-        if (laminas.size() > 1) { dto.setCorLamina2Andar2(laminas.get(1).getCor()); dto.setPadraoLamina2Andar2(laminas.get(1).getPadrao()); }
-        if (laminas.size() > 2) { dto.setCorLamina3Andar2(laminas.get(2).getCor()); dto.setPadraoLamina3Andar2(laminas.get(2).getPadrao()); }
+        if (laminas.size() > 0) {
+            dto.setCorLamina1Andar2(laminas.get(0).getCor());
+            dto.setPadraoLamina1Andar2(laminas.get(0).getPadrao());
+        }
+        if (laminas.size() > 1) {
+            dto.setCorLamina2Andar2(laminas.get(1).getCor());
+            dto.setPadraoLamina2Andar2(laminas.get(1).getPadrao());
+        }
+        if (laminas.size() > 2) {
+            dto.setCorLamina3Andar2(laminas.get(2).getCor());
+            dto.setPadraoLamina3Andar2(laminas.get(2).getPadrao());
+        }
     }
 
     private void preencherLaminasAndar3(PedidoInfoDTO dto, List<Lamina> laminas) {
-        if (laminas.size() > 0) { dto.setCorLamina1Andar3(laminas.get(0).getCor()); dto.setPadraoLamina1Andar3(laminas.get(0).getPadrao()); }
-        if (laminas.size() > 1) { dto.setCorLamina2Andar3(laminas.get(1).getCor()); dto.setPadraoLamina2Andar3(laminas.get(1).getPadrao()); }
-        if (laminas.size() > 2) { dto.setCorLamina3Andar3(laminas.get(2).getCor()); dto.setPadraoLamina3Andar3(laminas.get(2).getPadrao()); }
+        if (laminas.size() > 0) {
+            dto.setCorLamina1Andar3(laminas.get(0).getCor());
+            dto.setPadraoLamina1Andar3(laminas.get(0).getPadrao());
+        }
+        if (laminas.size() > 1) {
+            dto.setCorLamina2Andar3(laminas.get(1).getCor());
+            dto.setPadraoLamina2Andar3(laminas.get(1).getPadrao());
+        }
+        if (laminas.size() > 2) {
+            dto.setCorLamina3Andar3(laminas.get(2).getCor());
+            dto.setPadraoLamina3Andar3(laminas.get(2).getPadrao());
+        }
     }
 
     private void registrarNaExpedicao(Pedido pedido) {

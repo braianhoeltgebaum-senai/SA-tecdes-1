@@ -17,192 +17,249 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sa.smart.model.Bloco;
+import com.sa.smart.model.Estoque;
 import com.sa.smart.model.Pedido;
+import com.sa.smart.repository.EstoqueRepository;
 import com.sa.smart.repository.PedidoRepository;
 import com.sa.smart.service.PedidoService;
 
 @ExtendWith(MockitoExtension.class)
 class PedidoServiceTest {
 
-    @Mock
-    private PedidoRepository pedidoRepository;
+        @Mock
+        private PedidoRepository pedidoRepository;
 
-    @InjectMocks
-    private PedidoService pedidoService;
+        @Mock
+        private EstoqueRepository estoqueRepository;
 
-    private Pedido pedido;
+        @InjectMocks
+        private PedidoService pedidoService;
 
-    @BeforeEach
-    void setup() {
+        private Pedido pedido;
 
-        pedido = new Pedido();
+        @BeforeEach
+        void setup() {
 
-        pedido.setIdPedido(1L);
-        pedido.setOrdemProducao("OP001");
-        pedido.setTipoPedido(1);
-        pedido.setStatusPedido(1);
-    }
+                pedido = new Pedido();
 
-    @Test
-    void deveCriarPedido() {
+                pedido.setIdPedido(1L);
+                pedido.setOrdemProducao("OP001");
+                pedido.setTipoPedido(1);
+                pedido.setStatusPedido(1);
+                pedido.setCorTampa(1); // corTampa precisa ser válida (1-3) para não disparar
+                                       // RuntimeException em criarPedido()
+        }
 
-        when(pedidoRepository.save(any(Pedido.class)))
-                .thenReturn(pedido);
+        @Test
+        void deveCriarPedido() {
 
-        Pedido resultado =
-                pedidoService.criarPedido(pedido);
+                when(pedidoRepository.save(any(Pedido.class)))
+                                .thenReturn(pedido);
 
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getStatusPedido())
-                .isEqualTo(1);
+                Pedido resultado = pedidoService.criarPedido(pedido);
 
-        verify(pedidoRepository)
-                .save(any(Pedido.class));
-    }
+                assertThat(resultado).isNotNull();
+                assertThat(resultado.getStatusPedido())
+                                .isEqualTo(1);
 
-    @Test
-    void deveCriarPedidoTriploComTresBlocos() {
+                verify(pedidoRepository)
+                                .save(any(Pedido.class));
+        }
 
-        Bloco b1 = new Bloco();
-        Bloco b2 = new Bloco();
-        Bloco b3 = new Bloco();
+        @Test
+        void deveCriarPedidoTriploComTresBlocos() {
 
-        pedido.setTipoPedido(3);
-        pedido.setBlocos(List.of(b1, b2, b3));
+                Bloco b1 = new Bloco();
+                b1.setCorBloco(1);
+                Bloco b2 = new Bloco();
+                b2.setCorBloco(2);
+                Bloco b3 = new Bloco();
+                b3.setCorBloco(3);
 
-        when(pedidoRepository.save(any(Pedido.class)))
-                .thenReturn(pedido);
+                pedido.setTipoPedido(3);
+                pedido.setBlocos(List.of(b1, b2, b3));
 
-        Pedido resultado =
-                pedidoService.criarPedido(pedido);
+                // Para cada cor de bloco usada, o service consulta o estoque disponível
+                // dessa cor (findByCorOrderByPosicaoEstoqueAsc) e marca a posição
+                // encontrada como vazia (cor = 0).
+                Estoque e1 = new Estoque(1L, 1, 1);
+                Estoque e2 = new Estoque(2L, 2, 2);
+                Estoque e3 = new Estoque(3L, 3, 3);
 
-        assertThat(resultado).isNotNull();
+                when(estoqueRepository.findByCorOrderByPosicaoEstoqueAsc(1))
+                                .thenReturn(List.of(e1));
+                when(estoqueRepository.findByCorOrderByPosicaoEstoqueAsc(2))
+                                .thenReturn(List.of(e2));
+                when(estoqueRepository.findByCorOrderByPosicaoEstoqueAsc(3))
+                                .thenReturn(List.of(e3));
 
-        verify(pedidoRepository)
-                .save(any(Pedido.class));
-    }
+                when(pedidoRepository.save(any(Pedido.class)))
+                                .thenReturn(pedido);
 
-    @Test
-    void deveLancarErroQuandoPedidoTriploNaoTemTresBlocos() {
+                Pedido resultado = pedidoService.criarPedido(pedido);
 
-        Bloco b1 = new Bloco();
+                assertThat(resultado).isNotNull();
 
-        pedido.setTipoPedido(3);
-        pedido.setBlocos(List.of(b1));
+                verify(pedidoRepository)
+                                .save(any(Pedido.class));
+                verify(estoqueRepository, times(3))
+                                .save(any(Estoque.class));
+        }
 
-        assertThatThrownBy(() ->
-                pedidoService.criarPedido(pedido))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining(
-                        "Pedidos triplos exigem exatamente 3 blocos");
-    }
+        @Test
+        void deveLancarErroQuandoPedidoTriploNaoTemTresBlocos() {
 
-    @Test
-    void deveListarPedidos() {
+                Bloco b1 = new Bloco();
 
-        when(pedidoRepository.findAll())
-                .thenReturn(List.of(pedido));
+                pedido.setTipoPedido(3);
+                pedido.setBlocos(List.of(b1));
 
-        List<Pedido> lista =
-                pedidoService.listarTodos();
+                assertThatThrownBy(() -> pedidoService.criarPedido(pedido))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining(
+                                                "Pedidos triplos exigem exatamente 3 blocos");
+        }
 
-        assertThat(lista).hasSize(1);
-    }
+        @Test
+        void deveLancarErroQuandoCorTampaForaDoIntervalo() {
+                // cor 0 (inválida)
+                pedido.setCorTampa(0);
+                assertThatThrownBy(() -> pedidoService.criarPedido(pedido))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining("Cor da tampa inválida");
 
-    @Test
-    void deveAtualizarStatusParaConcluido() {
+                // cor 4 (inválida)
+                pedido.setCorTampa(4);
+                assertThatThrownBy(() -> pedidoService.criarPedido(pedido))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining("Cor da tampa inválida");
+        }
 
-        when(pedidoRepository.findById(1L))
-                .thenReturn(java.util.Optional.of(pedido));
+        @Test
+        void naoDeveLancarErroQuandoCorTampaValida() {
+                pedido.setCorTampa(1);
 
-        when(pedidoRepository.save(any(Pedido.class)))
-                .thenReturn(pedido);
+                when(pedidoRepository.save(any(Pedido.class)))
+                                .thenReturn(pedido);
 
-        pedidoService.atualizarStatusParaConcluido(1L);
+                Pedido resultado = pedidoService.criarPedido(pedido);
 
-        assertThat(pedido.getStatusPedido())
-                .isEqualTo(3);
+                assertThat(resultado).isNotNull();
+        }
 
-        verify(pedidoRepository)
-                .save(any(Pedido.class));
-    }
+        @Test
+        void deveLancarErroQuandoCorTampaInvalida() {
+                pedido.setCorTampa(0);
+                assertThatThrownBy(() -> pedidoService.criarPedido(pedido))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining("Cor da tampa inválida");
 
-    @Test
-    void deveAtualizarParcialmentePedido() {
+                pedido.setCorTampa(4);
+                assertThatThrownBy(() -> pedidoService.criarPedido(pedido))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining("Cor da tampa inválida");
+        }
 
-        when(pedidoRepository.findById(1L))
-                .thenReturn(java.util.Optional.of(pedido));
+        @Test
+        void deveListarPedidos() {
 
-        when(pedidoRepository.save(any(Pedido.class)))
-                .thenReturn(pedido);
+                when(pedidoRepository.findAll())
+                                .thenReturn(List.of(pedido));
 
-        Map<String, Object> campos = Map.of(
-                "ordemProducao", "OP999"
-        );
+                List<Pedido> lista = pedidoService.listarTodos();
 
-        Pedido resultado =
-                pedidoService.atualizarParcial(1L, campos);
+                assertThat(lista).hasSize(1);
+        }
 
-        assertThat(resultado.getOrdemProducao())
-                .isEqualTo("OP999");
+        @Test
+        void deveAtualizarStatusParaConcluido() {
 
-        verify(pedidoRepository)
-                .save(any(Pedido.class));
-    }
+                when(pedidoRepository.findById(1L))
+                                .thenReturn(java.util.Optional.of(pedido));
 
-    @Test
-    void deveExcluirPedidoPendente() {
+                when(pedidoRepository.save(any(Pedido.class)))
+                                .thenReturn(pedido);
 
-        pedido.setStatusPedido(1);
+                pedidoService.atualizarStatusParaConcluido(1L);
 
-        when(pedidoRepository.findById(1L))
-                .thenReturn(java.util.Optional.of(pedido));
+                assertThat(pedido.getStatusPedido())
+                                .isEqualTo(3);
 
-        doNothing().when(pedidoRepository)
-                .delete(any(Pedido.class));
+                verify(pedidoRepository)
+                                .save(any(Pedido.class));
+        }
 
-        pedidoService.excluir(1L);
+        @Test
+        void deveAtualizarParcialmentePedido() {
 
-        verify(pedidoRepository)
-                .delete(any(Pedido.class));
-    }
+                when(pedidoRepository.findById(1L))
+                                .thenReturn(java.util.Optional.of(pedido));
 
-    @Test
-    void deveLancarErroAoExcluirPedidoNaoPendente() {
+                when(pedidoRepository.save(any(Pedido.class)))
+                                .thenReturn(pedido);
 
-        pedido.setStatusPedido(2);
+                Map<String, Object> campos = Map.of(
+                                "ordemProducao", "OP999");
 
-        when(pedidoRepository.findById(1L))
-                .thenReturn(java.util.Optional.of(pedido));
+                Pedido resultado = pedidoService.atualizarParcial(1L, campos);
 
-        assertThatThrownBy(() ->
-                pedidoService.excluir(1L))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining(
-                        "Apenas pedidos Pendentes podem ser excluídos");
-    }
+                assertThat(resultado.getOrdemProducao())
+                                .isEqualTo("OP999");
 
-    @Test
-    void deveLancarErroQuandoPedidoNaoExisteAoAtualizarStatus() {
+                verify(pedidoRepository)
+                                .save(any(Pedido.class));
+        }
 
-        when(pedidoRepository.findById(1L))
-                .thenReturn(java.util.Optional.empty());
+        @Test
+        void deveExcluirPedidoPendente() {
 
-        assertThatThrownBy(() ->
-                pedidoService.atualizarStatusParaConcluido(1L))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Pedido não encontrado");
-    }
+                pedido.setStatusPedido(1);
 
-    @Test
-    void deveLancarErroQuandoPedidoNaoExisteAoExcluir() {
+                when(pedidoRepository.findById(1L))
+                                .thenReturn(java.util.Optional.of(pedido));
 
-        when(pedidoRepository.findById(1L))
-                .thenReturn(java.util.Optional.empty());
+                doNothing().when(pedidoRepository)
+                                .delete(any(Pedido.class));
 
-        assertThatThrownBy(() ->
-                pedidoService.excluir(1L))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Pedido não encontrado");
-    }
+                pedidoService.excluir(1L);
+
+                verify(pedidoRepository)
+                                .delete(any(Pedido.class));
+        }
+
+        @Test
+        void deveLancarErroAoExcluirPedidoNaoPendente() {
+
+                pedido.setStatusPedido(2);
+
+                when(pedidoRepository.findById(1L))
+                                .thenReturn(java.util.Optional.of(pedido));
+
+                assertThatThrownBy(() -> pedidoService.excluir(1L))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining(
+                                                "Apenas pedidos Pendentes podem ser excluídos");
+        }
+
+        @Test
+        void deveLancarErroQuandoPedidoNaoExisteAoAtualizarStatus() {
+
+                when(pedidoRepository.findById(1L))
+                                .thenReturn(java.util.Optional.empty());
+
+                assertThatThrownBy(() -> pedidoService.atualizarStatusParaConcluido(1L))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining("Pedido não encontrado");
+        }
+
+        @Test
+        void deveLancarErroQuandoPedidoNaoExisteAoExcluir() {
+
+                when(pedidoRepository.findById(1L))
+                                .thenReturn(java.util.Optional.empty());
+
+                assertThatThrownBy(() -> pedidoService.excluir(1L))
+                                .isInstanceOf(RuntimeException.class)
+                                .hasMessageContaining("Pedido não encontrado");
+        }
 }
