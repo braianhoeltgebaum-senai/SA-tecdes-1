@@ -120,6 +120,18 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
+    /**
+     * Marca o pedido como "Em Produção" (status 2).
+     * Chamado pelo PedidoController após o envio bem-sucedido ao CLP.
+     */
+    @Transactional
+    public Pedido atualizarStatusParaEmProducao(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+        pedido.setStatusPedido(2);
+        return pedidoRepository.save(pedido);
+    }
+
     public void atualizarStatusParaConcluido(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
