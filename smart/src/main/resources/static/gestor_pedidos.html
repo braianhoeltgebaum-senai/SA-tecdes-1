@@ -31,11 +31,11 @@
       }
 
       body {
-        font-family: "Inter", Arial, sans-serif;
-        background: radial-gradient(circle at top left, #1e293b 0%, #0f172a 40%),
-          #020617;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        background: #0a0f1a;
         min-height: 100vh;
-        padding: 0 40px 40px 40px;
+        display: flex;
+        flex-direction: column;
         color: white;
       }
 
@@ -50,7 +50,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 0 -40px 35px -40px;
       }
 
       .nav-logo { display: flex; flex-direction: column; }
@@ -61,6 +60,12 @@
       .nav-menu a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
       .nav-menu a:hover, .nav-menu a.active { color: #38bdf8; }
       /* ========================================================================== */
+
+      /* Conteúdo da página — padding fica aqui, não no body, para o nav ocupar
+         sempre a largura total em todas as páginas */
+      .page-content {
+        padding: 40px;
+      }
 
       .layout {
         display: flex;
@@ -379,12 +384,8 @@
       }
 
       @media (max-width: 700px) {
-        body {
-          padding: 0 20px 20px 20px;
-        }
-
-        nav {
-          margin: 0 -20px 25px -20px;
+        .page-content {
+          padding: 20px;
         }
 
         .top-grid,
@@ -415,6 +416,7 @@
       </ul>
     </nav>
 
+    <div class="page-content">
     <div class="layout">
       <!-- PAINEL ESQUERDO: FORMULÁRIO -->
       <div class="painel-form">
@@ -495,6 +497,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
 
     <script>
