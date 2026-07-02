@@ -47,6 +47,15 @@ public class SmartService {
     public static int     posicaoExpedicaoSolicitada = 0;
     public static boolean blockFinished         = false;
 
+    // NOVO: captura a posição de expedição NO MOMENTO em que o Node escreve
+    // o handshake de gravação (DB9:4, campo posicaoGuardarExp). Esse campo
+    // no CLP é transitório — ele é válido apenas durante o handshake de
+    // "adicionarExpedicao" e é zerado pelo CLP logo depois. Guardando aqui
+    // um valor estável, conseguimos comparar corretamente contra
+    // posicaoGuardadoExpedicao (que é persistente) no momento de finishOPExp,
+    // que ocorre bem depois do handshake já ter zerado o campo original.
+    public static int     posicaoExpedicaoConfirmada = 0;
+
     @Autowired private PlcConnectionService plcConnectionService;
     @Autowired private EstoqueRepository    estoqueRepository;
     @Autowired private ExpedicaoRepository  expedicaoRepository;
@@ -86,18 +95,17 @@ public class SmartService {
                 connector.writeBlock(9, 2, 60, buffer);
                 System.out.println("Dados enviados para o CLP: " + config.getIpClp());
 
-                // NOVO: abre o ciclo de rastreamento automático deste pedido.
-                // Sem isso, RastreamentoService nunca considera nenhuma bancada
-                // (incluindo a Expedição) como parte de um pedido "em curso",
-                // e por isso nunca grava Em Produção/Concluído no banco.
-                // Também garante que os status de cada bancada comecem
-                // zerados, para não herdar valores de um ciclo anterior.
+                // Abre o ciclo de rastreamento automático deste pedido e zera
+                // os status de cada bancada, além do valor de posição
+                // confirmada de um ciclo anterior (evita "vazamento" de
+                // estado entre pedidos consecutivos).
                 statusEstoque   = 0;
                 statusProcesso  = 0;
                 statusMontagem  = 0;
                 statusExpedicao = 0;
                 statusProducao  = 0;
                 pedidoEmCurso   = true;
+                posicaoExpedicaoConfirmada = 0; // NOVO: reset por ciclo
 
                 iniciarExecucaoPedido(config.getIpClp(), config.getCorTampa());
             } catch (Exception ex) {
@@ -253,7 +261,6 @@ public class SmartService {
         System.out.println("------------------------------------");
     }
 
-    // CORRIGIDO: import correto (java.lang.reflect.Field) e conversão via getInt segura
     private byte[] converterParaBytes(PedidoInfoDTO dto) {
         Field[] campos = dto.getClass().getDeclaredFields();
         ByteBuffer buffer = ByteBuffer.allocate(campos.length * 2);
@@ -263,7 +270,6 @@ public class SmartService {
                 int valor = campo.getInt(dto);
                 buffer.putShort((short) valor);
             } catch (IllegalAccessException | IllegalArgumentException e) {
-                // Campo não é int (ex.: anotações Lombok) — ignora
                 buffer.putShort((short) 0);
             }
         }
