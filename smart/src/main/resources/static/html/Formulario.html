@@ -432,15 +432,15 @@
 
     <nav>
       <div class="nav-logo">
-          <h1>SMART 4.0 · Planta Digital</h1>
-          <span>SENAI - TIMBÓ-SC</span>
+        <h1>SMART 4.0 · Planta Digital</h1>
+        <span>SENAI - TIMBÓ-SC</span>
       </div>
       <ul class="nav-menu">
-          <li><a href="#">Início</a></li>
-          <li><a href="gestor.html">Gestor De Pedidos</a></li>
-          <li><a href="Dashboard_simples.html" class="active">Dashboard</a></li>
+        <li><a href="#">Início</a></li>
+        <li><a href="gestor.html">Gestor De Pedidos</a></li>
+        <li><a href="Dashboard_simples.html" class="active">Dashboard</a></li>
       </ul>
-  </nav>
+    </nav>
 
     <div class="layout">
       <!-- PAINEL ESQUERDO: FORMULÁRIO -->
@@ -547,26 +547,26 @@
 
         for (let i = 1; i <= qtd; i++) {
           blocosContainer.innerHTML += `
-                <div class="bloco">
-                    <div class="bloco-header">
-                        <h2>Bloco ${i}</h2>
-                    </div>
-                    <div class="bloco-content">
-                        <div class="field">
-                            <label>Cor do Bloco</label>
-                            <select class="corBloco" onchange="atualizarPreview()">
-                                <option value="1">Preto</option>
-                                <option value="2">Vermelho</option>
-                                <option value="3">Azul</option>
-                            </select>
+                    <div class="bloco">
+                        <div class="bloco-header">
+                            <h2>Bloco ${i}</h2>
                         </div>
-                        <div class="laminasContainer"></div>
-                        <button type="button" class="btn btn-add" onclick="adicionarLamina(this)">
-                            + Adicionar Lâmina
-                        </button>
+                        <div class="bloco-content">
+                            <div class="field">
+                                <label>Cor do Bloco</label>
+                                <select class="corBloco" onchange="atualizarPreview()">
+                                    <option value="1">Preto</option>
+                                    <option value="2">Vermelho</option>
+                                    <option value="3">Azul</option>
+                                </select>
+                            </div>
+                            <div class="laminasContainer"></div>
+                            <button type="button" class="btn btn-add" onclick="adicionarLamina(this)">
+                                + Adicionar Lâmina
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
         }
 
         atualizarPreview();
@@ -590,51 +590,51 @@
         container.insertAdjacentHTML(
           "beforeend",
           `
-            <div class="lamina-card" id="lamina-${id}">
-                <div class="lamina-topo">
-                    <span>Lâmina ${total + 1}</span>
-                    <button type="button" class="btn btn-remove" onclick="removerLamina('${id}')">
-                        Remover
-                    </button>
+                <div class="lamina-card" id="lamina-${id}">
+                    <div class="lamina-topo">
+                        <span>Lâmina ${total + 1}</span>
+                        <button type="button" class="btn btn-remove" onclick="removerLamina('${id}')">
+                            Remover
+                        </button>
+                    </div>
+                    <div class="lamina-grid">
+    
+                        <div class="field">
+                            <label>Cor</label>
+                            <select class="corLamina" onchange="atualizarPreview()">
+                                <option value="0">Nenhuma</option>
+                                <option value="1">Vermelho</option>
+                                <option value="2">Azul</option>
+                                <option value="3">Amarelo</option>
+                                <option value="4">Verde</option>
+                                <option value="5">Preto</option>
+                                <option value="6">Branco</option>
+                            </select>
+                        </div>
+    
+                        <div class="field">
+                            <label>Padrão</label>
+                            <select class="padraoLamina" onchange="atualizarPreview()">
+                                <option value="0">Nenhum</option>
+                                <option value="1">Casa</option>
+                                <option value="2">Navio</option>
+                                <option value="3">Estrela</option>
+                            </select>
+                        </div>
+    
+                        <div class="field">
+                            <label>Posição</label>
+                            <select class="posicaoLamina" onchange="atualizarPreview()">
+                                <option value="0">Nenhuma</option>
+                                <option value="1">Esquerda</option>
+                                <option value="2">Frente</option>
+                                <option value="3">Direita</option>
+                            </select>
+                        </div>
+    
+                    </div>
                 </div>
-                <div class="lamina-grid">
-
-                    <div class="field">
-                        <label>Cor</label>
-                        <select class="corLamina" onchange="atualizarPreview()">
-                            <option value="0">Nenhuma</option>
-                            <option value="1">Vermelho</option>
-                            <option value="2">Azul</option>
-                            <option value="3">Amarelo</option>
-                            <option value="4">Verde</option>
-                            <option value="5">Preto</option>
-                            <option value="6">Branco</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label>Padrão</label>
-                        <select class="padraoLamina" onchange="atualizarPreview()">
-                            <option value="0">Nenhum</option>
-                            <option value="1">Casa</option>
-                            <option value="2">Navio</option>
-                            <option value="3">Estrela</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label>Posição</label>
-                        <select class="posicaoLamina" onchange="atualizarPreview()">
-                            <option value="0">Nenhuma</option>
-                            <option value="1">Esquerda</option>
-                            <option value="2">Frente</option>
-                            <option value="3">Direita</option>
-                        </select>
-                    </div>
-
-                </div>
-            </div>
-        `
+            `
         );
 
         atualizarPreview();
@@ -664,14 +664,14 @@
           blocoPreview.className = "bloco-preview";
 
           blocoPreview.innerHTML = `
-                <div class="camada" style="z-index:1; background-image:url('../assets/bloco/rBlocoCor${corBloco}.png');"></div>
-                <div class="camada" id="lamina-esquerda-${index}"></div>
-                <div class="camada" id="lamina-frente-${index}"></div>
-                <div class="camada" id="lamina-direita-${index}"></div>
-                <div class="camada" id="padrao-esquerda-${index}"></div>
-                <div class="camada" id="padrao-frente-${index}"></div>
-                <div class="camada" id="padrao-direita-${index}"></div>
-            `;
+                    <div class="camada" style="z-index:1; background-image:url('../assets/bloco/rBlocoCor${corBloco}.png');"></div>
+                    <div class="camada" id="lamina-esquerda-${index}"></div>
+                    <div class="camada" id="lamina-frente-${index}"></div>
+                    <div class="camada" id="lamina-direita-${index}"></div>
+                    <div class="camada" id="padrao-esquerda-${index}"></div>
+                    <div class="camada" id="padrao-frente-${index}"></div>
+                    <div class="camada" id="padrao-direita-${index}"></div>
+                `;
 
           previewStack.appendChild(blocoPreview);
 
@@ -780,14 +780,17 @@
           });
 
           // --- Lê posicaoExpedicao ---
-          const posicaoExpedicaoEl = document.getElementById("posicaoExpedicao");
+          const posicaoExpedicaoEl =
+            document.getElementById("posicaoExpedicao");
           const posicaoExpedicao = posicaoExpedicaoEl.value
             ? Number(posicaoExpedicaoEl.value)
             : null;
 
           // --- Monta payload do pedido ---
           const pedido = {
-            ordemProducao: document.getElementById("ordemProducao").value.trim(),
+            ordemProducao: document
+              .getElementById("ordemProducao")
+              .value.trim(),
             tipoPedido: Number(tipoPedido.value),
             corTampa: Number(document.getElementById("corTampa").value),
             posicaoExpedicao: posicaoExpedicao,
@@ -818,7 +821,6 @@
               `✔ Pedido #${idSalvo} salvo com sucesso! Acesse o Gestor de Pedidos para enviar à produção.`,
               "sucesso"
             );
-
           } catch (error) {
             console.error(error);
             mostrarStatus("✘ " + error.message, "erro");
