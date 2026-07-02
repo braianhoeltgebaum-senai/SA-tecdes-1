@@ -200,6 +200,23 @@ package com.sa.smart.service;
             removerExpedicao         =  (dadosClp4[42] & 0x02) != 0;
             opGuardadoExpedicao      = ((dadosClp4[44] & 0xFF) << 8) | (dadosClp4[45] & 0xFF);
 
+            // ==================================================================
+            // DIAGNÓSTICO TEMPORÁRIO — remover depois de identificar a causa.
+            // Loga sempre que finishOPExp estiver true (é quando a conclusão
+            // DEVERIA disparar), mostrando exatamente os valores que decidem
+            // se cicloConcluido vira true, e o estado das flags de ciclo.
+            // ==================================================================
+            if (finishOPExp) {
+                System.out.println("[DIAG Expedicao] finishOPExp=true | "
+                        + "posicaoGuardarExp=" + posicaoGuardarExp
+                        + " posicaoGuardadoExpedicao=" + posicaoGuardadoExpedicao
+                        + " (iguais? " + (posicaoGuardarExp == posicaoGuardadoExpedicao) + ")"
+                        + " | ocupadoExp=" + ocupadoExp
+                        + " | opGuardadoExpedicao=" + opGuardadoExpedicao
+                        + " | SmartService.pedidoEmCurso=" + SmartService.pedidoEmCurso
+                        + " | SmartService.statusProducao=" + SmartService.statusProducao);
+            }
+
             // NOVO: repassa para o rastreamento, sem alterar a lógica original abaixo
             rastreamentoService.processarExpedicao(
                     numeroOPExp, startOPExp, finishOPExp,
