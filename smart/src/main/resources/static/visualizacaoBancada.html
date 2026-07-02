@@ -1,442 +1,180 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Acompanhamento · Smart 4.0</title>
     <style>
-      *,
-      *::before,
-      *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-      :root {
-        --bg: #07101f;
-        --surface: #0d1b2e;
-        --border: #172238;
-        --muted: #3a5070;
-        --text: #c8dcf0;
-        --text-dim: #5a7a96;
-        --blue: #38bdf8;
-        --green: #4ade80;
-        --yellow: #facc15;
-        --red: #f87171;
-      }
-
-      body {
-        font-family: "Segoe UI", system-ui, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      nav {
-        background: var(--surface);
-        border-bottom: 1px solid var(--border);
-        padding: 14px 28px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .nav-logo h1 {
-        font-size: 1.1rem;
-        color: var(--blue);
-        font-weight: 700;
-      }
-      .nav-logo span {
-        font-size: 0.72rem;
-        color: var(--text-dim);
-      }
-      .nav-menu {
-        display: flex;
-        gap: 20px;
-        list-style: none;
-      }
-      .nav-menu a {
-        color: var(--text-dim);
-        text-decoration: none;
-        font-size: 0.88rem;
-        transition: color 0.2s;
-      }
-      .nav-menu a:hover,
-      .nav-menu a.active {
-        color: var(--blue);
-      }
-
-      .container {
-        max-width: 1100px;
-        margin: 32px auto;
-        padding: 0 22px;
-        flex: 1;
-      }
-
-      .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 14px;
-        margin-bottom: 28px;
-      }
-      .page-header h2 {
-        font-size: 1.45rem;
-        font-weight: 600;
-        color: var(--text);
-      }
-      .page-header .sub {
-        font-size: 0.78rem;
-        color: var(--text-dim);
-        margin-top: 3px;
-      }
-
-      .pill-pedido {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 40px;
-        padding: 7px 18px;
-      }
-      .pill-pedido .lbl {
-        font-size: 0.72rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--text-dim);
-      }
-      .pill-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--muted);
-        transition: background 0.3s;
-      }
-      .pill-dot.active {
-        background: var(--green);
-        box-shadow: 0 0 6px var(--green);
-      }
-      .pill-val {
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: var(--text);
-      }
-
-      .acoes {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 28px;
-        flex-wrap: wrap;
-      }
-      .btn {
-        border: none;
-        border-radius: 30px;
-        padding: 9px 22px;
-        font-weight: 600;
-        font-size: 0.84rem;
-        cursor: pointer;
-        transition: opacity 0.15s, transform 0.15s;
-        display: flex;
-        align-items: center;
-        gap: 7px;
-      }
-      .btn:hover {
-        opacity: 0.88;
-        transform: translateY(-1px);
-      }
-      .btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none;
-      }
-      .btn-force {
-        background: var(--surface);
-        color: var(--text);
-        border: 1px solid var(--border);
-      }
-
-      /* STEPPER */
-      .stepper {
-        display: grid;
-        grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr;
-        align-items: center;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 28px 32px;
-        margin-bottom: 28px;
-      }
-      .station {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-      }
-      .circle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        border: 2px solid var(--muted);
-        background: var(--bg);
-        transition: all 0.4s ease;
-        position: relative;
-      }
-      .circle.waiting {
-        border-color: var(--muted);
-      }
-      .circle.active {
-        border-color: var(--blue);
-        background: #071e35;
-      }
-      .circle.done {
-        border-color: var(--green);
-        background: #062010;
-      }
-      .circle.active::after {
-        content: "";
-        position: absolute;
-        inset: -6px;
-        border-radius: 50%;
-        border: 2px solid var(--blue);
-        animation: pulse 1.8s ease-out infinite;
-        opacity: 0;
-      }
-      @keyframes pulse {
-        0% {
-          opacity: 0.6;
-          transform: scale(1);
+        :root {
+            --bg:       #0a0f1a;
+            --surface:  #0d1b2e;
+            --border:   #172238;
+            --muted:    #3a5070;
+            --text:     #c8dcf0;
+            --text-dim: #5a7a96;
+            --blue:     #38bdf8;
+            --green:    #4ade80;
+            --yellow:   #facc15;
+            --red:      #f87171;
         }
-        100% {
-          opacity: 0;
-          transform: scale(1.45);
+
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* ==========================================================================
+           NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas do sistema
+           ========================================================================== */
+        nav {
+            width: 100%;
+            background: #111c30;
+            border-bottom: 1px solid #1e293b;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-      }
-      .s-name {
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: var(--text);
-      }
-      .s-badge {
-        font-size: 0.68rem;
-        font-weight: 600;
-        padding: 3px 11px;
-        border-radius: 20px;
-        background: var(--border);
-        color: var(--text-dim);
-        transition: all 0.3s;
-      }
-      .s-badge.active {
-        background: #0b2a42;
-        color: var(--blue);
-      }
-      .s-badge.done {
-        background: #062010;
-        color: var(--green);
-      }
-      .s-op {
-        font-size: 0.7rem;
-        color: var(--text-dim);
-      }
-      .s-op b {
-        color: var(--text);
-      }
-      .connector {
-        height: 2px;
-        background: var(--muted);
-        transition: background 0.4s;
-      }
-      .connector.active {
-        background: var(--blue);
-      }
-      .connector.done {
-        background: var(--green);
-      }
 
-      /* IMAGEM DA BANCADA */
-      .bancada-wrap {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 28px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-      }
-      .bancada-titulo {
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: var(--text-dim);
-        align-self: flex-start;
-      }
-      .bancada-wrap img {
-        width: 100%;
-        max-width: 860px;
-        border-radius: 12px;
-        border: 1px solid var(--border);
-        object-fit: contain;
-      }
+        .nav-logo { display: flex; flex-direction: column; }
+        .nav-logo h1 { font-size: 1.2rem; color: #38bdf8; font-weight: 700; }
+        .nav-logo span { font-size: 0.75rem; color: #64748b; }
 
-      /* DIAGNÓSTICO */
-      .diag-bar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 10px 18px;
-        margin-bottom: 20px;
-        font-size: 0.72rem;
-        color: var(--text-dim);
-      }
-      .diag-bar b {
-        color: var(--text);
-      }
-      .diag-sep {
-        color: var(--muted);
-      }
-      .fonte-badge {
-        padding: 2px 8px;
-        border-radius: 20px;
-        font-size: 0.65rem;
-        font-weight: 700;
-        background: var(--border);
-        color: var(--text-dim);
-      }
-      .fonte-badge.smart {
-        background: #0b2a42;
-        color: var(--blue);
-      }
-      .fonte-badge.bytes {
-        background: #1f1a06;
-        color: var(--yellow);
-      }
-      .fonte-badge.offline {
-        background: #2a0606;
-        color: var(--red);
-      }
+        .nav-menu { display: flex; gap: 20px; list-style: none; }
+        .nav-menu a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .nav-menu a:hover, .nav-menu a.active { color: #38bdf8; }
+        /* ========================================================================== */
 
-      /* RODAPÉ */
-      .footer-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.74rem;
-        color: var(--text-dim);
-        margin-top: 8px;
-      }
-      .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--muted);
-        transition: background 0.3s;
-      }
-      .dot.online {
-        background: var(--green);
-        box-shadow: 0 0 6px var(--green);
-      }
-      .dot.offline {
-        background: var(--red);
-      }
+        .container { max-width: 1100px; margin: 32px auto; padding: 0 22px; flex: 1; }
 
-      @media (max-width: 680px) {
-        .stepper {
-          grid-template-columns: 1fr;
-          gap: 12px;
+        .page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 28px; }
+        .page-header h2 { font-size: 1.45rem; font-weight: 600; color: var(--text); }
+        .page-header .sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 3px; }
+
+        .pill-pedido { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 40px; padding: 7px 18px; }
+        .pill-pedido .lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text-dim); }
+        .pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
+        .pill-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .pill-val { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+
+        .acoes { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+        .btn { border: none; border-radius: 30px; padding: 9px 22px; font-weight: 600; font-size: 0.84rem; cursor: pointer; transition: opacity .15s, transform .15s; display: flex; align-items: center; gap: 7px; }
+        .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-force { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+        /* STEPPER */
+        .stepper { display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px 32px; margin-bottom: 28px; }
+        .station { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .circle { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid var(--muted); background: var(--bg); transition: all 0.4s ease; position: relative; }
+        .circle.waiting { border-color: var(--muted); }
+        .circle.active  { border-color: var(--blue); background: #071e35; }
+        .circle.done    { border-color: var(--green); background: #062010; }
+        .circle.active::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--blue); animation: pulse 1.8s ease-out infinite; opacity: 0; }
+        @keyframes pulse { 0% { opacity: 0.6; transform: scale(1); } 100% { opacity: 0; transform: scale(1.45); } }
+        .s-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+        .s-badge { font-size: 0.68rem; font-weight: 600; padding: 3px 11px; border-radius: 20px; background: var(--border); color: var(--text-dim); transition: all 0.3s; }
+        .s-badge.active { background: #0b2a42; color: var(--blue); }
+        .s-badge.done   { background: #062010; color: var(--green); }
+        .s-op { font-size: 0.7rem; color: var(--text-dim); }
+        .s-op b { color: var(--text); }
+        .connector { height: 2px; background: var(--muted); transition: background 0.4s; }
+        .connector.active { background: var(--blue); }
+        .connector.done   { background: var(--green); }
+
+        /* IMAGEM DA BANCADA */
+        .bancada-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .bancada-titulo { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .6px; color: var(--text-dim); align-self: flex-start; }
+        .bancada-wrap img { width: 100%; max-width: 860px; border-radius: 12px; border: 1px solid var(--border); object-fit: contain; }
+
+        /* DIAGNÓSTICO */
+        .diag-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 18px; margin-bottom: 20px; font-size: 0.72rem; color: var(--text-dim); }
+        .diag-bar b { color: var(--text); }
+        .diag-sep { color: var(--muted); }
+        .fonte-badge { padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; background: var(--border); color: var(--text-dim); }
+        .fonte-badge.smart   { background: #0b2a42; color: var(--blue); }
+        .fonte-badge.bytes   { background: #1f1a06; color: var(--yellow); }
+        .fonte-badge.offline { background: #2a0606; color: var(--red); }
+
+        /* RODAPÉ */
+        .footer-bar { display: flex; align-items: center; gap: 10px; font-size: 0.74rem; color: var(--text-dim); margin-top: 8px; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
+        .dot.online  { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .dot.offline { background: var(--red); }
+
+        @media (max-width: 680px) {
+            .stepper { grid-template-columns: 1fr; gap: 12px; }
+            .connector { width: 2px; height: 28px; margin: 0 auto; }
         }
-        .connector {
-          width: 2px;
-          height: 28px;
-          margin: 0 auto;
-        }
-      }
     </style>
-  </head>
-  <body>
-    <nav>
-      <div class="nav-logo">
-        <h1>SMART 4.0 · Planta Digital</h1>
-        <span>SENAI – Timbó-SC</span>
-      </div>
-      <ul class="nav-menu">
-        <li><a href="#">Início</a></li>
-        <li><a href="#">Início</a></li>
-        <li><a href="Formulario.html">Criar Pedido</a></li>
-        <li><a href="gestor.html">Gestor de Pedidos</a></li>
-        <li><a href="Dashboard_simples.html">Dashboard</a></li>
-        <li><a href="acompanhamento.html" class="active">Acompanhamento</a></li>
-      </ul>
-    </nav>
+</head>
+<body>
 
-    <div class="container">
-      <div class="page-header">
+<nav>
+    <div class="nav-logo">
+        <h1>SMART 4.0 · Planta Digital</h1>
+        <span>SENAI · Timbó-SC</span>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="Inicio.html">Início</a></li>
+        <li><a href="visualizacaoBancada.html" class="active">Acompanhamento</a></li>
+        <li><a href="gestor_pedidos.html">Gestor de Pedidos</a></li>
+        <li><a href="gestor.html">Gestor de Produção</a></li>
+        <li><a href="Dashboard_simples.html">Dashboard</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+
+    <div class="page-header">
         <div>
-          <h2>Acompanhamento do Pedido</h2>
-          <div class="sub">
-            Atualização a cada 1,5 s via polling · CLPs S7 (ISO-TCP porta 102)
-          </div>
+            <h2>Acompanhamento do Pedido</h2>
+            <div class="sub">Atualização a cada 1,5 s via polling · CLPs S7 (ISO-TCP porta 102)</div>
         </div>
         <div class="pill-pedido">
-          <span class="pill-dot" id="pillDot"></span>
-          <span class="lbl">Pedido em curso</span>
-          <span class="pill-val" id="pillVal">—</span>
+            <span class="pill-dot" id="pillDot"></span>
+            <span class="lbl">Pedido em curso</span>
+            <span class="pill-val" id="pillVal">—</span>
         </div>
-      </div>
+    </div>
 
-      <div class="acoes">
+    <div class="acoes">
         <button class="btn btn-force" id="btnForce">↺ Atualizar agora</button>
-      </div>
+    </div>
 
-      <!-- STEPPER -->
-      <div class="stepper">
+    <!-- STEPPER -->
+    <div class="stepper">
         <div class="station">
-          <div class="circle waiting" id="ci-estoque">📦</div>
-          <span class="s-name">Estoque</span>
-          <span class="s-badge" id="ba-estoque">Aguardando</span>
-          <span class="s-op">OP: <b id="op-estoque">—</b></span>
+            <div class="circle waiting" id="ci-estoque">📦</div>
+            <span class="s-name">Estoque</span>
+            <span class="s-badge" id="ba-estoque">Aguardando</span>
+            <span class="s-op">OP: <b id="op-estoque">—</b></span>
         </div>
         <div class="connector" id="conn-1"></div>
         <div class="station">
-          <div class="circle waiting" id="ci-processo">⚙️</div>
-          <span class="s-name">Processo</span>
-          <span class="s-badge" id="ba-processo">Aguardando</span>
-          <span class="s-op">OP: <b id="op-processo">—</b></span>
+            <div class="circle waiting" id="ci-processo">⚙️</div>
+            <span class="s-name">Processo</span>
+            <span class="s-badge" id="ba-processo">Aguardando</span>
+            <span class="s-op">OP: <b id="op-processo">—</b></span>
         </div>
         <div class="connector" id="conn-2"></div>
         <div class="station">
-          <div class="circle waiting" id="ci-montagem">🔧</div>
-          <span class="s-name">Montagem</span>
-          <span class="s-badge" id="ba-montagem">Aguardando</span>
-          <span class="s-op">OP: <b id="op-montagem">—</b></span>
+            <div class="circle waiting" id="ci-montagem">🔧</div>
+            <span class="s-name">Montagem</span>
+            <span class="s-badge" id="ba-montagem">Aguardando</span>
+            <span class="s-op">OP: <b id="op-montagem">—</b></span>
         </div>
         <div class="connector" id="conn-3"></div>
         <div class="station">
-          <div class="circle waiting" id="ci-expedicao">🚚</div>
-          <span class="s-name">Expedição</span>
-          <span class="s-badge" id="ba-expedicao">Aguardando</span>
-          <span class="s-op">OP: <b id="op-expedicao">—</b></span>
+            <div class="circle waiting" id="ci-expedicao">🚚</div>
+            <span class="s-name">Expedição</span>
+            <span class="s-badge" id="ba-expedicao">Aguardando</span>
+            <span class="s-op">OP: <b id="op-expedicao">—</b></span>
         </div>
-      </div>
+    </div>
 
-      <!-- BARRA DE DIAGNÓSTICO -->
-      <div class="diag-bar" id="diagBar">
-        <span
-          >Fonte:
-          <span class="fonte-badge offline" id="diagFonte">—</span></span
-        >
+    <!-- BARRA DE DIAGNÓSTICO -->
+    <div class="diag-bar" id="diagBar">
+        <span>Fonte: <span class="fonte-badge offline" id="diagFonte">—</span></span>
         <span class="diag-sep">·</span>
         <span>CLP1: <b id="diagClp1">— B</b></span>
         <span class="diag-sep">·</span>
@@ -447,178 +185,148 @@
         <span>CLP4: <b id="diagClp4">— B</b></span>
         <span class="diag-sep">·</span>
         <span>Status raw: <b id="diagRaw">—</b></span>
-      </div>
+    </div>
 
-      <!-- IMAGEM DA BANCADA -->
-      <div class="bancada-wrap">
+    <!-- IMAGEM DA BANCADA -->
+    <div class="bancada-wrap">
         <span class="bancada-titulo">Bancada Smart 4.0</span>
-        <img src="../assets/bancada/Smart40.png" alt="Bancada Smart 4.0" />
-      </div>
+        <img src="assets/bancada/Smart40.png" alt="Bancada Smart 4.0" />
+    </div>
 
-      <div class="footer-bar">
+    <div class="footer-bar">
         <span class="dot offline" id="dotStatus"></span>
         <span id="txtStatus">Polling parado</span>
         <span>·</span>
         <span>IPs: 10.74.241.10 / .20 / .30 / .40</span>
-      </div>
     </div>
 
-    <script>
-      const API_BASE = "http://localhost:8088";
-      const POLL_MS = 1500;
+</div>
 
-      const CLP_IPS = {
-        estoque: "10.74.241.10",
-        processo: "10.74.241.20",
-        montagem: "10.74.241.30",
-        expedicao: "10.74.241.40",
-      };
+<script>
+const API_BASE = 'http://localhost:8088';
+const POLL_MS  = 1500;
 
-      const STATUS_MAP = {
-        0: { label: "Aguardando", cls: "" },
-        1: { label: "Em andamento", cls: "active" },
-        2: { label: "Concluído", cls: "done" },
-      };
+const CLP_IPS = {
+    estoque:   '10.74.241.10',
+    processo:  '10.74.241.20',
+    montagem:  '10.74.241.30',
+    expedicao: '10.74.241.40'
+};
 
-      function applyStation(name, status, op) {
-        const s = STATUS_MAP[status] ?? STATUS_MAP[0];
-        document.getElementById("ci-" + name).className =
-          "circle " + (s.cls || "waiting");
-        const ba = document.getElementById("ba-" + name);
-        ba.className = "s-badge " + s.cls;
-        ba.textContent = s.label;
-        const opEl = document.getElementById("op-" + name);
-        if (opEl) opEl.textContent = op && op > 0 ? op : "—";
-      }
+const STATUS_MAP = {
+    0: { label: 'Aguardando', cls: '' },
+    1: { label: 'Em andamento', cls: 'active' },
+    2: { label: 'Concluído',    cls: 'done' }
+};
 
-      function applyConnector(id, st) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.className =
-          "connector" + (st === 2 ? " done" : st === 1 ? " active" : "");
-      }
+function applyStation(name, status, op) {
+    const s = STATUS_MAP[status] ?? STATUS_MAP[0];
+    document.getElementById('ci-' + name).className = 'circle ' + (s.cls || 'waiting');
+    const ba = document.getElementById('ba-' + name);
+    ba.className   = 's-badge ' + s.cls;
+    ba.textContent = s.label;
+    const opEl = document.getElementById('op-' + name);
+    if (opEl) opEl.textContent = (op && op > 0) ? op : '—';
+}
 
-      function atualizarDiagnostico(data) {
-        // Buffers
-        const buf = data._buffers ?? {};
-        document.getElementById("diagClp1").textContent =
-          (buf.clp1 ?? "—") + " B";
-        document.getElementById("diagClp2").textContent =
-          (buf.clp2 ?? "—") + " B";
-        document.getElementById("diagClp3").textContent =
-          (buf.clp3 ?? "—") + " B";
-        document.getElementById("diagClp4").textContent =
-          (buf.clp4 ?? "—") + " B";
+function applyConnector(id, st) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'connector' + (st === 2 ? ' done' : st === 1 ? ' active' : '');
+}
 
-        // Fonte
-        const fonte = data._fonte ?? "—";
-        const badge = document.getElementById("diagFonte");
-        badge.textContent = fonte;
-        badge.className =
-          "fonte-badge" +
-          (fonte === "SmartService"
-            ? " smart"
-            : fonte === "bytes-crus"
-            ? " bytes"
-            : " offline");
+function atualizarDiagnostico(data) {
+    // Buffers
+    const buf = data._buffers ?? {};
+    document.getElementById('diagClp1').textContent = (buf.clp1 ?? '—') + ' B';
+    document.getElementById('diagClp2').textContent = (buf.clp2 ?? '—') + ' B';
+    document.getElementById('diagClp3').textContent = (buf.clp3 ?? '—') + ' B';
+    document.getElementById('diagClp4').textContent = (buf.clp4 ?? '—') + ' B';
 
-        // Status numérico raw para debug
-        const sE = data.estoque?.statusEstoque ?? "?";
-        const sP = data.processo?.status ?? data.estoque?.statusProcesso ?? "?";
-        const sM = data.montagem?.status ?? data.estoque?.statusMontagem ?? "?";
-        const sX =
-          data.expedicao?.status ?? data.estoque?.statusExpedicao ?? "?";
-        document.getElementById(
-          "diagRaw"
-        ).textContent = `E:${sE} P:${sP} M:${sM} X:${sX}`;
-      }
+    // Fonte
+    const fonte = data._fonte ?? '—';
+    const badge = document.getElementById('diagFonte');
+    badge.textContent = fonte;
+    badge.className = 'fonte-badge' + (fonte === 'SmartService' ? ' smart' : fonte === 'bytes-crus' ? ' bytes' : ' offline');
 
-      async function fetchStatus() {
-        try {
-          const r = await fetch(API_BASE + "/status", {
-            signal: AbortSignal.timeout(2000),
-          });
-          if (!r.ok) return;
+    // Status numérico raw para debug
+    const sE = data.estoque?.statusEstoque  ?? '?';
+    const sP = data.processo?.status        ?? data.estoque?.statusProcesso ?? '?';
+    const sM = data.montagem?.status        ?? data.estoque?.statusMontagem ?? '?';
+    const sX = data.expedicao?.status       ?? data.estoque?.statusExpedicao ?? '?';
+    document.getElementById('diagRaw').textContent = `E:${sE} P:${sP} M:${sM} X:${sX}`;
+}
 
-          const data = await r.json();
+async function fetchStatus() {
+    try {
+        const r = await fetch(API_BASE + '/status', { signal: AbortSignal.timeout(2000) });
+        if (!r.ok) return;
 
-          const sE = data.estoque?.statusEstoque ?? 0;
-          const sP = data.processo?.status ?? data.estoque?.statusProcesso ?? 0;
-          const sM = data.montagem?.status ?? data.estoque?.statusMontagem ?? 0;
-          const sX =
-            data.expedicao?.status ?? data.estoque?.statusExpedicao ?? 0;
-          const emCurso = data.estoque?.pedidoEmCurso ?? false;
+        const data = await r.json();
 
-          applyStation("estoque", sE, data.estoque?.op);
-          applyStation("processo", sP, data.processo?.op);
-          applyStation("montagem", sM, data.montagem?.op);
-          applyStation("expedicao", sX, data.expedicao?.op);
+        const sE = data.estoque?.statusEstoque   ?? 0;
+        const sP = data.processo?.status  ?? data.estoque?.statusProcesso  ?? 0;
+        const sM = data.montagem?.status  ?? data.estoque?.statusMontagem  ?? 0;
+        const sX = data.expedicao?.status ?? data.estoque?.statusExpedicao ?? 0;
+        const emCurso = data.estoque?.pedidoEmCurso ?? false;
 
-          applyConnector("conn-1", sE);
-          applyConnector("conn-2", sP);
-          applyConnector("conn-3", sM);
+        applyStation('estoque',   sE, data.estoque?.op);
+        applyStation('processo',  sP, data.processo?.op);
+        applyStation('montagem',  sM, data.montagem?.op);
+        applyStation('expedicao', sX, data.expedicao?.op);
 
-          document.getElementById("pillDot").className =
-            "pill-dot" + (emCurso ? " active" : "");
-          document.getElementById("pillVal").textContent = emCurso
-            ? "Em curso"
-            : "Parado";
+        applyConnector('conn-1', sE);
+        applyConnector('conn-2', sP);
+        applyConnector('conn-3', sM);
 
-          atualizarDiagnostico(data);
-        } catch (e) {
-          // backend offline — mantém último estado
-        }
-      }
+        document.getElementById('pillDot').className = 'pill-dot' + (emCurso ? ' active' : '');
+        document.getElementById('pillVal').textContent = emCurso ? 'Em curso' : 'Parado';
 
-      let timer = null;
+        atualizarDiagnostico(data);
 
-      function setStatusBar(online, txt) {
-        document.getElementById("dotStatus").className =
-          "dot " + (online ? "online" : "offline");
-        document.getElementById("txtStatus").textContent = txt;
-      }
+    } catch (e) {
+        // backend offline — mantém último estado
+    }
+}
 
-      async function iniciar() {
-        if (timer) {
-          clearInterval(timer);
-          timer = null;
-        }
-        try {
-          await fetch(API_BASE + "/start-readings", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(CLP_IPS),
-          });
-        } catch (e) {
-          console.warn("[Smart] /start-readings indisponível:", e.message);
-        }
-        fetchStatus();
-        timer = setInterval(fetchStatus, POLL_MS);
-        setStatusBar(true, "Polling ativo — atualização a cada 1,5 s");
-        document.getElementById("btnStart").textContent = "▶ Reiniciar";
-      }
+let timer = null;
 
-      function parar() {
-        if (timer) {
-          clearInterval(timer);
-          timer = null;
-        }
-        fetch(API_BASE + "/stop-readings", { method: "POST" }).catch(() => {});
-        setStatusBar(false, "Polling parado");
-        document.getElementById("btnStart").textContent = "▶ Iniciar";
-      }
+function setStatusBar(online, txt) {
+    document.getElementById('dotStatus').className = 'dot ' + (online ? 'online' : 'offline');
+    document.getElementById('txtStatus').textContent = txt;
+}
 
-      document
-        .getElementById("btnForce")
-        .addEventListener("click", async function () {
-          this.disabled = true;
-          this.textContent = "↺ Atualizando…";
-          await fetchStatus();
-          this.disabled = false;
-          this.textContent = "↺ Atualizar agora";
+async function iniciar() {
+    if (timer) { clearInterval(timer); timer = null; }
+    try {
+        await fetch(API_BASE + '/start-readings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(CLP_IPS)
         });
+    } catch (e) {
+        console.warn('[Smart] /start-readings indisponível:', e.message);
+    }
+    fetchStatus();
+    timer = setInterval(fetchStatus, POLL_MS);
+    setStatusBar(true, 'Polling ativo — atualização a cada 1,5 s');
+}
 
-      iniciar();
-    </script>
-  </body>
+function parar() {
+    if (timer) { clearInterval(timer); timer = null; }
+    fetch(API_BASE + '/stop-readings', { method: 'POST' }).catch(() => {});
+    setStatusBar(false, 'Polling parado');
+}
+
+document.getElementById('btnForce').addEventListener('click', async function () {
+    this.disabled = true;
+    this.textContent = '↺ Atualizando…';
+    await fetchStatus();
+    this.disabled = false;
+    this.textContent = '↺ Atualizar agora';
+});
+
+iniciar();
+</script>
+</body>
 </html>
