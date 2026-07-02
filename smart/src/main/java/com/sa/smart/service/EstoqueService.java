@@ -22,15 +22,18 @@ public class EstoqueService {
     private final EstoqueRepository repository;
     private final PlcConnectionService plcConnectionService;
     private final ApiIntegrationService apiIntegrationService;
+    private final RastreamentoService rastreamentoService; // NOVO
 
     public EstoqueService(
             EstoqueRepository repository,
             PlcConnectionService plcConnectionService,
-            ApiIntegrationService apiIntegrationService) {
+            ApiIntegrationService apiIntegrationService,
+            RastreamentoService rastreamentoService) { // NOVO
 
         this.repository = repository;
         this.plcConnectionService = plcConnectionService;
         this.apiIntegrationService = apiIntegrationService;
+        this.rastreamentoService = rastreamentoService; // NOVO
     }
 
     // ─── Campos de estado lidos do CLP ────────────────────────────────────────
@@ -175,6 +178,9 @@ public class EstoqueService {
         removerEstoque      =  (dadosClp1[106] & 0x02) != 0;
         retornoEstoqueCheio =  (dadosClp1[106] & 0x04) != 0;
         corGuardarEstoque   = ((dadosClp1[108] & 0xFF) << 8) | (dadosClp1[109] & 0xFF);
+
+        // NOVO: repassa para o rastreamento, sem alterar a lógica original abaixo
+        rastreamentoService.processarEstoque(dadosClp1, numeroOPEst, startOPEst, finishOPEst);
 
         // Se iniciarPedido == true e a estação ficou OCUPADA, reseta a flag
         if (iniciarPedido && ocupadoEst) {

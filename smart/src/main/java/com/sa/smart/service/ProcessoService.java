@@ -38,6 +38,7 @@ public class ProcessoService {
 
 
     @Autowired private PlcConnectionService plcConnectionService;
+    @Autowired private RastreamentoService rastreamentoService; // NOVO
 
     public void processData(String ip, byte[] dadosClp2) {
         // lógica que hoje está no método clpProcesso(...)
@@ -67,6 +68,9 @@ public class ProcessoService {
         aguardandoPro = (dadosClp2[6] & 0x02) != 0;
         manualPro = (dadosClp2[6] & 0x04) != 0;
         emergenciaPro = (dadosClp2[6] & 0x08) != 0;
+
+        // NOVO: repassa para o rastreamento, sem alterar a lógica original abaixo
+        rastreamentoService.processarProcesso(numeroOPPro, startOPPro, finishOPPro);
 
         // System.out.println("StatusEstoque: " + statusEstoque + "\n"
         //         + "StatusProcesso: " + statusProcesso + "\n"

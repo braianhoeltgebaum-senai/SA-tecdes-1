@@ -31,7 +31,13 @@ public class SmartService {
     // ─── Variáveis globais de estado da produção ──────────────────────────────
     public static boolean readOnly              = false;
     public static boolean aux_expedicao         = false;
+
+    // pedidoEmCurso é a flag que "abre" o ciclo de rastreamento automático.
+    // Enquanto ela for false, RastreamentoService NUNCA vai gravar mudanças
+    // de status no banco (Em Produção / Concluído) — é o guard usado por
+    // todas as bancadas (Estoque, Processo, Montagem, Expedição).
     public static boolean pedidoEmCurso         = false;
+
     public static byte    statusProducao        = 0;
     public static byte    statusEstoque         = 0;
     public static byte    statusProcesso        = 0;
@@ -79,6 +85,20 @@ public class SmartService {
             try {
                 connector.writeBlock(9, 2, 60, buffer);
                 System.out.println("Dados enviados para o CLP: " + config.getIpClp());
+
+                // NOVO: abre o ciclo de rastreamento automático deste pedido.
+                // Sem isso, RastreamentoService nunca considera nenhuma bancada
+                // (incluindo a Expedição) como parte de um pedido "em curso",
+                // e por isso nunca grava Em Produção/Concluído no banco.
+                // Também garante que os status de cada bancada comecem
+                // zerados, para não herdar valores de um ciclo anterior.
+                statusEstoque   = 0;
+                statusProcesso  = 0;
+                statusMontagem  = 0;
+                statusExpedicao = 0;
+                statusProducao  = 0;
+                pedidoEmCurso   = true;
+
                 iniciarExecucaoPedido(config.getIpClp(), config.getCorTampa());
             } catch (Exception ex) {
                 System.err.println("Erro ao enviar dados para o CLP: " + ex.getMessage());

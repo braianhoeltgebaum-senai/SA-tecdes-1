@@ -1,4 +1,4 @@
-    package com.sa.smart.service;
+package com.sa.smart.service;
 
     import java.util.HashMap;
     import java.util.List;
@@ -55,19 +55,22 @@
         // CORRIGIDO: declarados e injetados — estavam sendo usados em processData mas nunca existiam
         private final PlcConnectionService plcConnectionService;
         private final ApiIntegrationService apiIntegrationService;
+        private final RastreamentoService  rastreamentoService; // NOVO
 
         public ExpedicaoService(
                 ExpedicaoRepository  expedicaoRepository,
                 PedidoRepository     pedidoRepository,
                 EntityManager        entityManager,
                 PlcConnectionService plcConnectionService,
-                ApiIntegrationService apiIntegrationService) {
+                ApiIntegrationService apiIntegrationService,
+                RastreamentoService  rastreamentoService) { // NOVO
 
             this.expedicaoRepository  = expedicaoRepository;
             this.pedidoRepository     = pedidoRepository;
             this.entityManager        = entityManager;
             this.plcConnectionService = plcConnectionService;
             this.apiIntegrationService = apiIntegrationService;
+            this.rastreamentoService  = rastreamentoService; // NOVO
         }
 
         // ─── CRUD ─────────────────────────────────────────────────────────────────
@@ -196,6 +199,12 @@
             adicionarExpedicao       =  (dadosClp4[42] & 0x01) != 0;
             removerExpedicao         =  (dadosClp4[42] & 0x02) != 0;
             opGuardadoExpedicao      = ((dadosClp4[44] & 0xFF) << 8) | (dadosClp4[45] & 0xFF);
+
+            // NOVO: repassa para o rastreamento, sem alterar a lógica original abaixo
+            rastreamentoService.processarExpedicao(
+                    numeroOPExp, startOPExp, finishOPExp,
+                    posicaoGuardarExp, ocupadoExp,
+                    posicaoGuardadoExpedicao, opGuardadoExpedicao);
 
             // StartOP/FinishOP/CancelOP todos FALSE → RecebidoOPExp = FALSE
             if (!startOPExp && !finishOPExp && !cancelOPExp) {

@@ -34,6 +34,9 @@ public class MontagemService {
     @Autowired
     private PlcConnectionService plcConnectionService;
 
+    @Autowired
+    private RastreamentoService rastreamentoService; // NOVO
+
     public void processData(String ip, byte[] dadosClp3) {
         // lógica que hoje está no método clpMontagem(...)
 
@@ -61,6 +64,9 @@ public class MontagemService {
         aguardandoMon = (dadosClp3[6] & 0x02) != 0;
         manualMon = (dadosClp3[6] & 0x04) != 0;
         emergenciaMon = (dadosClp3[6] & 0x08) != 0;
+
+        // NOVO: repassa para o rastreamento, sem alterar a lógica original abaixo
+        rastreamentoService.processarMontagem(numeroOPMon, startOPMon, finishOPMon);
 
         // System.out.println("StatusEstoque: " + statusEstoque + "\n"
         //         + "StatusProcesso: " + statusProcesso + "\n"
