@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART 4.0 · Planta Digital</title>
+<style>
+  :root{
+    --bg-0:#0a0f1c;
+    --bg-1:#0d1526;
+    --bg-2:#111b30;
+    --card:#131d34;
+    --card-hover:#17233f;
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.14);
+    --text-0:#f3f6fb;
+    --text-1:#aab4c6;
+    --text-2:#727f96;
+    --cyan:#22d3ee;
+    --blue:#3b82f6;
+    --green:#22c55e;
+    --amber:#eab308;
+    --red:#ef4444;
+    --grad: linear-gradient(90deg, var(--cyan), var(--blue));
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:
+      radial-gradient(1100px 550px at 82% -10%, rgba(59,130,246,0.16), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(34,211,238,0.10), transparent 55%),
+      var(--bg-0);
+    color: var(--text-0);
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ text-decoration:none; color:inherit; }
+
+  /* ---------- HEADER ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 48px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    background:rgba(10,15,28,0.78);
+    backdrop-filter: blur(10px);
+    z-index:50;
+  }
+  .brand-block{ display:flex; flex-direction:column; gap:2px; }
+  .brand{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-0.01em;
+  }
+  .brand .dot{ color: var(--text-2); font-weight:600; margin:0 6px; }
+  .brand .grad{
+    background:var(--grad);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .brand-sub{
+    font-size:12px;
+    color:var(--text-2);
+    letter-spacing:.06em;
+  }
+
+  nav{ display:flex; align-items:center; gap:36px; }
+  nav a{
+    font-size:14px;
+    color:var(--text-1);
+    font-weight:500;
+    position:relative;
+    padding:6px 0;
+    transition:color .15s ease;
+  }
+  nav a:hover{ color:var(--text-0); }
+  nav a.active{ color:var(--text-0); }
+  nav a.active::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-4px;
+    height:2px;
+    background:var(--grad);
+    border-radius:2px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:1280px;
+    margin:0 auto;
+    padding:88px 48px 56px;
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    background:rgba(34,211,238,0.08);
+    border:1px solid rgba(34,211,238,0.25);
+    padding:6px 14px;
+    border-radius:100px;
+    margin-bottom:22px;
+  }
+  .eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 0 0 rgba(34,197,94,.6);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(34,197,94,.55); }
+    70%{ box-shadow:0 0 0 8px rgba(34,197,94,0); }
+    100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
+  }
+
+  .hero h1{
+    font-size:46px;
+    line-height:1.12;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    margin:0 0 20px;
+  }
+  .hero h1 .grad{
+    background:var(--grad);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p{
+    font-size:16.5px;
+    line-height:1.65;
+    color:var(--text-1);
+    max-width:520px;
+    margin:0 0 34px;
+  }
+
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 26px;
+    border-radius:12px;
+    font-size:14.5px;
+    font-weight:700;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .15s ease, filter .15s ease, background .15s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{
+    background:var(--grad);
+    color:#04121c;
+  }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--border-strong);
+    color:var(--text-0);
+  }
+  .btn-ghost:hover{ background:rgba(255,255,255,0.04); }
+
+  /* ---------- HERO VISUAL (signature element: live plant pulse) ---------- */
+  .hero-visual{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-visual::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px) 0 0/100% 22px,
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px) 0 0/22px 100%;
+    opacity:.5;
+    pointer-events:none;
+  }
+  .visual-head{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:18px; position:relative;
+  }
+  .visual-title{ font-size:13px; font-weight:700; color:var(--text-1); letter-spacing:.03em; }
+  .live-tag{
+    display:flex; align-items:center; gap:6px;
+    font-size:11px; font-weight:700; color:var(--green);
+    background:rgba(34,197,94,0.1);
+    border:1px solid rgba(34,197,94,0.3);
+    padding:4px 10px; border-radius:100px;
+  }
+  .live-tag .pulse{ width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+
+  .mini-stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    position:relative;
+    margin-bottom:14px;
+  }
+  .mini-stat{
+    background:var(--bg-1);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px 16px;
+  }
+  .mini-stat .num{ font-size:22px; font-weight:800; }
+  .mini-stat .lbl{ font-size:11.5px; color:var(--text-2); margin-top:2px; }
+  .mini-stat.c-blue .num{ color:var(--cyan); }
+  .mini-stat.c-amber .num{ color:var(--amber); }
+  .mini-stat.c-green .num{ color:var(--green); }
+  .mini-stat.c-slate .num{ color:var(--text-0); }
+
+  .grid-bar{
+    position:relative;
+    background:var(--bg-1);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px 16px;
+  }
+  .grid-bar-head{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--text-2); margin-bottom:10px; }
+  .cells{ display:grid; grid-template-columns:repeat(14,1fr); gap:4px; }
+  .cell{ aspect-ratio:1; border-radius:3px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.05); }
+  .cell.p{ background:rgba(239,68,68,0.55); border-color:rgba(239,68,68,0.7); }
+  .cell.b{ background:rgba(59,130,246,0.55); border-color:rgba(59,130,246,0.7); }
+  .cell.o{ background:rgba(34,197,94,0.5); border-color:rgba(34,197,94,0.7); }
+
+  /* ---------- MODULES ---------- */
+  .section{
+    max-width:1280px;
+    margin:0 auto;
+    padding:20px 48px 80px;
+  }
+  .section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .section-head h2{
+    font-size:22px;
+    font-weight:800;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{
+    font-size:13.5px;
+    color:var(--text-2);
+    margin:4px 0 0;
+  }
+
+  .modules{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+  }
+  .module-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:26px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    transition:border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  .module-card:hover{
+    border-color:var(--border-strong);
+    background:var(--card-hover);
+    transform:translateY(-3px);
+  }
+  .icon-wrap{
+    width:44px; height:44px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--border);
+  }
+  .icon-wrap svg{ width:22px; height:22px; }
+  .module-card h3{ font-size:16.5px; font-weight:700; margin:0; }
+  .module-card p{ font-size:13.5px; line-height:1.55; color:var(--text-1); margin:0; flex:1; }
+  .module-link{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; font-weight:700;
+    color:var(--cyan);
+  }
+  .module-link svg{ width:14px; height:14px; transition:transform .15s ease; }
+  .module-card:hover .module-link svg{ transform:translateX(3px); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--border);
+    padding:26px 48px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--text-2);
+    font-size:12.5px;
+  }
+
+  @media (max-width:980px){
+    header{ padding:18px 22px; }
+    nav{ gap:20px; }
+    .hero{ grid-template-columns:1fr; padding:56px 22px 32px; }
+    .hero h1{ font-size:34px; }
+    .section{ padding:10px 22px 56px; }
+    .modules{ grid-template-columns:1fr; }
+    footer{ padding:20px 22px; flex-direction:column; gap:8px; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-block">
+      <div class="brand">SMART 4.0 <span class="dot">·</span><span class="grad">Planta Digital</span></div>
+      <div class="brand-sub">SENAI &middot; TIMBÓ-SC</div>
+    </div>
+    <nav>
+      <a href="Inicio.html" class="active">Início</a>
+      <a href="Formulario.html">Criar Pedido</a>
+      <a href="gestor.html">Gestor De Pedidos</a>
+      <a href="visualizacaoBancada.html">Monitoramento</a>
+      <a href="Dashboard_simples.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow"><span class="pulse"></span> Linha conectada em tempo real</div>
+      <h1>A planta inteira,<br><span class="grad">visível em uma tela.</span></h1>
+      <p>O SMART 4.0 acompanha cada ordem de produção do pedido até a expedição, integrando estoque, montagem e status da linha em tempo real</p>
+      <div class="hero-actions">
+        <a href="Formulario.html" class="btn btn-primary">
+          Criar novo pedido
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="visualizacaoBancada.html" class="btn btn-ghost">Ver monitoramento</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="visual-head">
+        <span class="visual-title">ESTOQUE &amp; EXPEDIÇÃO</span>
+        <span class="live-tag"><span class="pulse"></span>AO VIVO</span>
+      </div>
+
+      <div class="mini-stats">
+        <div class="mini-stat c-slate"><div class="num">02</div><div class="lbl">Total de pedidos</div></div>
+        <div class="mini-stat c-amber"><div class="num">02</div><div class="lbl">Pendentes</div></div>
+        <div class="mini-stat c-blue"><div class="num">02</div><div class="lbl">Em produção</div></div>
+        <div class="mini-stat c-green"><div class="num">02</div><div class="lbl">Concluídos</div></div>
+      </div>
+
+      <div class="grid-bar" style="margin-bottom:10px;">
+        <div class="grid-bar-head"><span>ESTOQUE DE BLOCOS</span><span>0/28</span></div>
+        <div class="cells">
+          <div class="cell"></div><div class="cell"></div><div class="cell b"></div><div class="cell"></div>
+          <div class="cell p"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell b"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell p"></div>
+        </div>
+      </div>
+
+      <div class="grid-bar">
+        <div class="grid-bar-head"><span>EXPEDIÇÃO</span><span>0/12</span></div>
+        <div class="cells">
+          <div class="cell"></div><div class="cell o"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell o"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Módulos do sistema</h2>
+        <p>Acesse rapidamente cada etapa do processo produtivo.</p>
+      </div>
+    </div>
+
+    <div class="modules">
+      <a href="Formulario.html" class="module-card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <h3>Criar Pedido</h3>
+        <p>Monte a ordem de produção informando tipo, cor da tampa, blocos e lâminas antes de enviar para a linha.</p>
+        <span class="module-link">Abrir formulário
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
+      <a href="gestor.html" class="module-card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        </div>
+        <h3>Gestor de Pedidos</h3>
+        <p>Acompanhe todas as ordens registradas, edite dados de produção e controle o andamento de cada pedido.</p>
+        <span class="module-link">Abrir gestor
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
+      <a href="visualizacaoBancada.html" class="module-card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+        </div>
+        <h3>Monitoramento</h3>
+        <p>Veja em tempo real a ocupação do estoque de blocos e da expedição, com dados atualizados via API.</p>
+        <span class="module-link">Abrir monitoramento
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span>SMART 4.0 · Planta Digital</span>
+    <span>SENAI &middot; TIMBÓ-SC</span>
+  </footer>
+
+</body>
+</html>

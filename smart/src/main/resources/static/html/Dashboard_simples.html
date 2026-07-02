@@ -188,28 +188,6 @@
             font-weight: 500;
         }
 
-        .panel-header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-add-estoque {
-            background: #1e3a6b;
-            border: 1px solid #3b82f6;
-            color: #bfdbfe;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-add-estoque:hover {
-            background: #2c4f8f;
-        }
-
         .badge-pos {
             background: #1e293b;
             padding: 4px 12px;
@@ -241,12 +219,11 @@
             font-weight: 500;
             border: 1px solid #283548;
             transition: transform 0.15s, box-shadow 0.15s;
-            cursor: pointer;
+            cursor: default;
         }
 
         .stock-cell:hover {
             transform: scale(1.04);
-            box-shadow: 0 0 0 2px #38bdf8;
         }
 
         .stock-cell.vazio {
@@ -387,120 +364,6 @@
             color: #f9acac;
         }
 
-        .success-msg {
-            background: #10281f;
-            border: 1px solid #22c55e;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            font-size: 0.8rem;
-            color: #86efac;
-        }
-
-        /* --- MODAL DE EDIÇÃO DE ESTOQUE --- */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 500;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-overlay.open {
-            display: flex;
-        }
-
-        .modal-box {
-            background: #111c30;
-            border: 1px solid #1e293b;
-            border-radius: 16px;
-            padding: 28px;
-            max-width: 380px;
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .modal-box h3 {
-            font-size: 1.1rem;
-            color: #f8fafc;
-        }
-
-        .modal-box p {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            line-height: 1.4;
-        }
-
-        .modal-field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .modal-field label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #94a3b8;
-        }
-
-        .modal-box input,
-        .modal-box select {
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: #f8fafc;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 0.95rem;
-            width: 100%;
-        }
-
-        .modal-box input:focus,
-        .modal-box select:focus {
-            outline: none;
-            border-color: #38bdf8;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 4px;
-        }
-
-        .btn-modal-cancel {
-            background: #1e293b;
-            color: #94a3b8;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-modal-confirm {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-modal-confirm:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-modal-confirm:hover:not(:disabled) { background: #1d4ed8; }
-        .btn-modal-cancel:hover { background: #334155; color: #f8fafc; }
-
         @media (max-width: 900px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .exp-grid   { grid-template-columns: repeat(3, 1fr); }
@@ -521,9 +384,9 @@
             <span>SENAI - TIMBÓ-SC</span>
         </div>
         <ul class="nav-menu">
-            <li><a href="gestor_pedidos.html">Criar Pedido</a></li>
-            <li><a href="gestor.html">Gestor De Produção</a></li>
-            <li><a href="visualizacaoBancada.html" class="active">Acompanhamento</a></li>
+            <li><a href="#">Início</a></li>
+            <li><a href="Formulario.html">Criar Pedido</a></li>
+            <li><a href="gestor.html">Gestor De Pedidos</a></li>
         </ul>
     </nav>
 
@@ -571,14 +434,9 @@
             <div class="panel">
                 <div class="panel-header">
                     <h3>ESTOQUE DE BLOCOS</h3>
-                    <div class="panel-header-actions">
-                        <span class="badge-pos" id="estoqueContador">0/28 ocupadas</span>
-                    </div>
+                    <span class="badge-pos" id="estoqueContador">0/28 ocupadas</span>
                 </div>
                 <div class="panel-body">
-                    <p style="font-size:0.75rem; color:#64748b; margin-bottom:14px;">
-                        Clique em qualquer posição para definir ou alterar a cor do bloco.
-                    </p>
                     <div class="stock-grid" id="stockGrid">
                         <!-- preenchido via JS -->
                     </div>
@@ -630,34 +488,6 @@
         <footer>API backend · dbSmart40 | Conectividade em tempo real</footer>
     </div>
 
-    <!-- Modal: adicionar/editar posição de estoque -->
-    <div class="modal-overlay" id="modalEstoque">
-        <div class="modal-box">
-            <h3 id="modalEstoqueTitulo">Posição de Estoque</h3>
-            <p id="modalEstoqueDesc">Defina a cor do bloco armazenado nesta posição.</p>
-
-            <div class="modal-field">
-                <label>Posição</label>
-                <input type="number" id="modalEstoquePos" min="1" max="28" readonly />
-            </div>
-
-            <div class="modal-field">
-                <label>Cor do bloco</label>
-                <select id="modalEstoqueCor">
-                    <option value="0">Vazio</option>
-                    <option value="1">Preto</option>
-                    <option value="2">Vermelho</option>
-                    <option value="3">Azul</option>
-                </select>
-            </div>
-
-            <div class="modal-actions">
-                <button class="btn-modal-cancel" onclick="fecharModalEstoque()">Cancelar</button>
-                <button class="btn-modal-confirm" id="btnConfirmarEstoque" onclick="salvarEstoqueModal()">Salvar</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ─── Configuração ────────────────────────────────────────────────────
         const API_BASE = "http://localhost:8088";
@@ -678,36 +508,20 @@
             3: 'AZL'
         };
 
-        // Mapas em memória: posição → { id (ou null), cor }
-        let estoqueMap = new Map();
-        let posicaoEmEdicao = null;
-
         // ─── Helper fetch ────────────────────────────────────────────────────
-        async function fetchAPI(endpoint, options) {
+        async function fetchAPI(endpoint) {
             const res = await fetch(`${API_BASE}${endpoint}`, {
-                headers: { Accept: 'application/json', ...(options?.headers || {}) },
-                ...options
+                headers: { Accept: 'application/json' }
             });
             if (res.status === 204) return [];
-            if (!res.ok) {
-                const texto = await res.text().catch(() => '');
-                throw new Error(`HTTP ${res.status} – ${res.statusText}${texto ? ' – ' + texto : ''}`);
-            }
-            const contentType = res.headers.get('content-type') || '';
-            if (contentType.includes('application/json')) return res.json();
-            return null;
+            if (!res.ok) throw new Error(`HTTP ${res.status} – ${res.statusText}`);
+            return res.json();
         }
 
         function mostrarErro(msg) {
             const c = document.getElementById('errorContainer');
             c.innerHTML = `<div class="error-msg">⚠ ${msg}</div>`;
             setTimeout(() => c.innerHTML = '', 8000);
-        }
-
-        function mostrarSucesso(msg) {
-            const c = document.getElementById('errorContainer');
-            c.innerHTML = `<div class="success-msg">✔ ${msg}</div>`;
-            setTimeout(() => c.innerHTML = '', 5000);
         }
 
         // ─── 1. Estatísticas (pedidos) ────────────────────────────────────────
@@ -733,20 +547,19 @@
             try {
                 const items = await fetchAPI('/api/estoque/listar');
 
-                // Reconstroi o mapa posição → {id, cor}
+                // Monta mapa posição → cor
                 // CORREÇÃO: o DTO retorna "posicaoEstoque", não "posicao"
-                estoqueMap = new Map();
-                (items || []).forEach(item => {
+                const posMap = new Map();
+                items.forEach(item => {
                     if (item.posicaoEstoque != null) {
-                        estoqueMap.set(item.posicaoEstoque, { id: item.id, cor: item.cor ?? 0 });
+                        posMap.set(item.posicaoEstoque, item.cor ?? 0);
                     }
                 });
 
                 let ocupadas = 0;
                 let html = '';
                 for (let pos = 1; pos <= 28; pos++) {
-                    const registro = estoqueMap.get(pos);
-                    const cor      = registro ? (registro.cor ?? 0) : 0;
+                    const cor      = posMap.has(pos) ? posMap.get(pos) : 0;
                     const classe   = COR_CLASS[cor] ?? 'vazio';
                     const rotulo   = COR_LABEL[cor] ?? '';
                     const corNome  = { 1: 'Preto', 2: 'Vermelho', 3: 'Azul', 0: 'Vazio' }[cor] || 'Vazio';
@@ -754,8 +567,7 @@
 
                     html += `
                         <div class="stock-cell ${classe}"
-                             title="Posição ${pos} — ${corNome} (clique para editar)"
-                             onclick="abrirModalEstoque(${pos})">
+                             title="Posição ${pos} — ${corNome}">
                             <div class="cell-number">${String(pos).padStart(2, '0')}</div>
                             <div class="cell-label">${rotulo}</div>
                         </div>`;
@@ -770,68 +582,6 @@
             }
         }
 
-        // ─── Modal: abrir / fechar ─────────────────────────────────────────────
-        function abrirModalEstoque(pos) {
-            posicaoEmEdicao = pos;
-            const registro = estoqueMap.get(pos);
-            const corAtual = registro ? (registro.cor ?? 0) : 0;
-
-            document.getElementById('modalEstoquePos').value = pos;
-            document.getElementById('modalEstoqueCor').value = String(corAtual);
-            document.getElementById('modalEstoqueTitulo').textContent = `Posição de Estoque ${pos}`;
-            document.getElementById('modalEstoqueDesc').textContent = registro
-                ? 'Altere a cor do bloco armazenado nesta posição, ou defina como vazio.'
-                : 'Esta posição ainda não existe no banco. Escolha uma cor para cadastrá-la.';
-
-            document.getElementById('modalEstoque').classList.add('open');
-        }
-
-        function fecharModalEstoque() {
-            document.getElementById('modalEstoque').classList.remove('open');
-            posicaoEmEdicao = null;
-        }
-
-        // ─── Modal: salvar (cria ou atualiza via API) ───────────────────────────
-        async function salvarEstoqueModal() {
-            if (posicaoEmEdicao == null) return;
-
-            const btn = document.getElementById('btnConfirmarEstoque');
-            const pos = posicaoEmEdicao;
-            const cor = Number(document.getElementById('modalEstoqueCor').value);
-            const registro = estoqueMap.get(pos);
-
-            btn.disabled = true;
-            btn.textContent = 'Salvando...';
-
-            try {
-                if (registro && registro.id != null) {
-                    // Posição já existe → atualiza parcialmente (PATCH)
-                    await fetchAPI(`/api/estoque/patch/${registro.id}`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ posicaoEstoque: pos, cor: cor })
-                    });
-                } else {
-                    // Posição ainda não existe → cria (POST)
-                    await fetchAPI('/api/estoque/salvar', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ posicaoEstoque: pos, cor: cor })
-                    });
-                }
-
-                mostrarSucesso(`Posição ${pos} atualizada com sucesso.`);
-                fecharModalEstoque();
-                await carregarEstoque();
-            } catch (err) {
-                console.error('[Salvar Estoque]', err);
-                mostrarErro('Não foi possível salvar a posição ' + pos + ': ' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Salvar';
-            }
-        }
-
         // ─── 3. Expedição (12 posições) ───────────────────────────────────────
         async function carregarExpedicao() {
             const grid    = document.getElementById('expGrid');
@@ -843,7 +593,7 @@
                 // Considera ocupada apenas a expedição onde saidaEm é null
                 // (o bloco ainda não saiu do armazém de expedição)
                 const posMap = new Map();
-                (expedicoes || []).forEach(exp => {
+                expedicoes.forEach(exp => {
                     const posicao = exp.posicaoExpedicao;
                     const op      = exp.ordemProducao;
                     const saiu    = exp.saidaEm != null;   // já foi expedida?
