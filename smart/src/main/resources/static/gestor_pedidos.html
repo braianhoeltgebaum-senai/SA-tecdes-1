@@ -652,6 +652,32 @@
     }
 
     // =========================================================================
+    // CONTROLE DE POSIÇÕES DUPLICADAS
+    // Impede que duas lâminas do MESMO bloco usem a mesma posição
+    // (Esquerda / Frente / Direita), desabilitando no combobox as opções
+    // já escolhidas por outra lâmina do bloco.
+    // =========================================================================
+    function atualizarOpcoesPosicao(bloco) {
+      const selects = Array.from(bloco.querySelectorAll(".posicaoLamina"));
+      const posicoesOcupadas = selects
+        .map((s) => s.value)
+        .filter((v) => v !== "0");
+
+      selects.forEach((select) => {
+        const valorAtual = select.value;
+        Array.from(select.options).forEach((opt) => {
+          if (opt.value === "0") {
+            opt.disabled = false;
+            return;
+          }
+          // Desabilita a opção se ela já está em uso por OUTRA lâmina do bloco
+          opt.disabled =
+            posicoesOcupadas.includes(opt.value) && opt.value !== valorAtual;
+        });
+      });
+    }
+
+    // =========================================================================
     // PREVIEW ISOMÉTRICO
     // =========================================================================
     function atualizarPreview() {
@@ -665,6 +691,10 @@
       ).style.backgroundImage = `url('assets/bloco/rTampa${corTampa}.png')`;
 
       document.querySelectorAll(".bloco").forEach((bloco, index) => {
+        // Atualiza quais posições já estão ocupadas neste bloco antes de
+        // desenhar o preview, para refletir imediatamente no combobox.
+        atualizarOpcoesPosicao(bloco);
+
         const corBloco = bloco.querySelector(".corBloco").value;
         const blocoPreview = document.createElement("div");
         blocoPreview.className = "bloco-preview";
@@ -713,7 +743,7 @@
             } else {
               const caminho =
                 posicao == 3
-                  ? `assets/padroes/rPadrao${padrao}-1.png`
+                  ? `assets/padroes/rPadrao${padrao}-2.png`
                   : `assets/padroes/padrao${padrao}-${posicao == 1 ? 1 : 2
                   }.png`;
 
