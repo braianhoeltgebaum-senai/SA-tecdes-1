@@ -21,15 +21,13 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class ExpedicaoService {
 
-    //********************** Expedição *************************
-    //----------------------- NodeToPlc ------------------------
+    // --- Variáveis de leitura (mantidas intactas) ---
     boolean recebidoOpExp            = false;
     boolean recebidoExpedicao        = false;
     boolean iniciarGuardarExp        = false;
     int     posicaoGuardarExp        = 0;
     int[]   orderExpedicao           = new int[12];
 
-    //----------------------- PlcToNode ------------------------
     int     numeroOPExp              = 0;
     boolean cancelOPExp              = false;
     boolean finishOPExp              = false;
@@ -47,13 +45,14 @@ public class ExpedicaoService {
     boolean removerExpedicao         = false;
     int     opGuardadoExpedicao      = 0;
 
-    // ─── Dependências ─────────────────────────────────────────────────────────
+    // ─── Dependências (adicionado PedidoService) ─────────────────────────────
     private final ExpedicaoRepository  expedicaoRepository;
     private final PedidoRepository     pedidoRepository;
     private final EntityManager        entityManager;
     private final PlcConnectionService plcConnectionService;
     private final ApiIntegrationService apiIntegrationService;
     private final RastreamentoService  rastreamentoService;
+    private final PedidoService        pedidoService;   // NOVO
 
     public ExpedicaoService(
             ExpedicaoRepository  expedicaoRepository,
@@ -61,7 +60,8 @@ public class ExpedicaoService {
             EntityManager        entityManager,
             PlcConnectionService plcConnectionService,
             ApiIntegrationService apiIntegrationService,
-            RastreamentoService  rastreamentoService) {
+            RastreamentoService  rastreamentoService,
+            PedidoService        pedidoService) {       // NOVO
 
         this.expedicaoRepository  = expedicaoRepository;
         this.pedidoRepository     = pedidoRepository;
@@ -69,29 +69,26 @@ public class ExpedicaoService {
         this.plcConnectionService = plcConnectionService;
         this.apiIntegrationService = apiIntegrationService;
         this.rastreamentoService  = rastreamentoService;
+        this.pedidoService        = pedidoService;     // NOVO
     }
 
-    // ─── CRUD ─────────────────────────────────────────────────────────────────
+    // ─── CRUD (mantido igual) ──────────────────────────────────────────────────
 
     @Transactional
     public ExpedicaoDTO criar(ExpedicaoDTO dto) {
         Pedido pedido = buscarPedidoPorOrdemProducao(dto.ordemProducao());
-
         Expedicao e = new Expedicao();
         e.setPosicaoExpedicao(dto.posicaoExpedicao());
         e.setEntradaEm(dto.entradaEm());
         e.setSaidaEm(dto.saidaEm());
         e.setPedido(pedido);
-
         Expedicao saved = expedicaoRepository.save(e);
         return toDTO(saved);
     }
 
     @Transactional(readOnly = true)
     public List<ExpedicaoDTO> listar() {
-        return expedicaoRepository.findAll().stream()
-                .map(this::toDTO)
-                .toList();
+        return expedicaoRepository.findAll().stream().map(this::toDTO).toList();
     }
 
     @Transactional(readOnly = true)
@@ -104,12 +101,10 @@ public class ExpedicaoService {
     public ExpedicaoDTO put(Long id, ExpedicaoDTO dto) {
         Expedicao e = expedicaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Expedição não encontrada"));
-
         e.setPosicaoExpedicao(dto.posicaoExpedicao());
         e.setEntradaEm(dto.entradaEm());
         e.setSaidaEm(dto.saidaEm());
         e.setPedido(buscarPedidoPorOrdemProducao(dto.ordemProducao()));
-
         return toDTO(expedicaoRepository.save(e));
     }
 
@@ -117,12 +112,10 @@ public class ExpedicaoService {
     public ExpedicaoDTO patch(Long id, ExpedicaoDTO dto) {
         Expedicao e = expedicaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Expedição não encontrada"));
-
         if (dto.posicaoExpedicao() != null) e.setPosicaoExpedicao(dto.posicaoExpedicao());
         if (dto.entradaEm()        != null) e.setEntradaEm(dto.entradaEm());
         if (dto.saidaEm()          != null) e.setSaidaEm(dto.saidaEm());
         if (dto.ordemProducao()    != null) e.setPedido(buscarPedidoPorOrdemProducao(dto.ordemProducao()));
-
         return toDTO(expedicaoRepository.save(e));
     }
 
@@ -141,8 +134,6 @@ public class ExpedicaoService {
         }
         return -1;
     }
-
-    // ─── Helpers ──────────────────────────────────────────────────────────────
 
     private ExpedicaoDTO toDTO(Expedicao e) {
         return new ExpedicaoDTO(
@@ -164,14 +155,14 @@ public class ExpedicaoService {
                         "Pedido não encontrado com ordemProducao: " + ordemProducao));
     }
 
-    // ─── Processamento de dados do CLP ────────────────────────────────────────
+    // ─── Processamento de dados do CLP (CORRIGIDO) ────────────────────────────
 
     public void processData(String ip, byte[] dadosClp4) {
 
         PlcConnector plcConnectorExp = plcConnectionService.getConnection(ip);
         if (plcConnectorExp == null) return;
 
-        // Leitura das variáveis
+        // --- 1. Leitura das variáveis (mantida igual) ---
         recebidoOpExp            = (dadosClp4[0]  & 0x01) != 0;
         recebidoExpedicao        = (dadosClp4[2]  & 0x01) != 0;
         iniciarGuardarExp        = (dadosClp4[2]  & 0x02) != 0;
@@ -198,37 +189,50 @@ public class ExpedicaoService {
         removerExpedicao         =  (dadosClp4[42] & 0x02) != 0;
         opGuardadoExpedicao      = ((dadosClp4[44] & 0xFF) << 8) | (dadosClp4[45] & 0xFF);
 
-        // ==================================================================
-        // DIAGNÓSTICO — agora inclui posicaoExpedicaoConfirmada, o valor
-        // estável usado na checagem de conclusão (em vez do posicaoGuardarExp
-        // ao vivo, que o CLP zera assim que o handshake termina).
-        // ==================================================================
-        System.out.println("[DIAG Expedicao] "
-                + "startOPExp=" + startOPExp
-                + " finishOPExp=" + finishOPExp
-                + " cancelOPExp=" + cancelOPExp
-                + " recebidoOpExp=" + recebidoOpExp
-                + " | ocupadoExp=" + ocupadoExp
-                + " aguardandoExp=" + aguardandoExp
-                + " | pedirPosicaoExp=" + pedirPosicaoExp
-                + " aux_expedicao=" + SmartService.aux_expedicao
-                + " | adicionarExpedicao=" + adicionarExpedicao
-                + " removerExpedicao=" + removerExpedicao
-                + " recebidoExpedicao=" + recebidoExpedicao
-                + " | posicaoGuardarExp(live)=" + posicaoGuardarExp
-                + " posicaoExpedicaoConfirmada(travada)=" + SmartService.posicaoExpedicaoConfirmada
-                + " posicaoGuardadoExpedicao=" + posicaoGuardadoExpedicao
-                + " posicaoExpedicaoSolicitada=" + SmartService.posicaoExpedicaoSolicitada
-                + " | opGuardadoExpedicao=" + opGuardadoExpedicao
-                + " | pedidoEmCurso=" + SmartService.pedidoEmCurso
-                + " statusProducao=" + SmartService.statusProducao);
+        // ======================================================================
+        // 2. NOVA LÓGICA DE DETECÇÃO DE CONCLUSÃO
+        //    Baseada no OP guardado, não no handshake que não está sendo usado.
+        // ======================================================================
+        if (SmartService.pedidoEmCurso &&
+            opGuardadoExpedicao == SmartService.numeroPedidoAtual &&
+            posicaoGuardadoExpedicao > 0 &&
+            !ocupadoExp) {
 
-        // Repassa para o rastreamento — usa a posição CONFIRMADA (travada no
-        // momento do handshake), não o campo ao vivo do CLP.
-        rastreamentoService.processarExpedicao(
-                numeroOPExp, startOPExp, finishOPExp,
-                SmartService.posicaoExpedicaoConfirmada, ocupadoExp,
-                posicaoGuardadoExpedicao, opGuardadoExpedicao);
+            if (!SmartService.expedicaoConcluida) {
+                SmartService.expedicaoConcluida = true;
+
+                System.out.println(">>> ✅ Pedido " + opGuardadoExpedicao +
+                        " guardado na expedição (posição " + posicaoGuardadoExpedicao + "). Concluindo...");
+
+                // Atualiza os status globais
+                SmartService.statusExpedicao = 2;
+                SmartService.statusProducao  = 1; // ciclo concluído
+                SmartService.pedidoEmCurso   = false;
+                SmartService.numeroPedidoAtual = 0;
+
+                // Atualiza o pedido no banco para status 3 (Concluído)
+                try {
+                    pedidoService.atualizarStatusParaConcluido((long) opGuardadoExpedicao);
+                    System.out.println("Pedido #" + opGuardadoExpedicao + " marcado como Concluído no banco.");
+                } catch (Exception e) {
+                    System.err.println("❌ Erro ao atualizar pedido #" + opGuardadoExpedicao + ": " + e.getMessage());
+                    // Não reseta expedicaoConcluida para evitar loop, mas loga o erro.
+                }
+            }
+        } else {
+            // Libera a flag quando o OP guardado não for mais o pedido atual
+            // ou quando a posição for zerada (indicando que foi removido)
+            if (SmartService.expedicaoConcluida &&
+                (opGuardadoExpedicao != SmartService.numeroPedidoAtual ||
+                 posicaoGuardadoExpedicao == 0)) {
+                SmartService.expedicaoConcluida = false;
+            }
+        }
+
+        // ======================================================================
+        // 3. LÓGICAS DE HANDSHAKE E ESCRITA (mantidas intactas, pois fazem
+        //    a comunicação bidirecional com o CLP para reserva de posições)
+        // ======================================================================
 
         // StartOP/FinishOP/CancelOP todos FALSE → RecebidoOPExp = FALSE
         if (!startOPExp && !finishOPExp && !cancelOPExp) {
@@ -255,7 +259,7 @@ public class ExpedicaoService {
             }
         }
 
-        // FinishOP TRUE e RecebidoOP FALSE → RecebidoOPExp = TRUE
+        // FinishOP TRUE e RecebidoOP FALSE → RecebidoOPExp = TRUE (mantido para outros efeitos)
         if (finishOPExp && !recebidoOpExp) {
             if (!SmartService.readOnly) {
                 try {
@@ -319,26 +323,12 @@ public class ExpedicaoService {
                 }
                 System.out.println("Guardando OP em posicaoGuardarExp: " + posicaoGuardarExp);
                 if (posicaoGuardarExp > 0) {
-
-                    // ==========================================================
-                    // CORREÇÃO: captura a posição AQUI, enquanto o campo do CLP
-                    // (posicaoGuardarExp) ainda está válido — é o único momento
-                    // em que ele reflete a posição real sendo gravada. O CLP
-                    // zera esse campo assim que o handshake termina, então
-                    // sem essa captura a checagem de conclusão (mais abaixo,
-                    // e também no RastreamentoService) nunca bateria contra
-                    // posicaoGuardadoExpedicao quando finishOPExp finalmente
-                    // chegasse true.
-                    // ==========================================================
                     SmartService.posicaoExpedicaoConfirmada = posicaoGuardarExp;
-
                     int offset = 6 + (posicaoGuardarExp - 1) * 2;
                     try {
                         plcConnectorExp.writeInt(9, offset, opGuardadoExpedicao);
-
                         Map<String, Integer> dadosMap = new HashMap<>();
                         dadosMap.put("OP:" + posicaoGuardarExp, opGuardadoExpedicao);
-
                         boolean sucesso = apiIntegrationService.salvarExpedicao(dadosMap);
                         System.out.println(sucesso
                                 ? "Expedição adicionada com sucesso na API."
@@ -365,10 +355,8 @@ public class ExpedicaoService {
                     int offset = 6 + (posicaoRemovidoExpedicao - 1) * 2;
                     try {
                         plcConnectorExp.writeInt(9, offset, 0);
-
                         Map<String, Integer> dadosMap = new HashMap<>();
                         dadosMap.put("OP:" + posicaoRemovidoExpedicao, 0);
-
                         boolean sucesso = apiIntegrationService.salvarExpedicao(dadosMap);
                         System.out.println(sucesso
                                 ? "Expedição removida com sucesso na API."
@@ -381,18 +369,10 @@ public class ExpedicaoService {
             }
         }
 
-        // Pedido concluído pela expedição — agora compara contra o valor
-        // CONFIRMADO (travado), não contra o campo ao vivo do CLP.
-        if ((posicaoGuardadoExpedicao == SmartService.posicaoExpedicaoConfirmada)
-                && !ocupadoExp && finishOPExp) {
-            if (!SmartService.readOnly) {
-                System.out.println("statusProducao: " + SmartService.statusProducao);
-                System.out.println("pedidoEmCurso: "  + SmartService.pedidoEmCurso);
-                if (SmartService.statusProducao == 0 && SmartService.pedidoEmCurso) {
-                    SmartService.statusProducao = 1;
-                }
-                System.out.println("Operação OP:" + opGuardadoExpedicao + " Finalizada.");
-            }
-        }
+        // A chamada antiga para rastreamentoService.processarExpedicao foi REMOVIDA
+        // para evitar duplicidade de lógica (a conclusão agora é feita acima).
+        // Se precisar de debug, mantenha comentado.
+        // rastreamentoService.processarExpedicao(numeroOPExp, startOPExp, finishOPExp,
+        //         posicaoGuardarExp, ocupadoExp, posicaoGuardadoExpedicao, opGuardadoExpedicao);
     }
 }
