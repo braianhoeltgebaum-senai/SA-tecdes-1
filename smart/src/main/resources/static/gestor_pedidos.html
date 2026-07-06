@@ -3,31 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Factory</title>
+    <title>Smart Factory · Gestor de Pedidos</title>
 
     <style>
+      /* ==========================================================================
+         RESET E BASE — idêntico às outras telas
+         ========================================================================== */
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-      }
-
-      #padrao-esquerda-0,
-      #padrao-esquerda-1,
-      #padrao-esquerda-2 {
-        z-index: 11;
-      }
-
-      #padrao-frente-0,
-      #padrao-frente-1,
-      #padrao-frente-2 {
-        z-index: 21;
-      }
-
-      #padrao-direita-0,
-      #padrao-direita-1,
-      #padrao-direita-2 {
-        z-index: 16;
       }
 
       body {
@@ -37,11 +22,11 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        color: white;
+        color: #f8fafc;
       }
 
       /* ==========================================================================
-         NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas do sistema
+         NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas
          ========================================================================== */
       nav {
         width: 100%;
@@ -84,32 +69,84 @@
         color: #38bdf8;
       }
 
-      /* ========================================================================== */
-
-      /* Conteúdo da página — padding fica aqui, não no body, para o nav ocupar
-         sempre a largura total em todas as páginas */
+      /* ==========================================================================
+         CONTEÚDO PRINCIPAL — padrão de todas as páginas
+         ========================================================================== */
       .page-content {
-        padding: 40px;
+        padding: 32px 40px;
+        max-width: 1400px;
+        width: 100%;
+        margin: 0 auto;
+        flex: 1;
       }
 
+      /* Cabeçalho da página (igual ao das outras telas) */
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid #1e293b;
+        padding-bottom: 16px;
+      }
+      .page-header h2 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #c0e0ff, #60a5fa);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        margin: 0;
+      }
+      .page-header .sub {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        margin-top: 4px;
+      }
+
+      /* ==========================================================================
+         LAYOUT PRINCIPAL (form + preview)
+         ========================================================================== */
       .layout {
         display: flex;
-        gap: 30px;
+        gap: 28px;
         align-items: flex-start;
       }
 
       .painel-form {
         flex: 1;
-        background: rgba(15, 23, 42, 0.92);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(10px);
-        border-radius: 24px;
-        padding: 30px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+        background: #111c30;
+        border: 1px solid #1e293b;
+        border-radius: 20px;
+        padding: 26px;
       }
 
-      /* Grid de 4 colunas no topo */
+      .painel-preview {
+        width: 460px;
+        position: sticky;
+        top: 40px;
+      }
+
+      .preview-card {
+        background: #111c30;
+        border: 1px solid #1e293b;
+        border-radius: 20px;
+        padding: 24px;
+      }
+
+      .preview-title {
+        text-align: center;
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 22px;
+        color: #f8fafc;
+      }
+
+      /* ==========================================================================
+         FORMULÁRIO — campos, grids e blocos
+         ========================================================================== */
       .top-grid {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -117,7 +154,6 @@
         margin-bottom: 25px;
       }
 
-      /* Grid de 2 colunas para a linha de expedição + IP (ou qualquer linha secundária) */
       .mid-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -132,193 +168,160 @@
       }
 
       .field label {
-        font-size: 13px;
+        font-size: 0.8rem;
         font-weight: 600;
         color: #94a3b8;
+        letter-spacing: 0.02em;
       }
 
       input,
       select {
         background: #0f172a;
         border: 1px solid #334155;
-        color: white;
-        border-radius: 14px;
-        padding: 14px;
-        font-size: 15px;
-        transition: 0.2s;
+        color: #f8fafc;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 0.9rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
         width: 100%;
-      }
-
-      .tampa-global {
-        width: 340px;
-        height: 200px;
-        position: relative;
-      }
-
-      #previewTampa {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        z-index: 9999;
+        font-family: inherit;
       }
 
       input:focus,
       select:focus {
         outline: none;
         border-color: #38bdf8;
-        box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
       }
 
+      /* Blocos */
       .bloco {
-        margin-top: 28px;
-        border-radius: 22px;
+        margin-top: 24px;
+        border-radius: 16px;
         overflow: hidden;
-        background: linear-gradient(
-          180deg,
-          rgba(30, 41, 59, 0.95),
-          rgba(15, 23, 42, 0.95)
-        );
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: #0f172a;
+        border: 1px solid #1e293b;
       }
 
       .bloco-header {
-        padding: 18px 22px;
-        background: rgba(255, 255, 255, 0.04);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 14px 20px;
+        background: #0b1120;
+        border-bottom: 1px solid #1e293b;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
 
       .bloco-header h2 {
-        font-size: 18px;
-        font-weight: 700;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #f8fafc;
       }
 
       .bloco-content {
-        padding: 22px;
+        padding: 20px;
       }
 
+      /* Lâminas */
       .laminasContainer {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 16px;
       }
 
       .lamina-card {
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 18px;
-        padding: 18px;
+        background: #111c30;
+        border: 1px solid #1e293b;
+        border-radius: 14px;
+        padding: 16px;
       }
 
       .lamina-topo {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 14px;
       }
 
       .lamina-topo span {
-        font-size: 14px;
+        font-size: 0.85rem;
         font-weight: 700;
-        color: #e2e8f0;
+        color: #cbd5e6;
       }
 
       .lamina-grid {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        gap: 15px;
+        gap: 14px;
       }
 
+      /* Botões */
       .btn {
         border: none;
-        border-radius: 14px;
-        padding: 13px 18px;
-        font-weight: 700;
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-weight: 600;
+        font-size: 0.85rem;
         cursor: pointer;
-        transition: 0.2s;
+        transition: opacity 0.2s, transform 0.15s, background 0.2s;
+        font-family: inherit;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .btn:active {
+        transform: translateY(0);
       }
 
       .btn-add {
         width: 100%;
-        margin-top: 18px;
-        background: linear-gradient(135deg, #06b6d4, #3b82f6);
+        margin-top: 16px;
+        background: #1e293b;
+        border: 1px solid #334155;
+        color: #cbd5e6;
+      }
+      .btn-add:hover {
+        background: #2d3a4e;
+        border-color: #5b7a9a;
         color: white;
       }
 
-      .btn-add:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
-      }
-
       .btn-remove {
-        background: rgba(239, 68, 68, 0.18);
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.35);
         color: #fca5a5;
-        padding: 8px 14px;
+        padding: 7px 14px;
+        font-size: 0.78rem;
       }
-
       .btn-remove:hover {
         background: rgba(239, 68, 68, 0.3);
       }
 
       .btn-salvar {
         width: 100%;
-        margin-top: 30px;
-        padding: 18px;
-        font-size: 16px;
+        margin-top: 28px;
+        padding: 16px;
+        font-size: 0.95rem;
         background: linear-gradient(135deg, #0ea5e9, #2563eb);
         color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: filter 0.2s;
       }
-
       .btn-salvar:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.4);
+        filter: brightness(1.08);
       }
-
       .btn-salvar:disabled {
         opacity: 0.6;
         cursor: not-allowed;
-        transform: none;
-      }
-
-      .painel-preview {
-        width: 500px;
-        position: sticky;
-        top: 40px;
-      }
-
-      .preview-card {
-        background: rgba(15, 23, 42, 0.92);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(10px);
-        border-radius: 24px;
-        padding: 25px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-      }
-
-      .preview-title {
-        text-align: center;
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 25px;
-      }
-
-      .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
+        filter: none;
       }
 
       /* ==========================================================================
-   SISTEMA DE PREVIEW ISOMÉTRICO
-   ========================================================================== */
+         PREVIEW ISOMÉTRICO (mantido)
+         ========================================================================== */
       .bloco-preview {
         position: relative;
         width: 340px;
@@ -338,16 +341,13 @@
       .camada-base-fundo {
         z-index: 5;
       }
-
       .camada[data-posicao="1"],
       .camada[data-posicao="3"] {
         z-index: 10;
       }
-
       .camada[data-posicao="2"] {
         z-index: 20;
       }
-
       .camada-base-frontal {
         z-index: 30;
       }
@@ -364,48 +364,42 @@
       .status-envio {
         margin-top: 12px;
         padding: 12px 16px;
-        border-radius: 12px;
-        font-size: 14px;
+        border-radius: 10px;
+        font-size: 0.85rem;
         font-weight: 600;
         display: none;
       }
-
       .status-envio.sucesso {
-        background: rgba(34, 197, 94, 0.15);
-        border: 1px solid rgba(34, 197, 94, 0.3);
+        background: #10281f;
+        border: 1px solid #22c55e;
         color: #86efac;
       }
-
       .status-envio.erro {
-        background: rgba(239, 68, 68, 0.15);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        color: #fca5a5;
+        background: #2c1a1e;
+        border: 1px solid #ef4444;
+        color: #f9acac;
       }
-
       .status-envio.carregando {
-        background: rgba(56, 189, 248, 0.1);
-        border: 1px solid rgba(56, 189, 248, 0.25);
+        background: #0b2a42;
+        border: 1px solid #38bdf8;
         color: #7dd3fc;
       }
 
       /* ==========================================================================
-   RESPONSIVIDADE
-   ========================================================================== */
+         RESPONSIVIDADE — igual às outras telas
+         ========================================================================== */
       @media (max-width: 1200px) {
         .layout {
           flex-direction: column;
         }
-
         .painel-preview {
           width: 100%;
           position: relative;
           top: 0;
         }
-
         .top-grid {
           grid-template-columns: 1fr 1fr;
         }
-
         .mid-grid {
           grid-template-columns: 1fr;
         }
@@ -415,34 +409,72 @@
         .page-content {
           padding: 20px;
         }
-
         .top-grid,
         .mid-grid,
         .lamina-grid {
           grid-template-columns: 1fr;
         }
-
         .bloco-preview,
         .tampa-global {
           width: 100%;
         }
+        .page-header h2 {
+          font-size: 1.3rem;
+        }
+      }
+
+      /* ==========================================================================
+         UTILITÁRIOS ADICIONAIS (mesmo estilo das outras páginas)
+         ========================================================================== */
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+
+      /* Z-index para camadas de lâminas e padrões (mantido do original) */
+      #padrao-esquerda-0,
+      #padrao-esquerda-1,
+      #padrao-esquerda-2 {
+        z-index: 11;
+      }
+      #padrao-frente-0,
+      #padrao-frente-1,
+      #padrao-frente-2 {
+        z-index: 21;
+      }
+      #padrao-direita-0,
+      #padrao-direita-1,
+      #padrao-direita-2 {
+        z-index: 16;
+      }
+
+      /* Barra de diagnóstico opcional (como na página de acompanhamento) */
+      .diag-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        background: #111c30;
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        padding: 10px 18px;
+        margin-bottom: 20px;
+        font-size: 0.72rem;
+        color: #94a3b8;
+      }
+      .diag-bar b {
+        color: #f8fafc;
+      }
+      .diag-sep {
+        color: #334155;
       }
     </style>
   </head>
-  <script>
-    // Marca automaticamente o item do menu correspondente à página atual
-    document.querySelectorAll(".nav-menu a").forEach((link) => {
-      const hrefPage = link.getAttribute("href");
-      const currentPage =
-        window.location.pathname.split("/").pop() || "Inicio.html";
-      if (hrefPage === currentPage) {
-        link.classList.add("active");
-      } else {
-        link.classList.remove("active");
-      }
-    });
-  </script>
+
   <body>
+    <!-- ===== NAV ===== -->
     <nav>
       <div class="nav-logo">
         <h1>SMART 4.0 · Planta Digital</h1>
@@ -450,20 +482,28 @@
       </div>
       <ul class="nav-menu">
         <li><a href="Inicio.html">Início</a></li>
-        <li><a href="gestor_pedidos.html">Gestor de Pedidos</a></li>
+        <li><a href="gestor_pedidos.html" class="active">Gestor de Pedidos</a></li>
         <li><a href="gestor.html">Gestor de Produção</a></li>
         <li><a href="Dashboard_simples.html">Dashboard</a></li>
         <li><a href="visualizacaoBancada.html">Acompanhamento</a></li>
       </ul>
     </nav>
 
+    <!-- ===== CONTEÚDO ===== -->
     <div class="page-content">
+      <!-- Cabeçalho da página (padrão) -->
+      <div class="page-header">
+        <div>
+          <h2>Gestor de Pedidos</h2>
+          <div class="sub">Crie e monte pedidos com blocos e lâminas</div>
+        </div>
+      </div>
+
       <div class="layout">
         <!-- PAINEL ESQUERDO: FORMULÁRIO -->
         <div class="painel-form">
           <form id="formPedido">
             <!-- LINHA 1: Ordem, Tipo, Cor Tampa -->
-            <!-- IP do CLP foi movido para o Gestor de Pedidos -->
             <div class="top-grid">
               <div class="field">
                 <label>Ordem de Produção</label>
@@ -519,7 +559,7 @@
             <div class="status-envio" id="statusEnvio"></div>
 
             <!-- BOTÃO SALVAR -->
-            <button class="btn btn-salvar" type="submit" id="btnSalvar">
+            <button class="btn-salvar" type="submit" id="btnSalvar">
               Salvar Pedido
             </button>
           </form>
@@ -533,13 +573,27 @@
               <div class="tampa-global">
                 <div id="previewTampa" class="camada"></div>
               </div>
-
               <div id="previewStack"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- ===== SCRIPTS (mantidos intactos) ===== -->
+    <script>
+      // Marca automaticamente o item do menu correspondente à página atual
+      document.querySelectorAll(".nav-menu a").forEach((link) => {
+        const hrefPage = link.getAttribute("href");
+        const currentPage =
+          window.location.pathname.split("/").pop() || "Inicio.html";
+        if (hrefPage === currentPage) {
+          link.classList.add("active");
+        } else {
+          link.classList.remove("active");
+        }
+      });
+    </script>
 
     <script>
       // =========================================================================
@@ -664,9 +718,6 @@
 
       // =========================================================================
       // CONTROLE DE POSIÇÕES DUPLICADAS
-      // Impede que duas lâminas do MESMO bloco usem a mesma posição
-      // (Esquerda / Frente / Direita), desabilitando no combobox as opções
-      // já escolhidas por outra lâmina do bloco.
       // =========================================================================
       function atualizarOpcoesPosicao(bloco) {
         const selects = Array.from(bloco.querySelectorAll(".posicaoLamina"));
@@ -681,7 +732,6 @@
               opt.disabled = false;
               return;
             }
-            // Desabilita a opção se ela já está em uso por OUTRA lâmina do bloco
             opt.disabled =
               posicoesOcupadas.includes(opt.value) && opt.value !== valorAtual;
           });
@@ -702,8 +752,6 @@
         ).style.backgroundImage = `url('assets/bloco/rTampa${corTampa}.png')`;
 
         document.querySelectorAll(".bloco").forEach((bloco, index) => {
-          // Atualiza quais posições já estão ocupadas neste bloco antes de
-          // desenhar o preview, para refletir imediatamente no combobox.
           atualizarOpcoesPosicao(bloco);
 
           const corBloco = bloco.querySelector(".corBloco").value;
@@ -778,8 +826,6 @@
       // UTILITÁRIOS
       // =========================================================================
 
-      // Valida os dados mínimos do pedido antes de enviar ao servidor,
-      // evitando erros genéricos do backend para problemas óbvios do formulário.
       function validarPedido(pedido) {
         if (!pedido.ordemProducao) {
           return "Informe a Ordem de Produção.";
@@ -805,9 +851,6 @@
         return null;
       }
 
-      // Extrai uma mensagem de erro clara a partir da resposta HTTP.
-      // Tenta ler JSON estruturado (message, erro, errors de validação) e,
-      // se não encontrar nada útil, cai para um texto padrão por código HTTP.
       async function extrairMensagemErro(response) {
         let corpo = null;
 
@@ -832,7 +875,6 @@
             corpo.title ||
             null;
 
-          // Padrão de erro de validação do ASP.NET: { errors: { campo: ["msg", ...] } }
           if (!detalheBackend && corpo.errors) {
             const partes = [];
             for (const campo in corpo.errors) {
@@ -883,7 +925,6 @@
 
       // =========================================================================
       // SUBMIT: APENAS SALVAR PEDIDO
-      // O envio ao CLP acontece no Gestor de Pedidos, via botão "Enviar para Produção"
       // =========================================================================
       document
         .getElementById("formPedido")
@@ -932,11 +973,11 @@
             tipoPedido: Number(tipoPedido.value),
             corTampa: Number(document.getElementById("corTampa").value),
             posicaoExpedicao: posicaoExpedicao,
-            dataPedido: new Date().toISOString(), // timestamp para o banco
+            dataPedido: new Date().toISOString(),
             blocos: blocos,
           };
 
-          // --- Validação no front antes de chamar a API ---
+          // --- Validação no front ---
           const erroValidacao = validarPedido(pedido);
           if (erroValidacao) {
             mostrarStatus("✘ " + erroValidacao, "erro");
@@ -946,7 +987,6 @@
           }
 
           try {
-            // Salva o pedido no banco — sem enviar ao CLP
             const response = await fetch("http://localhost:8088/pedidos", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -961,7 +1001,6 @@
             const data = await response.json();
             console.log("Pedido salvo:", data);
 
-            // A API pode retornar o id como "id" ou "idPedido" dependendo do backend
             const idSalvo = data.id ?? data.idPedido ?? "—";
 
             mostrarStatus(
@@ -971,7 +1010,6 @@
           } catch (error) {
             console.error(error);
 
-            // Erro de rede (servidor fora do ar, CORS, sem conexão) não tem response
             const mensagemFinal =
               error instanceof TypeError
                 ? "Não foi possível conectar ao servidor. Verifique se o backend está em execução (http://localhost:8088) e sua conexão."

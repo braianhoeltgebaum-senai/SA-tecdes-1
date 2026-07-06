@@ -15,15 +15,15 @@
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial,
           sans-serif;
         background: #0a0f1a;
-        color: #eef2ff;
+        color: #f8fafc;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
       }
 
       /* ==========================================================================
-           NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas do sistema
-           ========================================================================== */
+         NAV PADRÃO SMART 4.0
+         ========================================================================== */
       nav {
         width: 100%;
         background: #111c30;
@@ -64,8 +64,10 @@
       .nav-menu a.active {
         color: #38bdf8;
       }
-      /* ========================================================================== */
 
+      /* ==========================================================================
+         CONTEÚDO
+         ========================================================================== */
       .container {
         max-width: 1400px;
         margin: 32px auto;
@@ -80,6 +82,8 @@
         flex-wrap: wrap;
         gap: 16px;
         margin-bottom: 28px;
+        border-bottom: 1px solid #1e293b;
+        padding-bottom: 16px;
       }
 
       .dashboard-header h2 {
@@ -89,6 +93,7 @@
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
+        margin: 0;
       }
 
       .sub {
@@ -105,11 +110,12 @@
         color: #cbd5e6;
         font-weight: 500;
         cursor: pointer;
-        transition: 0.2s;
+        transition: background 0.2s, border-color 0.2s, color 0.2s;
         display: flex;
         align-items: center;
         gap: 8px;
         font-size: 0.85rem;
+        font-family: inherit;
       }
 
       .refresh-btn:hover {
@@ -126,11 +132,14 @@
       }
 
       .stat-card {
-        background: #111827;
+        background: #111c30;
         border-radius: 20px;
         padding: 20px;
-        border: 1px solid #1f2a3e;
-        transition: 0.2s;
+        border: 1px solid #1e293b;
+        transition: border-color 0.2s;
+      }
+      .stat-card:hover {
+        border-color: #38bdf8;
       }
 
       .stat-card .label {
@@ -174,7 +183,7 @@
       }
 
       .panel {
-        background: #0f172a;
+        background: #111c30;
         border-radius: 24px;
         border: 1px solid #1e293b;
         overflow: hidden;
@@ -195,28 +204,13 @@
       .panel-header h3 {
         font-size: 1.1rem;
         font-weight: 500;
+        color: #f8fafc;
       }
 
       .panel-header-actions {
         display: flex;
         align-items: center;
         gap: 10px;
-      }
-
-      .btn-add-estoque {
-        background: #1e3a6b;
-        border: 1px solid #3b82f6;
-        color: #bfdbfe;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.72rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-
-      .btn-add-estoque:hover {
-        background: #2c4f8f;
       }
 
       .badge-pos {
@@ -231,7 +225,7 @@
         padding: 20px;
       }
 
-      /* GRID DE ESTOQUE (6 colunas × 5 linhas = 28 + parcial) */
+      /* GRID DE ESTOQUE */
       .stock-grid {
         display: grid;
         grid-template-columns: repeat(6, 1fr);
@@ -240,7 +234,7 @@
 
       .stock-cell {
         aspect-ratio: 1 / 1;
-        background: #111827;
+        background: #0f172a;
         border-radius: 12px;
         display: flex;
         flex-direction: column;
@@ -297,7 +291,7 @@
         letter-spacing: 0.05em;
       }
 
-      /* GRID EXPEDIÇÃO (4 colunas × 3 linhas = 12) */
+      /* GRID EXPEDIÇÃO */
       .exp-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -305,7 +299,7 @@
       }
 
       .exp-cell {
-        background: #111827;
+        background: #0f172a;
         border-radius: 14px;
         border: 1px solid #283548;
         padding: 20px 8px;
@@ -384,6 +378,7 @@
         background: none;
         border: none;
         cursor: pointer;
+        font-family: inherit;
       }
 
       .error-msg {
@@ -406,7 +401,7 @@
         color: #86efac;
       }
 
-      /* --- MODAL DE EDIÇÃO DE ESTOQUE --- */
+      /* MODAL */
       .modal-overlay {
         display: none;
         position: fixed;
@@ -461,16 +456,19 @@
         background: #0f172a;
         border: 1px solid #334155;
         color: #f8fafc;
-        border-radius: 8px;
+        border-radius: 10px;
         padding: 10px 14px;
         font-size: 0.95rem;
         width: 100%;
+        font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
       }
 
       .modal-box input:focus,
       .modal-box select:focus {
         outline: none;
         border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
       }
 
       .modal-actions {
@@ -485,10 +483,15 @@
         color: #94a3b8;
         border: none;
         padding: 10px 20px;
-        border-radius: 8px;
+        border-radius: 10px;
         font-size: 0.85rem;
         font-weight: 600;
         cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .btn-modal-cancel:hover {
+        background: #334155;
+        color: #f8fafc;
       }
 
       .btn-modal-confirm {
@@ -496,23 +499,18 @@
         color: white;
         border: none;
         padding: 10px 20px;
-        border-radius: 8px;
+        border-radius: 10px;
         font-size: 0.85rem;
         font-weight: 600;
         cursor: pointer;
+        transition: filter 0.2s;
       }
-
       .btn-modal-confirm:disabled {
         opacity: 0.6;
         cursor: not-allowed;
       }
-
       .btn-modal-confirm:hover:not(:disabled) {
-        background: #1d4ed8;
-      }
-      .btn-modal-cancel:hover {
-        background: #334155;
-        color: #f8fafc;
+        filter: brightness(1.08);
       }
 
       @media (max-width: 900px) {
@@ -809,8 +807,6 @@
         try {
           const items = await fetchAPI("/api/estoque/listar");
 
-          // Reconstroi o mapa posição → {id, cor}
-          // CORREÇÃO: o DTO retorna "posicaoEstoque", não "posicao"
           estoqueMap = new Map();
           (items || []).forEach((item) => {
             if (item.posicaoEstoque != null) {
@@ -892,14 +888,12 @@
 
         try {
           if (registro && registro.id != null) {
-            // Posição já existe → atualiza parcialmente (PATCH)
             await fetchAPI(`/api/estoque/patch/${registro.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ posicaoEstoque: pos, cor: cor }),
             });
           } else {
-            // Posição ainda não existe → cria (POST)
             await fetchAPI("/api/estoque/salvar", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -928,17 +922,12 @@
         try {
           const expedicoes = await fetchAPI("/api/expedicao/listar");
 
-          // Monta mapa posição → ordemProducao
-          // Considera ocupada apenas a expedição onde saidaEm é null
-          // (o bloco ainda não saiu do armazém de expedição)
           const posMap = new Map();
           (expedicoes || []).forEach((exp) => {
             const posicao = exp.posicaoExpedicao;
             const op = exp.ordemProducao;
-            const saiu = exp.saidaEm != null; // já foi expedida?
-
-            if (posicao == null || saiu) return; // posição inválida ou já liberada
-
+            const saiu = exp.saidaEm != null;
+            if (posicao == null || saiu) return;
             posMap.set(posicao, op ?? "OP");
           });
 
@@ -998,7 +987,6 @@
         }
       }
 
-      // Carga inicial + auto-refresh a cada 30 s
       carregarTodosDados();
       setInterval(carregarTodosDados, 30_000);
     </script>

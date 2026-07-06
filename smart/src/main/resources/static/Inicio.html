@@ -27,8 +27,8 @@
       }
 
       /* ==========================================================================
-     NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas do sistema
-     ========================================================================== */
+         NAV PADRÃO SMART 4.0
+         ========================================================================== */
       nav {
         width: 100%;
         background: #111c30;
@@ -69,9 +69,10 @@
       .nav-menu a.active {
         color: #38bdf8;
       }
-      /* ========================================================================== */
 
-      /* ---------- HERO ---------- */
+      /* ==========================================================================
+         HERO
+         ========================================================================== */
       .hero {
         max-width: 1200px;
         width: 100%;
@@ -157,6 +158,7 @@
         cursor: pointer;
         transition: transform 0.15s ease, filter 0.15s ease,
           background 0.2s ease;
+        font-family: inherit;
       }
       .btn:hover {
         transform: translateY(-1px);
@@ -173,8 +175,12 @@
         border: 1px solid #1e293b;
         color: #f8fafc;
       }
+      .btn-ghost:hover {
+        background: #1e293b;
+        border-color: #38bdf8;
+      }
 
-      /* ---------- HERO VISUAL ---------- */
+      /* HERO VISUAL */
       .hero-visual {
         background: #111c30;
         border: 1px solid #1e293b;
@@ -287,7 +293,9 @@
         border-color: rgba(34, 197, 94, 0.7);
       }
 
-      /* ---------- MÓDULOS ---------- */
+      /* ==========================================================================
+         MÓDULOS
+         ========================================================================== */
       .section {
         max-width: 1200px;
         width: 100%;
@@ -301,6 +309,10 @@
         font-size: 1.35rem;
         font-weight: 600;
         margin: 0;
+        background: linear-gradient(135deg, #c0e0ff, #60a5fa);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
       }
       .section-head p {
         font-size: 0.82rem;
@@ -371,7 +383,9 @@
         transform: translateX(3px);
       }
 
-      /* ---------- FOOTER ---------- */
+      /* ==========================================================================
+         FOOTER
+         ========================================================================== */
       footer {
         border-top: 1px solid #1e293b;
         padding: 22px 24px;
@@ -414,7 +428,6 @@
     </style>
   </head>
   <script>
-    // Marca automaticamente o item do menu correspondente à página atual
     document.querySelectorAll(".nav-menu a").forEach((link) => {
       const hrefPage = link.getAttribute("href");
       const currentPage =

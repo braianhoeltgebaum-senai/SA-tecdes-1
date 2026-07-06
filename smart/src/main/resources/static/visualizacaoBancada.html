@@ -13,32 +13,19 @@
         box-sizing: border-box;
       }
 
-      :root {
-        --bg: #0a0f1a;
-        --surface: #0d1b2e;
-        --border: #172238;
-        --muted: #3a5070;
-        --text: #c8dcf0;
-        --text-dim: #5a7a96;
-        --blue: #38bdf8;
-        --green: #4ade80;
-        --yellow: #facc15;
-        --red: #f87171;
-      }
-
       body {
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial,
           sans-serif;
-        background: var(--bg);
-        color: var(--text);
+        background: #0a0f1a;
+        color: #f8fafc;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
       }
 
       /* ==========================================================================
-           NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas do sistema
-           ========================================================================== */
+         NAV PADRÃO SMART 4.0
+         ========================================================================== */
       nav {
         width: 100%;
         background: #111c30;
@@ -79,8 +66,10 @@
       .nav-menu a.active {
         color: #38bdf8;
       }
-      /* ========================================================================== */
 
+      /* ==========================================================================
+         CONTEÚDO
+         ========================================================================== */
       .container {
         max-width: 1100px;
         margin: 32px auto;
@@ -95,24 +84,30 @@
         flex-wrap: wrap;
         gap: 14px;
         margin-bottom: 28px;
+        border-bottom: 1px solid #1e293b;
+        padding-bottom: 16px;
       }
       .page-header h2 {
-        font-size: 1.45rem;
+        font-size: 1.6rem;
         font-weight: 600;
-        color: var(--text);
+        background: linear-gradient(135deg, #c0e0ff, #60a5fa);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        margin: 0;
       }
       .page-header .sub {
-        font-size: 0.78rem;
-        color: var(--text-dim);
-        margin-top: 3px;
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-top: 4px;
       }
 
       .pill-pedido {
         display: flex;
         align-items: center;
         gap: 10px;
-        background: var(--surface);
-        border: 1px solid var(--border);
+        background: #111c30;
+        border: 1px solid #1e293b;
         border-radius: 40px;
         padding: 7px 18px;
       }
@@ -120,23 +115,23 @@
         font-size: 0.72rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        color: var(--text-dim);
+        color: #94a3b8;
       }
       .pill-dot {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: var(--muted);
+        background: #334155;
         transition: background 0.3s;
       }
       .pill-dot.active {
-        background: var(--green);
-        box-shadow: 0 0 6px var(--green);
+        background: #4ade80;
+        box-shadow: 0 0 6px #4ade80;
       }
       .pill-val {
         font-size: 0.95rem;
         font-weight: 700;
-        color: var(--text);
+        color: #f8fafc;
       }
 
       .acoes {
@@ -147,15 +142,16 @@
       }
       .btn {
         border: none;
-        border-radius: 30px;
+        border-radius: 10px;
         padding: 9px 22px;
         font-weight: 600;
         font-size: 0.84rem;
         cursor: pointer;
-        transition: opacity 0.15s, transform 0.15s;
+        transition: opacity 0.15s, transform 0.15s, background 0.2s;
         display: flex;
         align-items: center;
         gap: 7px;
+        font-family: inherit;
       }
       .btn:hover {
         opacity: 0.88;
@@ -167,9 +163,13 @@
         transform: none;
       }
       .btn-force {
-        background: var(--surface);
-        color: var(--text);
-        border: 1px solid var(--border);
+        background: #111c30;
+        color: #f8fafc;
+        border: 1px solid #1e293b;
+      }
+      .btn-force:hover {
+        background: #1e293b;
+        border-color: #38bdf8;
       }
 
       /* STEPPER */
@@ -177,8 +177,8 @@
         display: grid;
         grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr;
         align-items: center;
-        background: var(--surface);
-        border: 1px solid var(--border);
+        background: #111c30;
+        border: 1px solid #1e293b;
         border-radius: 20px;
         padding: 28px 32px;
         margin-bottom: 28px;
@@ -197,20 +197,20 @@
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
-        border: 2px solid var(--muted);
-        background: var(--bg);
+        border: 2px solid #334155;
+        background: #0a0f1a;
         transition: all 0.4s ease;
         position: relative;
       }
       .circle.waiting {
-        border-color: var(--muted);
+        border-color: #334155;
       }
       .circle.active {
-        border-color: var(--blue);
+        border-color: #38bdf8;
         background: #071e35;
       }
       .circle.done {
-        border-color: var(--green);
+        border-color: #4ade80;
         background: #062010;
       }
       .circle.active::after {
@@ -218,7 +218,7 @@
         position: absolute;
         inset: -6px;
         border-radius: 50%;
-        border: 2px solid var(--blue);
+        border: 2px solid #38bdf8;
         animation: pulse 1.8s ease-out infinite;
         opacity: 0;
       }
@@ -235,48 +235,48 @@
       .s-name {
         font-size: 0.82rem;
         font-weight: 600;
-        color: var(--text);
+        color: #f8fafc;
       }
       .s-badge {
         font-size: 0.68rem;
         font-weight: 600;
         padding: 3px 11px;
         border-radius: 20px;
-        background: var(--border);
-        color: var(--text-dim);
+        background: #1e293b;
+        color: #94a3b8;
         transition: all 0.3s;
       }
       .s-badge.active {
         background: #0b2a42;
-        color: var(--blue);
+        color: #38bdf8;
       }
       .s-badge.done {
         background: #062010;
-        color: var(--green);
+        color: #4ade80;
       }
       .s-op {
         font-size: 0.7rem;
-        color: var(--text-dim);
+        color: #94a3b8;
       }
       .s-op b {
-        color: var(--text);
+        color: #f8fafc;
       }
       .connector {
         height: 2px;
-        background: var(--muted);
+        background: #334155;
         transition: background 0.4s;
       }
       .connector.active {
-        background: var(--blue);
+        background: #38bdf8;
       }
       .connector.done {
-        background: var(--green);
+        background: #4ade80;
       }
 
       /* IMAGEM DA BANCADA */
       .bancada-wrap {
-        background: var(--surface);
-        border: 1px solid var(--border);
+        background: #111c30;
+        border: 1px solid #1e293b;
         border-radius: 20px;
         padding: 20px;
         margin-bottom: 28px;
@@ -289,14 +289,14 @@
         font-size: 0.78rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
-        color: var(--text-dim);
+        color: #94a3b8;
         align-self: flex-start;
       }
       .bancada-wrap img {
         width: 100%;
         max-width: 860px;
         border-radius: 12px;
-        border: 1px solid var(--border);
+        border: 1px solid #1e293b;
         object-fit: contain;
       }
 
@@ -306,39 +306,39 @@
         align-items: center;
         gap: 12px;
         flex-wrap: wrap;
-        background: var(--surface);
-        border: 1px solid var(--border);
+        background: #111c30;
+        border: 1px solid #1e293b;
         border-radius: 12px;
         padding: 10px 18px;
         margin-bottom: 20px;
         font-size: 0.72rem;
-        color: var(--text-dim);
+        color: #94a3b8;
       }
       .diag-bar b {
-        color: var(--text);
+        color: #f8fafc;
       }
       .diag-sep {
-        color: var(--muted);
+        color: #334155;
       }
       .fonte-badge {
         padding: 2px 8px;
         border-radius: 20px;
         font-size: 0.65rem;
         font-weight: 700;
-        background: var(--border);
-        color: var(--text-dim);
+        background: #1e293b;
+        color: #94a3b8;
       }
       .fonte-badge.smart {
         background: #0b2a42;
-        color: var(--blue);
+        color: #38bdf8;
       }
       .fonte-badge.bytes {
         background: #1f1a06;
-        color: var(--yellow);
+        color: #facc15;
       }
       .fonte-badge.offline {
         background: #2a0606;
-        color: var(--red);
+        color: #f87171;
       }
 
       /* RODAPÉ */
@@ -347,22 +347,22 @@
         align-items: center;
         gap: 10px;
         font-size: 0.74rem;
-        color: var(--text-dim);
+        color: #94a3b8;
         margin-top: 8px;
       }
       .dot {
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: var(--muted);
+        background: #334155;
         transition: background 0.3s;
       }
       .dot.online {
-        background: var(--green);
-        box-shadow: 0 0 6px var(--green);
+        background: #4ade80;
+        box-shadow: 0 0 6px #4ade80;
       }
       .dot.offline {
-        background: var(--red);
+        background: #f87171;
       }
 
       @media (max-width: 680px) {
@@ -375,11 +375,17 @@
           height: 28px;
           margin: 0 auto;
         }
+        .page-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .pill-pedido {
+          align-self: flex-start;
+        }
       }
     </style>
   </head>
   <script>
-    // Marca automaticamente o item do menu correspondente à página atual
     document.querySelectorAll(".nav-menu a").forEach((link) => {
       const hrefPage = link.getAttribute("href");
       const currentPage =
@@ -524,7 +530,6 @@
       }
 
       function atualizarDiagnostico(data) {
-        // Buffers
         const buf = data._buffers ?? {};
         document.getElementById("diagClp1").textContent =
           (buf.clp1 ?? "—") + " B";
@@ -535,7 +540,6 @@
         document.getElementById("diagClp4").textContent =
           (buf.clp4 ?? "—") + " B";
 
-        // Fonte
         const fonte = data._fonte ?? "—";
         const badge = document.getElementById("diagFonte");
         badge.textContent = fonte;
@@ -547,7 +551,6 @@
             ? " bytes"
             : " offline");
 
-        // Status numérico raw para debug
         const sE = data.estoque?.statusEstoque ?? "?";
         const sP = data.processo?.status ?? data.estoque?.statusProcesso ?? "?";
         const sM = data.montagem?.status ?? data.estoque?.statusMontagem ?? "?";
