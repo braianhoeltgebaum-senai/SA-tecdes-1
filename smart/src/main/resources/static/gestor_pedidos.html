@@ -6,9 +6,6 @@
     <title>Smart Factory · Gestor de Pedidos</title>
 
     <style>
-      /* ==========================================================================
-         RESET E BASE — idêntico às outras telas
-         ========================================================================== */
       * {
         margin: 0;
         padding: 0;
@@ -25,9 +22,6 @@
         color: #f8fafc;
       }
 
-      /* ==========================================================================
-         NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas
-         ========================================================================== */
       nav {
         width: 100%;
         background: #111c30;
@@ -69,9 +63,6 @@
         color: #38bdf8;
       }
 
-      /* ==========================================================================
-         CONTEÚDO PRINCIPAL — padrão de todas as páginas
-         ========================================================================== */
       .page-content {
         padding: 32px 40px;
         max-width: 1400px;
@@ -80,7 +71,6 @@
         flex: 1;
       }
 
-      /* Cabeçalho da página (igual ao das outras telas) */
       .page-header {
         display: flex;
         justify-content: space-between;
@@ -106,9 +96,6 @@
         margin-top: 4px;
       }
 
-      /* ==========================================================================
-         LAYOUT PRINCIPAL (form + preview)
-         ========================================================================== */
       .layout {
         display: flex;
         gap: 28px;
@@ -144,9 +131,6 @@
         color: #f8fafc;
       }
 
-      /* ==========================================================================
-         FORMULÁRIO — campos, grids e blocos
-         ========================================================================== */
       .top-grid {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -194,7 +178,6 @@
         box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
       }
 
-      /* Blocos */
       .bloco {
         margin-top: 24px;
         border-radius: 16px;
@@ -222,7 +205,6 @@
         padding: 20px;
       }
 
-      /* Lâminas */
       .laminasContainer {
         display: flex;
         flex-direction: column;
@@ -255,7 +237,6 @@
         gap: 14px;
       }
 
-      /* Botões */
       .btn {
         border: none;
         border-radius: 10px;
@@ -319,9 +300,6 @@
         filter: none;
       }
 
-      /* ==========================================================================
-         PREVIEW ISOMÉTRICO (mantido)
-         ========================================================================== */
       .bloco-preview {
         position: relative;
         width: 340px;
@@ -360,7 +338,6 @@
         position: relative;
       }
 
-      /* Status de envio */
       .status-envio {
         margin-top: 12px;
         padding: 12px 16px;
@@ -385,9 +362,13 @@
         color: #7dd3fc;
       }
 
-      /* ==========================================================================
-         RESPONSIVIDADE — igual às outras telas
-         ========================================================================== */
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+
       @media (max-width: 1200px) {
         .layout {
           flex-direction: column;
@@ -422,59 +403,10 @@
           font-size: 1.3rem;
         }
       }
-
-      /* ==========================================================================
-         UTILITÁRIOS ADICIONAIS (mesmo estilo das outras páginas)
-         ========================================================================== */
-      .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-      }
-
-      /* Z-index para camadas de lâminas e padrões (mantido do original) */
-      #padrao-esquerda-0,
-      #padrao-esquerda-1,
-      #padrao-esquerda-2 {
-        z-index: 11;
-      }
-      #padrao-frente-0,
-      #padrao-frente-1,
-      #padrao-frente-2 {
-        z-index: 21;
-      }
-      #padrao-direita-0,
-      #padrao-direita-1,
-      #padrao-direita-2 {
-        z-index: 16;
-      }
-
-      /* Barra de diagnóstico opcional (como na página de acompanhamento) */
-      .diag-bar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 12px;
-        padding: 10px 18px;
-        margin-bottom: 20px;
-        font-size: 0.72rem;
-        color: #94a3b8;
-      }
-      .diag-bar b {
-        color: #f8fafc;
-      }
-      .diag-sep {
-        color: #334155;
-      }
     </style>
   </head>
 
   <body>
-    <!-- ===== NAV ===== -->
     <nav>
       <div class="nav-logo">
         <h1>SMART 4.0 · Planta Digital</h1>
@@ -489,9 +421,7 @@
       </ul>
     </nav>
 
-    <!-- ===== CONTEÚDO ===== -->
     <div class="page-content">
-      <!-- Cabeçalho da página (padrão) -->
       <div class="page-header">
         <div>
           <h2>Gestor de Pedidos</h2>
@@ -503,7 +433,6 @@
         <!-- PAINEL ESQUERDO: FORMULÁRIO -->
         <div class="painel-form">
           <form id="formPedido">
-            <!-- LINHA 1: Ordem, Tipo, Cor Tampa -->
             <div class="top-grid">
               <div class="field">
                 <label>Ordem de Produção</label>
@@ -530,35 +459,19 @@
               </div>
             </div>
 
-            <!-- LINHA 2: Expedição -->
             <div class="mid-grid">
               <div class="field">
                 <label>Posição da Expedição</label>
                 <select id="posicaoExpedicao">
-                  <option value="">Selecione</option>
-                  <option value="1">Posição 1</option>
-                  <option value="2">Posição 2</option>
-                  <option value="3">Posição 3</option>
-                  <option value="4">Posição 4</option>
-                  <option value="5">Posição 5</option>
-                  <option value="6">Posição 6</option>
-                  <option value="7">Posição 7</option>
-                  <option value="8">Posição 8</option>
-                  <option value="9">Posição 9</option>
-                  <option value="10">Posição 10</option>
-                  <option value="11">Posição 11</option>
-                  <option value="12">Posição 12</option>
+                  <option value="">Carregando posições...</option>
                 </select>
               </div>
             </div>
 
-            <!-- BLOCOS DINÂMICOS -->
             <div id="blocosContainer"></div>
 
-            <!-- STATUS DE ENVIO -->
             <div class="status-envio" id="statusEnvio"></div>
 
-            <!-- BOTÃO SALVAR -->
             <button class="btn-salvar" type="submit" id="btnSalvar">
               Salvar Pedido
             </button>
@@ -580,9 +493,8 @@
       </div>
     </div>
 
-    <!-- ===== SCRIPTS (mantidos intactos) ===== -->
     <script>
-      // Marca automaticamente o item do menu correspondente à página atual
+      // Marca menu ativo
       document.querySelectorAll(".nav-menu a").forEach((link) => {
         const hrefPage = link.getAttribute("href");
         const currentPage =
@@ -593,23 +505,74 @@
           link.classList.remove("active");
         }
       });
-    </script>
 
-    <script>
       // =========================================================================
       // INICIALIZAÇÃO
       // =========================================================================
+      const API_BASE = "http://localhost:8088";
       const tipoPedido = document.getElementById("tipoPedido");
       const blocosContainer = document.getElementById("blocosContainer");
+      const posicaoSelect = document.getElementById("posicaoExpedicao");
 
-      criarBlocos(1);
+      let posicoesOcupadas = new Set();
 
-      tipoPedido.addEventListener("change", () => {
-        criarBlocos(Number(tipoPedido.value));
-      });
+      // Carrega as posições ocupadas da expedição e preenche o select
+      async function carregarPosicoesExpedicao() {
+        try {
+          const response = await fetch(`${API_BASE}/api/expedicao/listar`);
+          if (!response.ok) throw new Error("Erro ao buscar expedição");
+          const expedicoes = await response.json();
+
+          posicoesOcupadas = new Set();
+          (expedicoes || []).forEach((exp) => {
+            const pos = exp.posicaoExpedicao;
+            const saiu = exp.saidaEm != null;
+            if (pos != null && !saiu) {
+              posicoesOcupadas.add(pos);
+            }
+          });
+
+          preencherSelectPosicoes();
+        } catch (err) {
+          console.error("Erro ao carregar posições de expedição:", err);
+          // Fallback: mostra todas as posições como disponíveis
+          posicoesOcupadas = new Set();
+          preencherSelectPosicoes();
+        }
+      }
+
+      function preencherSelectPosicoes() {
+        const select = posicaoSelect;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="">Selecione</option>';
+
+        for (let i = 1; i <= 12; i++) {
+          const option = document.createElement("option");
+          option.value = String(i);
+          option.textContent = `Posição ${i}`;
+          if (posicoesOcupadas.has(i)) {
+            option.disabled = true;
+            option.textContent += " (ocupada)";
+          }
+          select.appendChild(option);
+        }
+
+        // Se o valor atual ainda for válido, mantém
+        if (currentValue && !posicoesOcupadas.has(Number(currentValue))) {
+          select.value = currentValue;
+        } else {
+          select.value = "";
+        }
+      }
+
+      // Atualiza as posições após salvar um pedido (para liberar a posição usada)
+      // e também periodicamente
+      async function atualizarPosicoesExpedicao() {
+        await carregarPosicoesExpedicao();
+      }
 
       // =========================================================================
-      // BLOCOS
+      // BLOCOS E LÂMINAS (mesmo código anterior)
       // =========================================================================
       function criarBlocos(qtd) {
         if (qtd > 3) qtd = 3;
@@ -639,13 +602,9 @@
                 </div>
             `;
         }
-
         atualizarPreview();
       }
 
-      // =========================================================================
-      // LÂMINAS
-      // =========================================================================
       function adicionarLamina(btn) {
         const bloco = btn.closest(".bloco");
         const container = bloco.querySelector(".laminasContainer");
@@ -669,7 +628,6 @@
                     </button>
                 </div>
                 <div class="lamina-grid">
-
                     <div class="field">
                         <label>Cor</label>
                         <select class="corLamina" onchange="atualizarPreview()">
@@ -682,7 +640,6 @@
                             <option value="6">Branco</option>
                         </select>
                     </div>
-
                     <div class="field">
                         <label>Padrão</label>
                         <select class="padraoLamina" onchange="atualizarPreview()">
@@ -692,7 +649,6 @@
                             <option value="3">Estrela</option>
                         </select>
                     </div>
-
                     <div class="field">
                         <label>Posição</label>
                         <select class="posicaoLamina" onchange="atualizarPreview()">
@@ -702,12 +658,10 @@
                             <option value="3">Direita</option>
                         </select>
                     </div>
-
                 </div>
             </div>
         `
         );
-
         atualizarPreview();
       }
 
@@ -716,9 +670,6 @@
         atualizarPreview();
       }
 
-      // =========================================================================
-      // CONTROLE DE POSIÇÕES DUPLICADAS
-      // =========================================================================
       function atualizarOpcoesPosicao(bloco) {
         const selects = Array.from(bloco.querySelectorAll(".posicaoLamina"));
         const posicoesOcupadas = selects
@@ -739,13 +690,12 @@
       }
 
       // =========================================================================
-      // PREVIEW ISOMÉTRICO
+      // PREVIEW
       // =========================================================================
       function atualizarPreview() {
         const previewStack = document.getElementById("previewStack");
         previewStack.innerHTML = "";
 
-        // Tampa
         const corTampa = document.getElementById("corTampa").value;
         document.getElementById(
           "previewTampa"
@@ -806,15 +756,6 @@
                     : `assets/padroes/padrao${padrao}-${
                         posicao == 1 ? 1 : 2
                       }.png`;
-
-                console.log(
-                  "Padrao:",
-                  padrao,
-                  "Posicao:",
-                  posicao,
-                  "Caminho:",
-                  caminho
-                );
                 camadaPadrao.style.backgroundImage = `url('${caminho}')`;
               }
             }
@@ -823,9 +764,8 @@
       }
 
       // =========================================================================
-      // UTILITÁRIOS
+      // UTILITÁRIOS DE VALIDAÇÃO E SUBMIT
       // =========================================================================
-
       function validarPedido(pedido) {
         if (!pedido.ordemProducao) {
           return "Informe a Ordem de Produção.";
@@ -833,10 +773,7 @@
         if (!pedido.corTampa || pedido.corTampa === 0) {
           return "Selecione a cor da tampa.";
         }
-        if (
-          pedido.posicaoExpedicao === null ||
-          pedido.posicaoExpedicao === undefined
-        ) {
+        if (pedido.posicaoExpedicao === null || pedido.posicaoExpedicao === undefined) {
           return "Selecione a posição da expedição.";
         }
         if (!pedido.blocos || pedido.blocos.length === 0) {
@@ -853,7 +790,6 @@
 
       async function extrairMensagemErro(response) {
         let corpo = null;
-
         try {
           corpo = await response.clone().json();
         } catch (_) {
@@ -865,7 +801,6 @@
         }
 
         let detalheBackend = null;
-
         if (corpo && typeof corpo === "object") {
           detalheBackend =
             corpo.message ||
@@ -874,7 +809,6 @@
             corpo.detail ||
             corpo.title ||
             null;
-
           if (!detalheBackend && corpo.errors) {
             const partes = [];
             for (const campo in corpo.errors) {
@@ -892,18 +826,16 @@
           400: "Dados do pedido inválidos. Verifique os campos preenchidos.",
           401: "Sessão expirada ou não autorizada. Faça login novamente.",
           403: "Você não tem permissão para criar pedidos.",
-          404: "Endpoint de pedidos não encontrado no servidor. Verifique a configuração da API.",
+          404: "Endpoint de pedidos não encontrado no servidor.",
           409: "Conflito ao salvar o pedido (ex: ordem de produção já existente).",
-          422: "Não foi possível processar os dados enviados. Verifique os campos.",
-          500: "Erro interno no servidor ao salvar o pedido. Tente novamente ou contate o suporte.",
-          503: "Servidor indisponível no momento. Tente novamente em instantes.",
+          422: "Não foi possível processar os dados enviados.",
+          500: "Erro interno no servidor ao salvar o pedido.",
+          503: "Servidor indisponível no momento.",
         };
 
         const mensagemPadrao =
           mensagensPorStatus[response.status] ||
-          `O servidor retornou um erro (HTTP ${response.status} - ${
-            response.statusText || "desconhecido"
-          }).`;
+          `Erro HTTP ${response.status} - ${response.statusText || "desconhecido"}.`;
 
         return detalheBackend
           ? `${mensagemPadrao} Detalhe: ${detalheBackend}`
@@ -915,7 +847,6 @@
         el.textContent = mensagem;
         el.className = `status-envio ${tipo}`;
         el.style.display = "block";
-
         if (tipo !== "carregando") {
           setTimeout(() => {
             el.style.display = "none";
@@ -924,7 +855,7 @@
       }
 
       // =========================================================================
-      // SUBMIT: APENAS SALVAR PEDIDO
+      // SUBMIT DO FORMULÁRIO
       // =========================================================================
       document
         .getElementById("formPedido")
@@ -938,10 +869,8 @@
 
           // --- Monta os blocos ---
           const blocos = [];
-
           document.querySelectorAll(".bloco").forEach((bloco) => {
             const laminas = [];
-
             bloco.querySelectorAll(".lamina-card").forEach((card) => {
               laminas.push({
                 cor: Number(card.querySelector(".corLamina").value),
@@ -951,33 +880,57 @@
                 ),
               });
             });
-
             blocos.push({
               corBloco: Number(bloco.querySelector(".corBloco").value),
               laminas: laminas,
             });
           });
 
-          // --- Lê posicaoExpedicao ---
-          const posicaoExpedicaoEl =
-            document.getElementById("posicaoExpedicao");
-          const posicaoExpedicao = posicaoExpedicaoEl.value
+          const posicaoExpedicaoEl = document.getElementById("posicaoExpedicao");
+          const posicaoEscolhida = posicaoExpedicaoEl.value
             ? Number(posicaoExpedicaoEl.value)
             : null;
 
-          // --- Monta payload do pedido ---
+          // --- Verifica se a posição ainda está livre (consulta atualizada) ---
+          try {
+            const response = await fetch(`${API_BASE}/api/expedicao/listar`);
+            if (response.ok) {
+              const expedicoes = await response.json();
+              const ocupadas = new Set();
+              (expedicoes || []).forEach((exp) => {
+                const pos = exp.posicaoExpedicao;
+                const saiu = exp.saidaEm != null;
+                if (pos != null && !saiu) {
+                  ocupadas.add(pos);
+                }
+              });
+              // Se a posição escolhida está ocupada, exibe erro
+              if (posicaoEscolhida !== null && ocupadas.has(posicaoEscolhida)) {
+                mostrarStatus(
+                  `✘ A posição ${posicaoEscolhida} já está ocupada. Escolha outra.`,
+                  "erro"
+                );
+                btnSalvar.disabled = false;
+                btnSalvar.textContent = "Salvar Pedido";
+                // Atualiza o select para refletir mudanças
+                await carregarPosicoesExpedicao();
+                return;
+              }
+            }
+          } catch (err) {
+            console.warn("Não foi possível verificar ocupação da expedição:", err);
+            // Continua mesmo sem verificação (fallback)
+          }
+
           const pedido = {
-            ordemProducao: document
-              .getElementById("ordemProducao")
-              .value.trim(),
+            ordemProducao: document.getElementById("ordemProducao").value.trim(),
             tipoPedido: Number(tipoPedido.value),
             corTampa: Number(document.getElementById("corTampa").value),
-            posicaoExpedicao: posicaoExpedicao,
+            posicaoExpedicao: posicaoEscolhida,
             dataPedido: new Date().toISOString(),
             blocos: blocos,
           };
 
-          // --- Validação no front ---
           const erroValidacao = validarPedido(pedido);
           if (erroValidacao) {
             mostrarStatus("✘ " + erroValidacao, "erro");
@@ -987,7 +940,7 @@
           }
 
           try {
-            const response = await fetch("http://localhost:8088/pedidos", {
+            const response = await fetch(`${API_BASE}/pedidos`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(pedido),
@@ -999,28 +952,40 @@
             }
 
             const data = await response.json();
-            console.log("Pedido salvo:", data);
-
             const idSalvo = data.id ?? data.idPedido ?? "—";
-
             mostrarStatus(
-              `✔ Pedido #${idSalvo} salvo com sucesso! Acesse o Gestor de Pedidos para enviar à produção.`,
+              `✔ Pedido #${idSalvo} salvo com sucesso!`,
               "sucesso"
             );
+            // Atualiza a lista de posições ocupadas
+            await carregarPosicoesExpedicao();
           } catch (error) {
             console.error(error);
-
             const mensagemFinal =
               error instanceof TypeError
-                ? "Não foi possível conectar ao servidor. Verifique se o backend está em execução (http://localhost:8088) e sua conexão."
+                ? "Não foi possível conectar ao servidor. Verifique o backend."
                 : error.message;
-
             mostrarStatus("✘ " + mensagemFinal, "erro");
           } finally {
             btnSalvar.disabled = false;
             btnSalvar.textContent = "Salvar Pedido";
           }
         });
+
+      // =========================================================================
+      // INICIALIZAÇÃO FINAL
+      // =========================================================================
+      async function iniciar() {
+        await carregarPosicoesExpedicao();
+        criarBlocos(1);
+        tipoPedido.addEventListener("change", () => {
+          criarBlocos(Number(tipoPedido.value));
+        });
+        // Atualiza posições a cada 30s para refletir mudanças de outros usuários
+        setInterval(atualizarPosicoesExpedicao, 30000);
+      }
+
+      iniciar();
     </script>
   </body>
 </html>

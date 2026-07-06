@@ -136,7 +136,7 @@
         font-style: italic;
       }
 
-      /* FILTROS */
+      /* FILTROS E ORDENAÇÃO */
       .filters-container {
         display: flex;
         gap: 10px;
@@ -180,6 +180,26 @@
         background: #2d3a4e;
         border-color: #5b7a9a;
         color: white;
+      }
+
+      .btn-order {
+        background: #111c30;
+        color: #94a3b8;
+        border: 1px solid #1e293b;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .btn-order:hover {
+        border-color: #38bdf8;
+        color: #f8fafc;
       }
 
       /* GRID DOS PEDIDOS (CARDS) */
@@ -537,6 +557,9 @@
               Concluídos
             </button>
           </div>
+          <button class="btn-order" id="btnOrder" onclick="alternarOrdem()">
+            Mais recentes
+          </button>
           <button class="btn-refresh" onclick="obterPedidos()">
             Atualizar ↻
           </button>
@@ -575,6 +598,7 @@
       let todosPedidos = [];
       let filtroAtivo = "todos";
       let pedidoPendenteCLP = null;
+      let ordemAtual = "recentes"; // 'recentes' ou 'antigos'
 
       const mapaStatus = {
         1: { nome: "Pendente", classe: "status-1" },
@@ -614,6 +638,7 @@
           tipoPedido: 2,
           corTampa: 2,
           statusPedido: 1,
+          dataPedido: "2026-07-06T10:00:00.000Z",
           blocos: [
             {
               corBloco: 2,
@@ -640,6 +665,7 @@
           tipoPedido: 1,
           corTampa: 3,
           statusPedido: 2,
+          dataPedido: "2026-07-06T09:00:00.000Z",
           blocos: [
             {
               corBloco: 1,
@@ -657,6 +683,7 @@
           tipoPedido: 3,
           corTampa: 1,
           statusPedido: 3,
+          dataPedido: "2026-07-05T22:00:00.000Z",
           blocos: [
             {
               corBloco: 2,
@@ -761,11 +788,20 @@
         document.getElementById("modalIP").classList.remove("open");
       }
 
+      function alternarOrdem() {
+        ordemAtual = ordemAtual === "recentes" ? "antigos" : "recentes";
+        const btn = document.getElementById("btnOrder");
+        btn.textContent =
+          ordemAtual === "recentes" ? "Mais recentes" : "Mais antigos";
+        renderizarCards();
+      }
+
       function renderizarCards() {
         const grid = document.getElementById("gridPedidos");
         grid.innerHTML = "";
 
-        const pedidosFiltrados = todosPedidos.filter((p) => {
+        // Filtra
+        let pedidosFiltrados = todosPedidos.filter((p) => {
           if (filtroAtivo === "todos") return true;
           return Number(p.statusPedido) === Number(filtroAtivo);
         });
@@ -774,6 +810,17 @@
           grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px 0;">Nenhum pedido encontrado para este status.</p>`;
           return;
         }
+
+        // Ordena
+        pedidosFiltrados.sort((a, b) => {
+          const dataA = a.dataPedido ? new Date(a.dataPedido) : new Date(a.id);
+          const dataB = b.dataPedido ? new Date(b.dataPedido) : new Date(b.id);
+          if (ordemAtual === "recentes") {
+            return dataB - dataA; // mais recentes primeiro
+          } else {
+            return dataA - dataB; // mais antigos primeiro
+          }
+        });
 
         pedidosFiltrados.forEach((pedido) => {
           const statusNum = Number(pedido.statusPedido);

@@ -326,6 +326,11 @@
         background: linear-gradient(145deg, #0b2e26, #064e3b);
         border-color: #2dd4bf;
         box-shadow: 0 0 10px rgba(45, 212, 191, 0.22);
+        cursor: pointer;
+      }
+
+      .exp-cell.occupied:hover {
+        box-shadow: 0 0 0 2px #2dd4bf, 0 0 16px rgba(45, 212, 191, 0.4);
       }
 
       .exp-pos {
@@ -401,7 +406,7 @@
         color: #86efac;
       }
 
-      /* MODAL */
+      /* MODAL GENÉRICO */
       .modal-overlay {
         display: none;
         position: fixed;
@@ -511,6 +516,20 @@
       }
       .btn-modal-confirm:hover:not(:disabled) {
         filter: brightness(1.08);
+      }
+      .btn-modal-danger {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: filter 0.2s;
+      }
+      .btn-modal-danger:hover:not(:disabled) {
+        filter: brightness(1.1);
       }
 
       @media (max-width: 900px) {
@@ -657,6 +676,9 @@
             <span class="badge-pos" id="expedicaoContador">0/12 ocupadas</span>
           </div>
           <div class="panel-body">
+            <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 14px">
+              Clique em uma posição ocupada para removê-la da expedição.
+            </p>
             <div class="exp-grid" id="expGrid">
               <!-- preenchido via JS -->
             </div>
@@ -673,7 +695,7 @@
                   class="legend-dot"
                   style="background: #064e3b; border: 1px solid #2dd4bf"
                 ></div>
-                Ocupado (OP)
+                Ocupado (clique para remover)
               </div>
             </div>
           </div>
@@ -721,6 +743,45 @@
       </div>
     </div>
 
+    <!-- Modal: remover posição de expedição -->
+    <div class="modal-overlay" id="modalExpedicao">
+      <div class="modal-box">
+        <h3 id="modalExpedicaoTitulo">Remover da Expedição</h3>
+        <p id="modalExpedicaoDesc">
+          Tem certeza que deseja liberar esta posição? O bloco será removido da
+          expedição.
+        </p>
+
+        <div class="modal-field">
+          <label>Posição</label>
+          <input
+            type="number"
+            id="modalExpedicaoPos"
+            min="1"
+            max="12"
+            readonly
+          />
+        </div>
+        <div class="modal-field">
+          <label>Ordem de Produção</label>
+          <input type="text" id="modalExpedicaoOp" readonly />
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" onclick="fecharModalExpedicao()">
+            Cancelar
+          </button>
+          <button
+            class="btn-modal-danger"
+            id="btnRemoverExpedicao"
+            onclick="removerExpedicaoModal()"
+          >
+            Remover
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       // ─── Configuração ────────────────────────────────────────────────────
       const API_BASE = "http://localhost:8088";
@@ -744,6 +805,10 @@
       // Mapas em memória: posição → { id (ou null), cor }
       let estoqueMap = new Map();
       let posicaoEmEdicao = null;
+
+      // Mapa para expedição: posição → { id, op }
+      let expedicaoMap = new Map();
+      let posicaoExpedicaoEmEdicao = null;
 
       // ─── Helper fetch ────────────────────────────────────────────────────
       async function fetchAPI(endpoint, options) {
@@ -851,7 +916,7 @@
         }
       }
 
-      // ─── Modal: abrir / fechar ─────────────────────────────────────────────
+      // ─── Modal Estoque ────────────────────────────────────────────────────
       function abrirModalEstoque(pos) {
         posicaoEmEdicao = pos;
         const registro = estoqueMap.get(pos);
@@ -874,7 +939,6 @@
         posicaoEmEdicao = null;
       }
 
-      // ─── Modal: salvar (cria ou atualiza via API) ───────────────────────────
       async function salvarEstoqueModal() {
         if (posicaoEmEdicao == null) return;
 
@@ -922,25 +986,33 @@
         try {
           const expedicoes = await fetchAPI("/api/expedicao/listar");
 
-          const posMap = new Map();
+          // Reconstroi o mapa posição → { id, op }
+          expedicaoMap = new Map();
           (expedicoes || []).forEach((exp) => {
             const posicao = exp.posicaoExpedicao;
             const op = exp.ordemProducao;
             const saiu = exp.saidaEm != null;
             if (posicao == null || saiu) return;
-            posMap.set(posicao, op ?? "OP");
+            expedicaoMap.set(posicao, {
+              id: exp.id,
+              op: op ?? "OP",
+            });
           });
 
           let ocupadas = 0;
           let html = "";
           for (let i = 1; i <= 12; i++) {
-            const op = posMap.get(i);
-            if (op) {
+            const registro = expedicaoMap.get(i);
+            if (registro) {
               ocupadas++;
-              const opExibida = op.length > 14 ? op.slice(0, 12) + "…" : op;
+              const opExibida =
+                registro.op.length > 14
+                  ? registro.op.slice(0, 12) + "…"
+                  : registro.op;
               html += `
                             <div class="exp-cell occupied"
-                                 title="Posição ${i} — Pedido: ${op}">
+                                 title="Posição ${i} — Pedido: ${registro.op} (clique para remover)"
+                                 onclick="abrirModalExpedicao(${i})">
                                 <div class="exp-pos">${String(i).padStart(
                                   2,
                                   "0"
@@ -967,6 +1039,68 @@
             '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#f87171;">Falha ao carregar expedição</div>';
           contador.textContent = "ERRO";
           mostrarErro("Não foi possível carregar a expedição: " + err.message);
+        }
+      }
+
+      // ─── Modal Expedição ──────────────────────────────────────────────────
+      function abrirModalExpedicao(pos) {
+        const registro = expedicaoMap.get(pos);
+        if (!registro) {
+          mostrarErro("Posição não está ocupada.");
+          return;
+        }
+
+        posicaoExpedicaoEmEdicao = pos;
+        document.getElementById("modalExpedicaoPos").value = pos;
+        document.getElementById("modalExpedicaoOp").value = registro.op;
+        document.getElementById(
+          "modalExpedicaoTitulo"
+        ).textContent = `Remover da Expedição - Posição ${pos}`;
+        document.getElementById("modalExpedicaoDesc").textContent =
+          `Tem certeza que deseja liberar a posição ${pos} (OP: ${registro.op})? O bloco será removido da expedição.`;
+
+        document.getElementById("modalExpedicao").classList.add("open");
+      }
+
+      function fecharModalExpedicao() {
+        document.getElementById("modalExpedicao").classList.remove("open");
+        posicaoExpedicaoEmEdicao = null;
+      }
+
+      async function removerExpedicaoModal() {
+        if (posicaoExpedicaoEmEdicao == null) return;
+
+        const btn = document.getElementById("btnRemoverExpedicao");
+        const pos = posicaoExpedicaoEmEdicao;
+        const registro = expedicaoMap.get(pos);
+
+        if (!registro) {
+          mostrarErro("Posição não encontrada.");
+          fecharModalExpedicao();
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Removendo...";
+
+        try {
+          // Chamada para liberar a posição (marcar saidaEm = now ou deletar)
+          // Usando DELETE /api/expedicao/{id} como exemplo.
+          await fetchAPI(`/api/expedicao/${registro.id}`, {
+            method: "DELETE",
+          });
+
+          mostrarSucesso(`Posição ${pos} liberada com sucesso.`);
+          fecharModalExpedicao();
+          await carregarExpedicao();
+        } catch (err) {
+          console.error("[Remover Expedição]", err);
+          mostrarErro(
+            "Não foi possível remover a posição " + pos + ": " + err.message
+          );
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Remover";
         }
       }
 
