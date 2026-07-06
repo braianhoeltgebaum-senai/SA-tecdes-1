@@ -20,9 +20,11 @@ import com.sa.smart.dto.PedidoInfoDTO;
 import com.sa.smart.enums.EnumCorBloco;
 import com.sa.smart.model.Bloco;
 import com.sa.smart.model.Estoque;
+import com.sa.smart.model.Expedicao;
 import com.sa.smart.model.Lamina;
 import com.sa.smart.model.Pedido;
 import com.sa.smart.repository.EstoqueRepository;
+import com.sa.smart.repository.ExpedicaoRepository;
 import com.sa.smart.repository.PedidoRepository;
 
 @Service
@@ -30,12 +32,15 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final EstoqueRepository estoqueRepository;
+    private final ExpedicaoRepository expedicaoRepository; // NOVO
 
     public PedidoService(
             PedidoRepository pedidoRepository,
-            EstoqueRepository estoqueRepository) {
+            EstoqueRepository estoqueRepository,
+            ExpedicaoRepository expedicaoRepository) { // NOVO
         this.pedidoRepository = pedidoRepository;
         this.estoqueRepository = estoqueRepository;
+        this.expedicaoRepository = expedicaoRepository; // NOVO
     }
 
     // ─── Mapeamento auxiliar ──────────────────────────────────────────────────
@@ -55,16 +60,6 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
-    /**
-     * Cria um novo pedido.
-     *
-     * Para cada bloco, busca a PRIMEIRA posição de estoque que contenha um bloco
-     * da cor solicitada (ordenado por posicaoEstoque ASC), evitando reutilizar
-     * posições já atribuídas a blocos anteriores do mesmo pedido.
-     *
-     * Após atribuir a posição ao bloco, marca o estoque como vazio (cor=0)
-     * para que o robô saiba que foi o sistema quem reservou aquela saída.
-     */
     @Transactional
     public Pedido criarPedido(Pedido pedido) {
         if (pedido.getTipoPedido() == 3 &&
@@ -72,7 +67,6 @@ public class PedidoService {
             throw new RuntimeException("Pedidos triplos exigem exatamente 3 blocos.");
         }
 
-        // Validação da cor da tampa (1-3)
         if (pedido.getCorTampa() == null || pedido.getCorTampa() < 1 || pedido.getCorTampa() > 3) {
             throw new RuntimeException("Cor da tampa inválida. Use 1, 2 ou 3.");
         }
@@ -80,8 +74,6 @@ public class PedidoService {
         pedido.setStatusPedido(1); // Pendente
 
         if (pedido.getBlocos() != null) {
-            // Rastreia as posições físicas já alocadas neste pedido para não
-            // atribuir a mesma posição a dois blocos (ex.: triplo com 2 pretos)
             Set<Integer> posicoesJaUsadas = new HashSet<>();
 
             for (Bloco bloco : pedido.getBlocos()) {
@@ -93,8 +85,6 @@ public class PedidoService {
                     throw new RuntimeException("Cor do bloco não informada ou inválida.");
                 }
 
-                // Busca TODAS as posições com a cor pedida (ordenadas pela posição física)
-                // e pega a primeira que ainda não foi alocada neste pedido.
                 Estoque estoque = estoqueRepository
                         .findByCorOrderByPosicaoEstoqueAsc(corBloco)
                         .stream()
@@ -110,8 +100,6 @@ public class PedidoService {
                 posicoesJaUsadas.add(estoque.getPosicaoEstoque());
                 bloco.setEstoque(estoque);
 
-                // Marca a posição como "vazia" no banco para não ser reatribuída
-                // a outro pedido. O robô vai buscar o bloco nessa posição.
                 estoque.setCor(0);
                 estoqueRepository.save(estoque);
             }
@@ -120,10 +108,6 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    /**
-     * Marca o pedido como "Em Produção" (status 2).
-     * Chamado pelo PedidoController após o envio bem-sucedido ao CLP.
-     */
     @Transactional
     public Pedido atualizarStatusParaEmProducao(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
@@ -132,6 +116,12 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
+    /**
+     * Marca o pedido como Concluído (status 3) e cria automaticamente
+     * o registro de Expedicao usando a posicaoExpedicao escolhida
+     * pelo usuário na tela de criação do pedido.
+     */
+    @Transactional
     public void atualizarStatusParaConcluido(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
@@ -164,10 +154,6 @@ public class PedidoService {
 
     // ─── Geração de config e info para o CLP ──────────────────────────────────
 
-    /**
-     * Gera o DTO de configuração do pedido (cabeçalho + lista de blocos + IP do
-     * CLP).
-     */
     @Transactional(readOnly = true)
     public PedidoConfigDTO gerarConfig(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
@@ -200,13 +186,6 @@ public class PedidoService {
         return dto;
     }
 
-    /**
-     * Gera o DTO de informações do pedido para envio ao CLP.
-     *
-     * Os campos posicaoEstoqueAndar* são preenchidos com a posição física
-     * (posicaoEstoque) do estoque vinculado a cada bloco quando o pedido foi
-     * criado.
-     */
     @Transactional(readOnly = true)
     public PedidoInfoDTO gerarInfo(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
@@ -222,8 +201,6 @@ public class PedidoService {
         for (int i = 0; i < blocos.size() && i < 3; i++) {
             Bloco bloco = blocos.get(i);
 
-            // Valida que o bloco tem estoque vinculado (deve ter sido atribuído em
-            // criarPedido)
             if (bloco.getEstoque() == null) {
                 throw new RuntimeException(
                         "Bloco " + bloco.getIdBloco() + " não tem posição de estoque vinculada.");
@@ -243,7 +220,6 @@ public class PedidoService {
         return dto;
     }
 
-    // ─── Preenchimento dos andares ────────────────────────────────────────────
     private void preencherAndar(PedidoInfoDTO dto, Bloco bloco, List<Lamina> laminas, int andar) {
         switch (andar) {
             case 1 -> {
@@ -312,7 +288,43 @@ public class PedidoService {
         }
     }
 
+    /**
+     * Cria automaticamente o registro de Expedicao usando a posicaoExpedicao
+     * definida pelo usuário na tela de criação do pedido.
+     *
+     * Não faz nada se:
+     *  - a posição não foi informada; ou
+     *  - já existe um registro de expedição em aberto (saidaEm == null)
+     *    para este mesmo pedido (evita duplicar em reprocessamentos).
+     */
     private void registrarNaExpedicao(Pedido pedido) {
-        System.out.println("Gerando registro de expedição para a OP: " + pedido.getOrdemProducao());
+        if (pedido.getPosicaoExpedicao() == null) {
+            System.out.println("⚠ Pedido " + pedido.getOrdemProducao()
+                    + " concluído sem posicaoExpedicao definida. Registro de expedição NÃO criado.");
+            return;
+        }
+
+        boolean jaExisteEmAberto = expedicaoRepository.findAll().stream()
+                .anyMatch(e -> e.getPedido() != null
+                        && e.getPedido().getIdPedido().equals(pedido.getIdPedido())
+                        && e.getSaidaEm() == null);
+
+        if (jaExisteEmAberto) {
+            System.out.println("Pedido " + pedido.getOrdemProducao()
+                    + " já possui registro de expedição em aberto. Nada a fazer.");
+            return;
+        }
+
+        Expedicao expedicao = new Expedicao();
+        expedicao.setPedido(pedido);
+        expedicao.setPosicaoExpedicao(pedido.getPosicaoExpedicao());
+        expedicao.setEntradaEm(LocalDateTime.now());
+        expedicao.setSaidaEm(null);
+        expedicao.setOrderNumber(pedido.getIdPedido() != null ? pedido.getIdPedido().intValue() : null);
+
+        expedicaoRepository.save(expedicao);
+
+        System.out.println("✅ Registro de expedição criado automaticamente para pedido "
+                + pedido.getOrdemProducao() + " na posição " + pedido.getPosicaoExpedicao());
     }
 }
