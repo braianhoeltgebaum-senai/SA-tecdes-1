@@ -27,8 +27,8 @@
       }
 
       /* ==========================================================================
-         NAV PADRÃO SMART 4.0
-         ========================================================================== */
+     NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas do sistema
+     ========================================================================== */
       nav {
         width: 100%;
         background: #111c30;
@@ -69,10 +69,9 @@
       .nav-menu a.active {
         color: #38bdf8;
       }
+      /* ========================================================================== */
 
-      /* ==========================================================================
-         HERO
-         ========================================================================== */
+      /* ---------- HERO ---------- */
       .hero {
         max-width: 1200px;
         width: 100%;
@@ -158,7 +157,6 @@
         cursor: pointer;
         transition: transform 0.15s ease, filter 0.15s ease,
           background 0.2s ease;
-        font-family: inherit;
       }
       .btn:hover {
         transform: translateY(-1px);
@@ -175,12 +173,8 @@
         border: 1px solid #1e293b;
         color: #f8fafc;
       }
-      .btn-ghost:hover {
-        background: #1e293b;
-        border-color: #38bdf8;
-      }
 
-      /* HERO VISUAL */
+      /* ---------- HERO VISUAL ---------- */
       .hero-visual {
         background: #111c30;
         border: 1px solid #1e293b;
@@ -292,10 +286,12 @@
         background: rgba(34, 197, 94, 0.5);
         border-color: rgba(34, 197, 94, 0.7);
       }
+      .cell.k {
+        background: rgba(148, 163, 184, 0.35);
+        border-color: rgba(148, 163, 184, 0.55);
+      }
 
-      /* ==========================================================================
-         MÓDULOS
-         ========================================================================== */
+      /* ---------- MÓDULOS ---------- */
       .section {
         max-width: 1200px;
         width: 100%;
@@ -309,10 +305,6 @@
         font-size: 1.35rem;
         font-weight: 600;
         margin: 0;
-        background: linear-gradient(135deg, #c0e0ff, #60a5fa);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
       }
       .section-head p {
         font-size: 0.82rem;
@@ -383,9 +375,7 @@
         transform: translateX(3px);
       }
 
-      /* ==========================================================================
-         FOOTER
-         ========================================================================== */
+      /* ---------- FOOTER ---------- */
       footer {
         border-top: 1px solid #1e293b;
         padding: 22px 24px;
@@ -428,6 +418,7 @@
     </style>
   </head>
   <script>
+    // Marca automaticamente o item do menu correspondente à página atual
     document.querySelectorAll(".nav-menu a").forEach((link) => {
       const hrefPage = link.getAttribute("href");
       const currentPage =
@@ -496,64 +487,39 @@
 
         <div class="mini-stats">
           <div class="mini-stat c-slate">
-            <div class="num">02</div>
+            <div class="num" id="miniTotal">--</div>
             <div class="lbl">Total de pedidos</div>
           </div>
           <div class="mini-stat c-amber">
-            <div class="num">02</div>
+            <div class="num" id="miniPendentes">--</div>
             <div class="lbl">Pendentes</div>
           </div>
           <div class="mini-stat c-blue">
-            <div class="num">02</div>
+            <div class="num" id="miniProducao">--</div>
             <div class="lbl">Em produção</div>
           </div>
           <div class="mini-stat c-green">
-            <div class="num">02</div>
+            <div class="num" id="miniConcluidos">--</div>
             <div class="lbl">Concluídos</div>
           </div>
         </div>
 
         <div class="grid-bar">
           <div class="grid-bar-head">
-            <span>ESTOQUE DE BLOCOS</span><span>0/28</span>
+            <span>ESTOQUE DE BLOCOS</span
+            ><span id="miniEstoqueContador">0/28</span>
           </div>
-          <div class="cells">
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell b"></div>
-            <div class="cell"></div>
-            <div class="cell p"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell b"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell p"></div>
+          <div class="cells" id="miniEstoqueCells">
+            <!-- preenchido via JS -->
           </div>
         </div>
 
         <div class="grid-bar">
           <div class="grid-bar-head">
-            <span>EXPEDIÇÃO</span><span>0/12</span>
+            <span>EXPEDIÇÃO</span><span id="miniExpContador">0/12</span>
           </div>
-          <div class="cells">
-            <div class="cell"></div>
-            <div class="cell o"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell o"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+          <div class="cells" id="miniExpCells">
+            <!-- preenchido via JS -->
           </div>
         </div>
       </div>
@@ -668,5 +634,109 @@
       <span>SMART 4.0 · Planta Digital</span>
       <span>SENAI · TIMBÓ-SC</span>
     </footer>
+
+    <script>
+      // ─── Dados reais para o mini-dashboard da home ────────────────────────────
+      const API_BASE_HOME = "http://localhost:8088";
+
+      async function fetchAPIHome(endpoint) {
+        const res = await fetch(`${API_BASE_HOME}${endpoint}`, {
+          headers: { Accept: "application/json" },
+        });
+        if (res.status === 204) return [];
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const contentType = res.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) return res.json();
+        return null;
+      }
+
+      async function carregarMiniStats() {
+        try {
+          const pedidos = await fetchAPIHome("/pedidos");
+          document.getElementById("miniTotal").textContent = pedidos.length;
+          document.getElementById("miniPendentes").textContent =
+            pedidos.filter((p) => p.statusPedido === 1).length;
+          document.getElementById("miniProducao").textContent =
+            pedidos.filter((p) => p.statusPedido === 2).length;
+          document.getElementById("miniConcluidos").textContent =
+            pedidos.filter((p) => p.statusPedido === 3).length;
+        } catch (err) {
+          console.error("[Home] Erro ao carregar pedidos:", err);
+          [
+            "miniTotal",
+            "miniPendentes",
+            "miniProducao",
+            "miniConcluidos",
+          ].forEach((id) => (document.getElementById(id).textContent = "—"));
+        }
+      }
+
+      async function carregarMiniEstoque() {
+        const container = document.getElementById("miniEstoqueCells");
+        const contador = document.getElementById("miniEstoqueContador");
+        try {
+          const items = await fetchAPIHome("/api/estoque/listar");
+
+          const mapa = new Map();
+          (items || []).forEach((item) => {
+            if (item.posicaoEstoque != null) {
+              mapa.set(item.posicaoEstoque, item.cor ?? 0);
+            }
+          });
+
+          let ocupadas = 0;
+          let html = "";
+          for (let pos = 1; pos <= 28; pos++) {
+            const cor = mapa.get(pos) ?? 0;
+            let classe = "";
+            if (cor === 1) classe = "k"; // preto
+            if (cor === 2) classe = "p"; // vermelho
+            if (cor === 3) classe = "b"; // azul
+            if (cor !== 0) ocupadas++;
+            html += `<div class="cell ${classe}"></div>`;
+          }
+          container.innerHTML = html;
+          contador.textContent = `${ocupadas}/28`;
+        } catch (err) {
+          console.error("[Home] Erro ao carregar estoque:", err);
+          contador.textContent = "—/28";
+        }
+      }
+
+      async function carregarMiniExpedicao() {
+        const container = document.getElementById("miniExpCells");
+        const contador = document.getElementById("miniExpContador");
+        try {
+          const expedicoes = await fetchAPIHome("/api/expedicao/listar");
+
+          const posOcupadas = new Set();
+          (expedicoes || []).forEach((exp) => {
+            if (exp.posicaoExpedicao != null && exp.saidaEm == null) {
+              posOcupadas.add(exp.posicaoExpedicao);
+            }
+          });
+
+          let html = "";
+          for (let i = 1; i <= 12; i++) {
+            const ocupado = posOcupadas.has(i);
+            html += `<div class="cell ${ocupado ? "o" : ""}"></div>`;
+          }
+          container.innerHTML = html;
+          contador.textContent = `${posOcupadas.size}/12`;
+        } catch (err) {
+          console.error("[Home] Erro ao carregar expedição:", err);
+          contador.textContent = "—/12";
+        }
+      }
+
+      function carregarTudoHome() {
+        carregarMiniStats();
+        carregarMiniEstoque();
+        carregarMiniExpedicao();
+      }
+
+      carregarTudoHome();
+      setInterval(carregarTudoHome, 15000); // atualiza a cada 15s
+    </script>
   </body>
 </html>
