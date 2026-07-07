@@ -1,0 +1,3578 @@
+{
+  "info": {
+    "_postman_id": "d1e3feb0-4dd7-4c85-b751-4bd82b456c0d",
+    "name": "Testes Swagger",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53159561",
+    "_collection_link": "https://go.postman.co/collection/53159561-d1e3feb0-4dd7-4c85-b751-4bd82b456c0d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "lamina",
+          "item": [
+            {
+              "name": "put",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Total",
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/lamina/put/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "lamina",
+                            "put",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/lamina/put/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "lamina",
+                                "put",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "salvar",
+              "item": [
+                {
+                  "name": "criar 1",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/lamina/salvar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "lamina",
+                        "salvar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/lamina/salvar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "lamina",
+                            "salvar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "patch",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Parcial 1",
+                      "request": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/lamina/patch/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "lamina",
+                            "patch",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/lamina/patch/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "lamina",
+                                "patch",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listar",
+              "item": [
+                {
+                  "name": "listar 1",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/lamina/listar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "lamina",
+                        "listar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/lamina/listar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "lamina",
+                            "listar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": 8853,\n    \"cor\": 9744,\n    \"padrao\": 8938,\n    \"posicaoNoBloco\": 6831,\n    \"blocoIdBloco\": 9924\n  },\n  {\n    \"id\": 2401,\n    \"cor\": 6375,\n    \"padrao\": 8765,\n    \"posicaoNoBloco\": 7403,\n    \"blocoIdBloco\": 8881\n  }\n]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listarId",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "buscar 1",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/lamina/listarId/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "lamina",
+                            "listarId",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/lamina/listarId/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "lamina",
+                                "listarId",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 9648,\n  \"cor\": 1040,\n  \"padrao\": 6993,\n  \"posicaoNoBloco\": 4214,\n  \"blocoIdBloco\": 4585\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "deletar",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/lamina/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "lamina",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/lamina/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "lamina",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "expedicao",
+          "item": [
+            {
+              "name": "put",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Total 1",
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/expedicao/put/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "expedicao",
+                            "put",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/expedicao/put/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "expedicao",
+                                "put",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "salvar",
+              "item": [
+                {
+                  "name": "criar 2",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/expedicao/salvar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "expedicao",
+                        "salvar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/expedicao/salvar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "expedicao",
+                            "salvar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "patch",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Parcial 2",
+                      "request": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/expedicao/patch/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "expedicao",
+                            "patch",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/expedicao/patch/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "expedicao",
+                                "patch",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listar",
+              "item": [
+                {
+                  "name": "listar 2",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/expedicao/listar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "expedicao",
+                        "listar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/expedicao/listar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "expedicao",
+                            "listar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": 8628,\n    \"posicaoExpedicao\": 9144,\n    \"entradaEm\": \"1994-05-27T20:28:44.592Z\",\n    \"saidaEm\": \"1990-11-26T06:52:00.666Z\",\n    \"ordemProducao\": \"string\"\n  },\n  {\n    \"id\": 7501,\n    \"posicaoExpedicao\": 5654,\n    \"entradaEm\": \"1956-12-13T14:12:02.100Z\",\n    \"saidaEm\": \"1973-01-06T06:00:08.403Z\",\n    \"ordemProducao\": \"string\"\n  }\n]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listarId",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "buscar 2",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/expedicao/listarId/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "expedicao",
+                            "listarId",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/expedicao/listarId/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "expedicao",
+                                "listarId",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 6387,\n  \"posicaoExpedicao\": 2721,\n  \"entradaEm\": \"1995-03-03T16:17:27.699Z\",\n  \"saidaEm\": \"1972-01-13T16:58:39.729Z\",\n  \"ordemProducao\": \"string\"\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "deletar 1",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/expedicao/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "expedicao",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/expedicao/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "expedicao",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "estoque",
+          "item": [
+            {
+              "name": "put",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Total 2",
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/estoque/put/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "estoque",
+                            "put",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/estoque/put/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "estoque",
+                                "put",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "salvar",
+              "item": [
+                {
+                  "name": "criar 3",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/estoque/salvar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "estoque",
+                        "salvar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/estoque/salvar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "estoque",
+                            "salvar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "patch",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Parcial 3",
+                      "request": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/estoque/patch/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "estoque",
+                            "patch",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/estoque/patch/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "estoque",
+                                "patch",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listar",
+              "item": [
+                {
+                  "name": "listar 3",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/estoque/listar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "estoque",
+                        "listar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/estoque/listar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "estoque",
+                            "listar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": 9456,\n    \"posicaoEstoque\": 5993,\n    \"cor\": 8856\n  },\n  {\n    \"id\": 3774,\n    \"posicaoEstoque\": 1142,\n    \"cor\": 4887\n  }\n]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listarId",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "buscar Por Id",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/estoque/listarId/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "estoque",
+                            "listarId",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/estoque/listarId/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "estoque",
+                                "listarId",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 7028,\n  \"posicaoEstoque\": 4083,\n  \"cor\": 5431\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "disponiveis",
+              "item": [
+                {
+                  "name": "listar Disponiveis",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/estoque/disponiveis",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "estoque",
+                        "disponiveis"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/estoque/disponiveis",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "estoque",
+                            "disponiveis"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": 9456,\n    \"posicaoEstoque\": 5993,\n    \"cor\": 8856\n  },\n  {\n    \"id\": 3774,\n    \"posicaoEstoque\": 1142,\n    \"cor\": 4887\n  }\n]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "deletar 2",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/estoque/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "estoque",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/estoque/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "estoque",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bloco",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "status-concluido",
+                  "item": [
+                    {
+                      "name": "atualizar Status Concluido",
+                      "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/:id/status-concluido",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            ":id",
+                            "status-concluido"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/bloco/:id/status-concluido",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "bloco",
+                                ":id",
+                                "status-concluido"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "deletar 3",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bloco/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bloco",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "put",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Total 3",
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/put/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            "put",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/bloco/put/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "bloco",
+                                "put",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "salvar",
+              "item": [
+                {
+                  "name": "criar 4",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bloco/salvar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bloco",
+                        "salvar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/salvar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            "salvar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "patch",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "atualizar Parcial 4",
+                      "request": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/patch/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            "patch",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/bloco/patch/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "bloco",
+                                "patch",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listar",
+              "item": [
+                {
+                  "name": "listar 4",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bloco/listar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bloco",
+                        "listar"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/listar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            "listar"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": 2909,\n    \"andar\": 8390,\n    \"corBloco\": \"VERMELHO\",\n    \"laminas\": [\n      {\n        \"id\": 3642,\n        \"cor\": 6784,\n        \"padrao\": 3146,\n        \"posicaoNoBloco\": 8524,\n        \"blocoIdBloco\": 1604\n      },\n      {\n        \"id\": 3196,\n        \"cor\": 2378,\n        \"padrao\": 4826,\n        \"posicaoNoBloco\": 2032,\n        \"blocoIdBloco\": 5533\n      }\n    ],\n    \"criadoEm\": \"1984-07-05T19:12:04.567Z\",\n    \"estoqueId\": 8620,\n    \"idPedido\": 3909\n  },\n  {\n    \"id\": 782,\n    \"andar\": 1958,\n    \"corBloco\": \"PRETO\",\n    \"laminas\": [\n      {\n        \"id\": 8447,\n        \"cor\": 3673,\n        \"padrao\": 8648,\n        \"posicaoNoBloco\": 756,\n        \"blocoIdBloco\": 7994\n      },\n      {\n        \"id\": 1294,\n        \"cor\": 4077,\n        \"padrao\": 782,\n        \"posicaoNoBloco\": 5157,\n        \"blocoIdBloco\": 6881\n      }\n    ],\n    \"criadoEm\": \"1991-01-31T15:54:48.978Z\",\n    \"estoqueId\": 1691,\n    \"idPedido\": 5418\n  }\n]"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "listarId",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "buscar 3",
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/listarId/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            "listarId",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/bloco/listarId/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "bloco",
+                                "listarId",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "8611"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 8868,\n  \"andar\": 442,\n  \"corBloco\": \"VERMELHO\",\n  \"laminas\": [\n    {\n      \"id\": 3334,\n      \"cor\": 2825,\n      \"padrao\": 2957,\n      \"posicaoNoBloco\": 8629,\n      \"blocoIdBloco\": 7106\n    },\n    {\n      \"id\": 7911,\n      \"cor\": 4522,\n      \"padrao\": 2859,\n      \"posicaoNoBloco\": 5119,\n      \"blocoIdBloco\": 9221\n    }\n  ],\n  \"criadoEm\": \"1988-06-12T02:32:40.333Z\",\n  \"estoqueId\": 1632,\n  \"idPedido\": 8695\n}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "disponiveis",
+              "item": [
+                {
+                  "name": "listar Disponiveis 1",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bloco/disponiveis",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bloco",
+                        "disponiveis"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bloco/disponiveis",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bloco",
+                            "disponiveis"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": 2909,\n    \"andar\": 8390,\n    \"corBloco\": \"VERMELHO\",\n    \"laminas\": [\n      {\n        \"id\": 3642,\n        \"cor\": 6784,\n        \"padrao\": 3146,\n        \"posicaoNoBloco\": 8524,\n        \"blocoIdBloco\": 1604\n      },\n      {\n        \"id\": 3196,\n        \"cor\": 2378,\n        \"padrao\": 4826,\n        \"posicaoNoBloco\": 2032,\n        \"blocoIdBloco\": 5533\n      }\n    ],\n    \"criadoEm\": \"1984-07-05T19:12:04.567Z\",\n    \"estoqueId\": 8620,\n    \"idPedido\": 3909\n  },\n  {\n    \"id\": 782,\n    \"andar\": 1958,\n    \"corBloco\": \"PRETO\",\n    \"laminas\": [\n      {\n        \"id\": 8447,\n        \"cor\": 3673,\n        \"padrao\": 8648,\n        \"posicaoNoBloco\": 756,\n        \"blocoIdBloco\": 7994\n      },\n      {\n        \"id\": 1294,\n        \"cor\": 4077,\n        \"padrao\": 782,\n        \"posicaoNoBloco\": 5157,\n        \"blocoIdBloco\": 6881\n      }\n    ],\n    \"criadoEm\": \"1991-01-31T15:54:48.978Z\",\n    \"estoqueId\": 1691,\n    \"idPedido\": 5418\n  }\n]"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stop-readings",
+      "item": [
+        {
+          "name": "stop Readings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stop-readings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stop-readings"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/stop-readings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "stop-readings"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "cookie": [],
+              "body": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "start-readings",
+      "item": [
+        {
+          "name": "start Readings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key_0\": \"string\",\n  \"key_1\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/start-readings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "start-readings"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"key_0\": \"string\",\n  \"key_1\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/start-readings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "start-readings"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "cookie": [],
+              "body": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "producao",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "iniciar",
+              "item": [
+                {
+                  "name": "iniciar Pedido",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/producao/:id/iniciar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "producao",
+                        ":id",
+                        "iniciar"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/producao/:id/iniciar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "producao",
+                            ":id",
+                            "iniciar"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "string"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "gravar",
+              "item": [
+                {
+                  "name": "gravar Pedido",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/producao/:id/gravar",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "producao",
+                        ":id",
+                        "gravar"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/producao/:id/gravar",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "producao",
+                            ":id",
+                            "gravar"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "string"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pedidos",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "iniciar",
+              "item": [
+                {
+                  "name": "iniciar",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pedidos/:id/iniciar?ip=string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        ":id",
+                        "iniciar"
+                      ],
+                      "query": [
+                        {
+                          "key": "ip",
+                          "value": "string"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pedidos/:id/iniciar?ip=string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pedidos",
+                            ":id",
+                            "iniciar"
+                          ],
+                          "query": [
+                            {
+                              "key": "ip",
+                              "value": "string"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "string"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "concluir",
+              "item": [
+                {
+                  "name": "concluir",
+                  "request": {
+                    "method": "PATCH",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/pedidos/:id/concluir",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        ":id",
+                        "concluir"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/pedidos/:id/concluir",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pedidos",
+                            ":id",
+                            "concluir"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "info",
+              "item": [
+                {
+                  "name": "info",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pedidos/:id/info",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        ":id",
+                        "info"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pedidos/:id/info",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pedidos",
+                            ":id",
+                            "info"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"Cor_Andar_1\": 6929,\n  \"Posicao_Estoque_Andar_1\": 3224,\n  \"Cor_Lamina_1_Andar_1\": 8491,\n  \"Cor_Lamina_2_Andar_1\": 6502,\n  \"Cor_Lamina_3_Andar_1\": 666,\n  \"Padrao_Lamina_1_Andar_1\": 7505,\n  \"Padrao_Lamina_2_Andar_1\": 2710,\n  \"Padrao_Lamina_3_Andar_1\": 6483,\n  \"Processamento_Andar_1\": 526,\n  \"Cor_Andar_2\": 4830,\n  \"Posicao_Estoque_Andar_2\": 8603,\n  \"Cor_Lamina_1_Andar_2\": 1308,\n  \"Cor_Lamina_2_Andar_2\": 6500,\n  \"Cor_Lamina_3_Andar_2\": 4746,\n  \"Padrao_Lamina_1_Andar_2\": 5377,\n  \"Padrao_Lamina_2_Andar_2\": 4040,\n  \"Padrao_Lamina_3_Andar_2\": 7049,\n  \"Processamento_Andar_2\": 4459,\n  \"Cor_Andar_3\": 3033,\n  \"Posicao_Estoque_Andar_3\": 1980,\n  \"Cor_Lamina_1_Andar_3\": 596,\n  \"Cor_Lamina_2_Andar_3\": 5155,\n  \"Cor_Lamina_3_Andar_3\": 5805,\n  \"Padrao_Lamina_1_Andar_3\": 779,\n  \"Padrao_Lamina_2_Andar_3\": 8492,\n  \"Padrao_Lamina_3_Andar_3\": 1703,\n  \"Processamento_Andar_3\": 4164,\n  \"Numero_Pedido\": 2163,\n  \"Andares\": 6614,\n  \"Posicao_Expedicao\": 202\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "config",
+              "item": [
+                {
+                  "name": "config",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pedidos/:id/config",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        ":id",
+                        "config"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/pedidos/:id/config",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pedidos",
+                            ":id",
+                            "config"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "8611"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"Id_Pedido\": 235,\n  \"Ordem_Pedido\": \"string\",\n  \"Tipo_Pedido\": 3717,\n  \"Tampa_Pedido\": 8869,\n  \"Status_Pedido\": 3906,\n  \"Blocos\": [\n    {\n      \"id\": 7104,\n      \"andar\": 399,\n      \"corBloco\": \"PRETO\",\n      \"laminas\": [\n        {\n          \"id\": 4732,\n          \"cor\": 1930,\n          \"padrao\": 2545,\n          \"posicaoNoBloco\": 4016,\n          \"blocoIdBloco\": 3450\n        },\n        {\n          \"id\": 6384,\n          \"cor\": 7796,\n          \"padrao\": 8723,\n          \"posicaoNoBloco\": 4113,\n          \"blocoIdBloco\": 8451\n        }\n      ],\n      \"criadoEm\": \"1985-01-13T12:31:05.612Z\",\n      \"estoqueId\": 862,\n      \"idPedido\": 3637\n    },\n    {\n      \"id\": 4019,\n      \"andar\": 2802,\n      \"corBloco\": \"PRETO\",\n      \"laminas\": [\n        {\n          \"id\": 9560,\n          \"cor\": 9992,\n          \"padrao\": 3714,\n          \"posicaoNoBloco\": 2234,\n          \"blocoIdBloco\": 4970\n        },\n        {\n          \"id\": 2624,\n          \"cor\": 7522,\n          \"padrao\": 1310,\n          \"posicaoNoBloco\": 6041,\n          \"blocoIdBloco\": 9315\n        }\n      ],\n      \"criadoEm\": \"1962-06-22T16:39:34.892Z\",\n      \"estoqueId\": 9974,\n      \"idPedido\": 558\n    }\n  ],\n  \"Ip_CLP\": \"string\"\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "buscar",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8611"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pedidos/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "*/*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"idPedido\": 3545,\n  \"ordemProducao\": \"string\",\n  \"statusPedido\": 8991,\n  \"tipoPedido\": 2146,\n  \"corTampa\": 5944,\n  \"posicaoExpedicao\": 6163,\n  \"timestamp\": \"1983-10-16T09:50:45.803Z\",\n  \"blocos\": [\n    {\n      \"idBloco\": 5721,\n      \"estoqueId\": 373,\n      \"estoque\": {\n        \"id\": 6567,\n        \"posicaoEstoque\": 6814,\n        \"cor\": 9765\n      },\n      \"corBloco\": 5949,\n      \"criadoEm\": \"2017-06-14T04:42:47.480Z\",\n      \"laminas\": [\n        {\n          \"id\": 9606,\n          \"cor\": 4344,\n          \"padrao\": 7446,\n          \"posicaoNoBloco\": 6328,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 6516,\n          \"cor\": 788,\n          \"padrao\": 2742,\n          \"posicaoNoBloco\": 5601,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    },\n    {\n      \"idBloco\": 4951,\n      \"estoqueId\": 904,\n      \"estoque\": {\n        \"id\": 6146,\n        \"posicaoEstoque\": 1386,\n        \"cor\": 4493\n      },\n      \"corBloco\": 4890,\n      \"criadoEm\": \"2015-09-24T22:35:34.305Z\",\n      \"laminas\": [\n        {\n          \"id\": 7137,\n          \"cor\": 9003,\n          \"padrao\": 9971,\n          \"posicaoNoBloco\": 8452,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 4629,\n          \"cor\": 3644,\n          \"padrao\": 6957,\n          \"posicaoNoBloco\": 4150,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "excluir",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8611"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "OK",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/pedidos/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "atualizar Parcial",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"key_0\": {},\n  \"key_1\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8611"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "OK",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"key_0\": {},\n  \"key_1\": {}\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/pedidos/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "8611"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "*/*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"idPedido\": 3545,\n  \"ordemProducao\": \"string\",\n  \"statusPedido\": 8991,\n  \"tipoPedido\": 2146,\n  \"corTampa\": 5944,\n  \"posicaoExpedicao\": 6163,\n  \"timestamp\": \"1983-10-16T09:50:45.803Z\",\n  \"blocos\": [\n    {\n      \"idBloco\": 5721,\n      \"estoqueId\": 373,\n      \"estoque\": {\n        \"id\": 6567,\n        \"posicaoEstoque\": 6814,\n        \"cor\": 9765\n      },\n      \"corBloco\": 5949,\n      \"criadoEm\": \"2017-06-14T04:42:47.480Z\",\n      \"laminas\": [\n        {\n          \"id\": 9606,\n          \"cor\": 4344,\n          \"padrao\": 7446,\n          \"posicaoNoBloco\": 6328,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 6516,\n          \"cor\": 788,\n          \"padrao\": 2742,\n          \"posicaoNoBloco\": 5601,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    },\n    {\n      \"idBloco\": 4951,\n      \"estoqueId\": 904,\n      \"estoque\": {\n        \"id\": 6146,\n        \"posicaoEstoque\": 1386,\n        \"cor\": 4493\n      },\n      \"corBloco\": 4890,\n      \"criadoEm\": \"2015-09-24T22:35:34.305Z\",\n      \"laminas\": [\n        {\n          \"id\": 7137,\n          \"cor\": 9003,\n          \"padrao\": 9971,\n          \"posicaoNoBloco\": 8452,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 4629,\n          \"cor\": 3644,\n          \"padrao\": 6957,\n          \"posicaoNoBloco\": 4150,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    }\n  ]\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"idPedido\": 850,\n    \"ordemProducao\": \"string\",\n    \"statusPedido\": 9707,\n    \"tipoPedido\": 678,\n    \"corTampa\": 6888,\n    \"posicaoExpedicao\": 5074,\n    \"timestamp\": \"2001-06-17T01:24:28.150Z\",\n    \"blocos\": [\n      {\n        \"idBloco\": 8733,\n        \"estoqueId\": 9077,\n        \"estoque\": {\n          \"id\": 9963,\n          \"posicaoEstoque\": 4077,\n          \"cor\": 544\n        },\n        \"corBloco\": 9165,\n        \"criadoEm\": \"1957-03-14T13:04:06.262Z\",\n        \"laminas\": [\n          {\n            \"id\": 6138,\n            \"cor\": 8893,\n            \"padrao\": 7818,\n            \"posicaoNoBloco\": 3172,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          },\n          {\n            \"id\": 4673,\n            \"cor\": 5628,\n            \"padrao\": 8348,\n            \"posicaoNoBloco\": 3449,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          }\n        ]\n      },\n      {\n        \"idBloco\": 3501,\n        \"estoqueId\": 2035,\n        \"estoque\": {\n          \"id\": 9396,\n          \"posicaoEstoque\": 3897,\n          \"cor\": 5139\n        },\n        \"corBloco\": 9663,\n        \"criadoEm\": \"1997-03-20T14:41:45.102Z\",\n        \"laminas\": [\n          {\n            \"id\": 4442,\n            \"cor\": 2572,\n            \"padrao\": 5163,\n            \"posicaoNoBloco\": 5042,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          },\n          {\n            \"id\": 8264,\n            \"cor\": 1290,\n            \"padrao\": 3629,\n            \"posicaoNoBloco\": 6329,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  {\n    \"idPedido\": 2144,\n    \"ordemProducao\": \"string\",\n    \"statusPedido\": 2217,\n    \"tipoPedido\": 6229,\n    \"corTampa\": 953,\n    \"posicaoExpedicao\": 39,\n    \"timestamp\": \"1995-06-20T15:50:12.106Z\",\n    \"blocos\": [\n      {\n        \"idBloco\": 3177,\n        \"estoqueId\": 9994,\n        \"estoque\": {\n          \"id\": 7091,\n          \"posicaoEstoque\": 3773,\n          \"cor\": 6031\n        },\n        \"corBloco\": 1894,\n        \"criadoEm\": \"1977-08-27T09:28:53.099Z\",\n        \"laminas\": [\n          {\n            \"id\": 9991,\n            \"cor\": 2359,\n            \"padrao\": 1866,\n            \"posicaoNoBloco\": 3629,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          },\n          {\n            \"id\": 6561,\n            \"cor\": 2770,\n            \"padrao\": 9690,\n            \"posicaoNoBloco\": 2240,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          }\n        ]\n      },\n      {\n        \"idBloco\": 5304,\n        \"estoqueId\": 8542,\n        \"estoque\": {\n          \"id\": 18,\n          \"posicaoEstoque\": 8204,\n          \"cor\": 0\n        },\n        \"corBloco\": 9837,\n        \"criadoEm\": \"2006-07-19T23:23:39.202Z\",\n        \"laminas\": [\n          {\n            \"id\": 3188,\n            \"cor\": 1215,\n            \"padrao\": 2101,\n            \"posicaoNoBloco\": 448,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          },\n          {\n            \"id\": 9474,\n            \"cor\": 3553,\n            \"padrao\": 2363,\n            \"posicaoNoBloco\": 5942,\n            \"bloco\": {\n              \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n            }\n          }\n        ]\n      }\n    ]\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPedido\": 3545,\n  \"ordemProducao\": \"string\",\n  \"statusPedido\": 8991,\n  \"tipoPedido\": 2146,\n  \"corTampa\": 5944,\n  \"posicaoExpedicao\": 6163,\n  \"timestamp\": \"1983-10-16T09:50:45.803Z\",\n  \"blocos\": [\n    {\n      \"idBloco\": 5721,\n      \"estoqueId\": 373,\n      \"estoque\": {\n        \"id\": 6567,\n        \"posicaoEstoque\": 6814,\n        \"cor\": 9765\n      },\n      \"corBloco\": 5949,\n      \"criadoEm\": \"2017-06-14T04:42:47.480Z\",\n      \"laminas\": [\n        {\n          \"id\": 9606,\n          \"cor\": 4344,\n          \"padrao\": 7446,\n          \"posicaoNoBloco\": 6328,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 6516,\n          \"cor\": 788,\n          \"padrao\": 2742,\n          \"posicaoNoBloco\": 5601,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    },\n    {\n      \"idBloco\": 4951,\n      \"estoqueId\": 904,\n      \"estoque\": {\n        \"id\": 6146,\n        \"posicaoEstoque\": 1386,\n        \"cor\": 4493\n      },\n      \"corBloco\": 4890,\n      \"criadoEm\": \"2015-09-24T22:35:34.305Z\",\n      \"laminas\": [\n        {\n          \"id\": 7137,\n          \"cor\": 9003,\n          \"padrao\": 9971,\n          \"posicaoNoBloco\": 8452,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 4629,\n          \"cor\": 3644,\n          \"padrao\": 6957,\n          \"posicaoNoBloco\": 4150,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"idPedido\": 3545,\n  \"ordemProducao\": \"string\",\n  \"statusPedido\": 8991,\n  \"tipoPedido\": 2146,\n  \"corTampa\": 5944,\n  \"posicaoExpedicao\": 6163,\n  \"timestamp\": \"1983-10-16T09:50:45.803Z\",\n  \"blocos\": [\n    {\n      \"idBloco\": 5721,\n      \"estoqueId\": 373,\n      \"estoque\": {\n        \"id\": 6567,\n        \"posicaoEstoque\": 6814,\n        \"cor\": 9765\n      },\n      \"corBloco\": 5949,\n      \"criadoEm\": \"2017-06-14T04:42:47.480Z\",\n      \"laminas\": [\n        {\n          \"id\": 9606,\n          \"cor\": 4344,\n          \"padrao\": 7446,\n          \"posicaoNoBloco\": 6328,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 6516,\n          \"cor\": 788,\n          \"padrao\": 2742,\n          \"posicaoNoBloco\": 5601,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    },\n    {\n      \"idBloco\": 4951,\n      \"estoqueId\": 904,\n      \"estoque\": {\n        \"id\": 6146,\n        \"posicaoEstoque\": 1386,\n        \"cor\": 4493\n      },\n      \"corBloco\": 4890,\n      \"criadoEm\": \"2015-09-24T22:35:34.305Z\",\n      \"laminas\": [\n        {\n          \"id\": 7137,\n          \"cor\": 9003,\n          \"padrao\": 9971,\n          \"posicaoNoBloco\": 8452,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 4629,\n          \"cor\": 3644,\n          \"padrao\": 6957,\n          \"posicaoNoBloco\": 4150,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"idPedido\": 3545,\n  \"ordemProducao\": \"string\",\n  \"statusPedido\": 8991,\n  \"tipoPedido\": 2146,\n  \"corTampa\": 5944,\n  \"posicaoExpedicao\": 6163,\n  \"timestamp\": \"1983-10-16T09:50:45.803Z\",\n  \"blocos\": [\n    {\n      \"idBloco\": 5721,\n      \"estoqueId\": 373,\n      \"estoque\": {\n        \"id\": 6567,\n        \"posicaoEstoque\": 6814,\n        \"cor\": 9765\n      },\n      \"corBloco\": 5949,\n      \"criadoEm\": \"2017-06-14T04:42:47.480Z\",\n      \"laminas\": [\n        {\n          \"id\": 9606,\n          \"cor\": 4344,\n          \"padrao\": 7446,\n          \"posicaoNoBloco\": 6328,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 6516,\n          \"cor\": 788,\n          \"padrao\": 2742,\n          \"posicaoNoBloco\": 5601,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    },\n    {\n      \"idBloco\": 4951,\n      \"estoqueId\": 904,\n      \"estoque\": {\n        \"id\": 6146,\n        \"posicaoEstoque\": 1386,\n        \"cor\": 4493\n      },\n      \"corBloco\": 4890,\n      \"criadoEm\": \"2015-09-24T22:35:34.305Z\",\n      \"laminas\": [\n        {\n          \"id\": 7137,\n          \"cor\": 9003,\n          \"padrao\": 9971,\n          \"posicaoNoBloco\": 8452,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        },\n        {\n          \"id\": 4629,\n          \"cor\": 3644,\n          \"padrao\": 6957,\n          \"posicaoNoBloco\": 4150,\n          \"bloco\": {\n            \"value\": \"<Circular reference to #/components/schemas/Bloco detected>\"\n          }\n        }\n      ]\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "status",
+      "item": [
+        {
+          "name": "get Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "status"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "status"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"key_0\": {},\n  \"key_1\": {}\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "smartstream",
+      "item": [
+        {
+          "name": "{bancada}",
+          "item": [
+            {
+              "name": "smart Stream",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/smartstream/:bancada",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "smartstream",
+                    ":bancada"
+                  ],
+                  "variable": [
+                    {
+                      "key": "bancada",
+                      "value": "string"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/smartstream/:bancada",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "smartstream",
+                        ":bancada"
+                      ],
+                      "variable": [
+                        {
+                          "key": "bancada",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "*/*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"timeout\": 6466\n}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rastreamento",
+      "item": [
+        {
+          "name": "rastrear",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rastreamento",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rastreamento"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/rastreamento",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "rastreamento"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"key_0\": {},\n  \"key_1\": {}\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "data",
+      "item": [
+        {
+          "name": "{clp}",
+          "item": [
+            {
+              "name": "get Data",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/data/:clp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "data",
+                    ":clp"
+                  ],
+                  "variable": [
+                    {
+                      "key": "clp",
+                      "value": "string"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/data/:clp",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "data",
+                        ":clp"
+                      ],
+                      "variable": [
+                        {
+                          "key": "clp",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "*/*"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "string"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8088"
+    }
+  ]
+}
