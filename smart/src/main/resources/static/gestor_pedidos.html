@@ -535,7 +535,6 @@
           preencherSelectPosicoes();
         } catch (err) {
           console.error("Erro ao carregar posições de expedição:", err);
-          // Fallback: mostra todas as posições como disponíveis
           posicoesOcupadas = new Set();
           preencherSelectPosicoes();
         }
@@ -557,7 +556,6 @@
           select.appendChild(option);
         }
 
-        // Se o valor atual ainda for válido, mantém
         if (currentValue && !posicoesOcupadas.has(Number(currentValue))) {
           select.value = currentValue;
         } else {
@@ -565,14 +563,12 @@
         }
       }
 
-      // Atualiza as posições após salvar um pedido (para liberar a posição usada)
-      // e também periodicamente
       async function atualizarPosicoesExpedicao() {
         await carregarPosicoesExpedicao();
       }
 
       // =========================================================================
-      // BLOCOS E LÂMINAS (mesmo código anterior)
+      // BLOCOS E LÂMINAS
       // =========================================================================
       function criarBlocos(qtd) {
         if (qtd > 3) qtd = 3;
@@ -690,7 +686,14 @@
       }
 
       // =========================================================================
-      // PREVIEW
+      // PREVIEW — PADRÃO DA DIREITA NÃO APARECE
+      // CORRIGIDO: "posicao" agora é convertido para Number logo no início do
+      // loop de cada lâmina. Antes ele ficava como string (vindo de .value do
+      // select) e a comparação `posicao === 3` nunca era verdadeira (string
+      // "3" !== number 3), então o bloco que escondia o padrão da lâmina da
+      // direita nunca executava — o padrão da direita "vazava" e usava o
+      // background-position padrão (center), sobrepondo o padrão da lâmina
+      // da frente (do meio).
       // =========================================================================
       function atualizarPreview() {
         const previewStack = document.getElementById("previewStack");
@@ -709,7 +712,7 @@
           blocoPreview.className = "bloco-preview";
 
           blocoPreview.innerHTML = `
-                <div class="camada" style="z-index:1; background-image:url('assets/bloco/rBlocoCor${corBloco}.png');"></div>
+                <div class="camada" style="z-index:1; background-image:url('assets/bloco/rBlocoCor${corBloco}.png'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
                 <div class="camada" id="lamina-esquerda-${index}"></div>
                 <div class="camada" id="lamina-frente-${index}"></div>
                 <div class="camada" id="lamina-direita-${index}"></div>
@@ -723,40 +726,77 @@
           bloco.querySelectorAll(".lamina-card").forEach((card) => {
             const cor = card.querySelector(".corLamina").value;
             const padrao = card.querySelector(".padraoLamina").value;
-            const posicao = card.querySelector(".posicaoLamina").value;
+            // CORRIGIDO: conversão explícita para número
+            const posicao = Number(card.querySelector(".posicaoLamina").value);
 
-            if (posicao == 0) return;
+            if (posicao === 0) return;
 
             const nomePosicao =
-              posicao == 1 ? "esquerda" : posicao == 2 ? "frente" : "direita";
+              posicao === 1 ? "esquerda" : posicao === 2 ? "frente" : "direita";
 
-            const zLamina = posicao == 1 ? 100 : posicao == 2 ? 200 : 150;
+            const zLamina = posicao === 1 ? 100 : posicao === 2 ? 200 : 150;
             const zPadrao = zLamina + 1;
 
+            // ---- LÂMINA ----
             const camadaLamina = document.getElementById(
               `lamina-${nomePosicao}-${index}`
             );
             if (camadaLamina) {
               camadaLamina.style.zIndex = zLamina;
               camadaLamina.style.backgroundImage = `url('assets/laminas/lamina${posicao}-${cor}.png')`;
+              camadaLamina.style.backgroundSize = "contain";
+              camadaLamina.style.backgroundRepeat = "no-repeat";
+              if (posicao === 1) {
+                camadaLamina.style.backgroundPosition = "left center";
+              } else if (posicao === 2) {
+                camadaLamina.style.backgroundPosition = "center center";
+              } else if (posicao === 3) {
+                camadaLamina.style.backgroundPosition = "right center";
+              }
             }
 
+            // ---- PADRÃO ----
+            // SE FOR DIREITA (posicao === 3), NÃO MOSTRA O PADRÃO.
+            // Agora essa comparação realmente funciona, pois "posicao" é
+            // number e não mais string.
+            if (posicao === 3) {
+              const camadaPadrao = document.getElementById(
+                `padrao-${nomePosicao}-${index}`
+              );
+              if (camadaPadrao) {
+                camadaPadrao.style.backgroundImage = "none";
+                camadaPadrao.style.display = "none";
+              }
+              return;
+            }
+
+            // Para ESQUERDA e FRENTE, mostra o padrão normalmente
             const camadaPadrao = document.getElementById(
               `padrao-${nomePosicao}-${index}`
             );
             if (camadaPadrao) {
               camadaPadrao.style.zIndex = zPadrao;
+              camadaPadrao.style.backgroundSize = "contain";
+              camadaPadrao.style.backgroundRepeat = "no-repeat";
 
-              if (padrao == 0) {
+              if (posicao === 1) {
+                camadaPadrao.style.backgroundPosition = "left center";
+              } else if (posicao === 2) {
+                camadaPadrao.style.backgroundPosition = "center center";
+              }
+
+              if (Number(padrao) === 0) {
                 camadaPadrao.style.backgroundImage = "none";
+                camadaPadrao.style.display = "none";
               } else {
-                const caminho =
-                  posicao == 3
-                    ? `assets/padroes/rPadrao${padrao}-2.png`
-                    : `assets/padroes/padrao${padrao}-${
-                        posicao == 1 ? 1 : 2
-                      }.png`;
-                camadaPadrao.style.backgroundImage = `url('${caminho}')`;
+                const caminho = `assets/padroes/padrao${padrao}-${
+                  posicao === 1 ? 1 : 2
+                }.png`;
+                camadaPadrao.style.backgroundImage = `url('${caminho}?t=${Date.now()}')`;
+                camadaPadrao.style.display = "block";
+                camadaPadrao.onerror = function () {
+                  this.style.display = "none";
+                };
               }
             }
           });
@@ -764,7 +804,7 @@
       }
 
       // =========================================================================
-      // UTILITÁRIOS DE VALIDAÇÃO E SUBMIT
+      // VALIDAÇÃO E SUBMIT
       // =========================================================================
       function validarPedido(pedido) {
         if (!pedido.ordemProducao) {
@@ -867,7 +907,6 @@
           btnSalvar.textContent = "Salvando...";
           mostrarStatus("Salvando pedido...", "carregando");
 
-          // --- Monta os blocos ---
           const blocos = [];
           document.querySelectorAll(".bloco").forEach((bloco) => {
             const laminas = [];
@@ -891,7 +930,6 @@
             ? Number(posicaoExpedicaoEl.value)
             : null;
 
-          // --- Verifica se a posição ainda está livre (consulta atualizada) ---
           try {
             const response = await fetch(`${API_BASE}/api/expedicao/listar`);
             if (response.ok) {
@@ -904,7 +942,6 @@
                   ocupadas.add(pos);
                 }
               });
-              // Se a posição escolhida está ocupada, exibe erro
               if (posicaoEscolhida !== null && ocupadas.has(posicaoEscolhida)) {
                 mostrarStatus(
                   `✘ A posição ${posicaoEscolhida} já está ocupada. Escolha outra.`,
@@ -912,14 +949,12 @@
                 );
                 btnSalvar.disabled = false;
                 btnSalvar.textContent = "Salvar Pedido";
-                // Atualiza o select para refletir mudanças
                 await carregarPosicoesExpedicao();
                 return;
               }
             }
           } catch (err) {
             console.warn("Não foi possível verificar ocupação da expedição:", err);
-            // Continua mesmo sem verificação (fallback)
           }
 
           const pedido = {
@@ -953,11 +988,7 @@
 
             const data = await response.json();
             const idSalvo = data.id ?? data.idPedido ?? "—";
-            mostrarStatus(
-              `✔ Pedido #${idSalvo} salvo com sucesso!`,
-              "sucesso"
-            );
-            // Atualiza a lista de posições ocupadas
+            mostrarStatus(`✔ Pedido #${idSalvo} salvo com sucesso!`, "sucesso");
             await carregarPosicoesExpedicao();
           } catch (error) {
             console.error(error);
@@ -981,7 +1012,6 @@
         tipoPedido.addEventListener("change", () => {
           criarBlocos(Number(tipoPedido.value));
         });
-        // Atualiza posições a cada 30s para refletir mudanças de outros usuários
         setInterval(atualizarPosicoesExpedicao, 30000);
       }
 
