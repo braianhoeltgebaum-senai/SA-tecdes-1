@@ -1,1021 +1,1113 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Factory · Gestor de Pedidos</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Factory · Gestor de Pedidos</title>
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      body {
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial,
-          sans-serif;
-        background: #0a0f1a;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        color: #f8fafc;
-      }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #0a0f1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #f8fafc;
+    }
 
-      nav {
-        width: 100%;
-        background: #111c30;
-        border-bottom: 1px solid #1e293b;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+    /* BANNER */
+    .banner-visualizacao {
+      display: none;
+      background: #facc15;
+      color: #0a0f1a;
+      text-align: center;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #eab308;
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .banner-visualizacao.ativo {
+      display: block;
+    }
+    .banner-visualizacao span {
+      background: #0a0f1a;
+      color: #facc15;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+    }
 
-      .nav-logo {
-        display: flex;
-        flex-direction: column;
-      }
-      .nav-logo h1 {
-        font-size: 1.2rem;
-        color: #38bdf8;
-        font-weight: 700;
-      }
-      .nav-logo span {
-        font-size: 0.75rem;
-        color: #64748b;
-      }
+    nav {
+      width: 100%;
+      background: #111c30;
+      border-bottom: 1px solid #1e293b;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      .nav-menu {
-        display: flex;
-        gap: 20px;
-        list-style: none;
-      }
-      .nav-menu a {
-        color: #94a3b8;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
-        transition: color 0.2s;
-      }
-      .nav-menu a:hover,
-      .nav-menu a.active {
-        color: #38bdf8;
-      }
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-logo h1 {
+      font-size: 1.2rem;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .nav-logo span {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
 
-      .page-content {
-        padding: 32px 40px;
-        max-width: 1400px;
-        width: 100%;
-        margin: 0 auto;
-        flex: 1;
-      }
+    .nav-menu {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-menu a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: #38bdf8;
+    }
 
-      .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-bottom: 28px;
-        border-bottom: 1px solid #1e293b;
-        padding-bottom: 16px;
-      }
-      .page-header h2 {
-        font-size: 1.6rem;
-        font-weight: 600;
-        background: linear-gradient(135deg, #c0e0ff, #60a5fa);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-        margin: 0;
-      }
-      .page-header .sub {
-        color: #94a3b8;
-        font-size: 0.85rem;
-        margin-top: 4px;
-      }
+    .page-content {
+      padding: 32px 40px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+    }
 
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 16px;
+    }
+    .page-header h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #c0e0ff, #60a5fa);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin: 0;
+    }
+    .page-header .sub {
+      color: #94a3b8;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .layout {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    .painel-form {
+      flex: 1;
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 26px;
+    }
+
+    .painel-preview {
+      width: 460px;
+      position: sticky;
+      top: 40px;
+    }
+
+    .preview-card {
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .preview-title {
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+      color: #f8fafc;
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .mid-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: 0.02em;
+    }
+
+    input,
+    select {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    input:disabled,
+    select:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .bloco {
+      margin-top: 24px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+    }
+
+    .bloco-header {
+      padding: 14px 20px;
+      background: #0b1120;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bloco-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    .bloco-content {
+      padding: 20px;
+    }
+
+    .laminasContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .lamina-card {
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .lamina-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .lamina-topo span {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #cbd5e6;
+    }
+
+    .lamina-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, background 0.2s;
+      font-family: inherit;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-add {
+      width: 100%;
+      margin-top: 16px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e6;
+    }
+    .btn-add:hover {
+      background: #2d3a4e;
+      border-color: #5b7a9a;
+      color: white;
+    }
+    .btn-add:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-remove {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+      padding: 7px 14px;
+      font-size: 0.78rem;
+    }
+    .btn-remove:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+    .btn-remove:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-salvar {
+      width: 100%;
+      margin-top: 28px;
+      padding: 16px;
+      font-size: 0.95rem;
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .btn-salvar:hover {
+      filter: brightness(1.08);
+    }
+    .btn-salvar:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
+
+    .bloco-preview {
+      position: relative;
+      width: 340px;
+      height: 170px;
+      isolation: isolate;
+    }
+
+    .camada {
+      position: absolute;
+      inset: 0;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      pointer-events: none;
+    }
+
+    .camada-base-fundo {
+      z-index: 5;
+    }
+    .camada[data-posicao="1"],
+    .camada[data-posicao="3"] {
+      z-index: 10;
+    }
+    .camada[data-posicao="2"] {
+      z-index: 20;
+    }
+    .camada-base-frontal {
+      z-index: 30;
+    }
+
+    .tampa-global {
+      width: 340px;
+      height: 200px;
+      margin-bottom: -15px;
+      z-index: 999;
+      position: relative;
+    }
+
+    .status-envio {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: none;
+    }
+    .status-envio.sucesso {
+      background: #10281f;
+      border: 1px solid #22c55e;
+      color: #86efac;
+    }
+    .status-envio.erro {
+      background: #2c1a1e;
+      border: 1px solid #ef4444;
+      color: #f9acac;
+    }
+    .status-envio.carregando {
+      background: #0b2a42;
+      border: 1px solid #38bdf8;
+      color: #7dd3fc;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Modo visualização: desabilita campos e botões */
+    .modo-visualizacao input,
+    .modo-visualizacao select,
+    .modo-visualizacao .btn-add,
+    .modo-visualizacao .btn-remove {
+      opacity: 0.6 !important;
+      pointer-events: none !important;
+      cursor: not-allowed !important;
+    }
+    .modo-visualizacao .btn-salvar {
+      opacity: 0.5 !important;
+      pointer-events: none !important;
+      filter: grayscale(0.8) !important;
+    }
+
+    @media (max-width: 1200px) {
       .layout {
-        display: flex;
-        gap: 28px;
-        align-items: flex-start;
-      }
-
-      .painel-form {
-        flex: 1;
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 20px;
-        padding: 26px;
-      }
-
-      .painel-preview {
-        width: 460px;
-        position: sticky;
-        top: 40px;
-      }
-
-      .preview-card {
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 20px;
-        padding: 24px;
-      }
-
-      .preview-title {
-        text-align: center;
-        font-size: 1.05rem;
-        font-weight: 700;
-        margin-bottom: 22px;
-        color: #f8fafc;
-      }
-
-      .top-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: 18px;
-        margin-bottom: 25px;
-      }
-
-      .mid-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 18px;
-        margin-bottom: 25px;
-      }
-
-      .field {
-        display: flex;
         flex-direction: column;
-        gap: 7px;
       }
-
-      .field label {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #94a3b8;
-        letter-spacing: 0.02em;
-      }
-
-      input,
-      select {
-        background: #0f172a;
-        border: 1px solid #334155;
-        color: #f8fafc;
-        border-radius: 10px;
-        padding: 12px 14px;
-        font-size: 0.9rem;
-        transition: border-color 0.2s, box-shadow 0.2s;
+      .painel-preview {
         width: 100%;
-        font-family: inherit;
+        position: relative;
+        top: 0;
       }
-
-      input:focus,
-      select:focus {
-        outline: none;
-        border-color: #38bdf8;
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      .top-grid {
+        grid-template-columns: 1fr 1fr;
       }
-
-      .bloco {
-        margin-top: 24px;
-        border-radius: 16px;
-        overflow: hidden;
-        background: #0f172a;
-        border: 1px solid #1e293b;
+      .mid-grid {
+        grid-template-columns: 1fr;
       }
+    }
 
-      .bloco-header {
-        padding: 14px 20px;
-        background: #0b1120;
-        border-bottom: 1px solid #1e293b;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .bloco-header h2 {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #f8fafc;
-      }
-
-      .bloco-content {
+    @media (max-width: 700px) {
+      .page-content {
         padding: 20px;
       }
-
-      .laminasContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .lamina-card {
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 14px;
-        padding: 16px;
-      }
-
-      .lamina-topo {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 14px;
-      }
-
-      .lamina-topo span {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #cbd5e6;
-      }
-
+      .top-grid,
+      .mid-grid,
       .lamina-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 14px;
+        grid-template-columns: 1fr;
       }
-
-      .btn {
-        border: none;
-        border-radius: 10px;
-        padding: 12px 18px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: opacity 0.2s, transform 0.15s, background 0.2s;
-        font-family: inherit;
-      }
-      .btn:hover {
-        transform: translateY(-1px);
-      }
-      .btn:active {
-        transform: translateY(0);
-      }
-
-      .btn-add {
-        width: 100%;
-        margin-top: 16px;
-        background: #1e293b;
-        border: 1px solid #334155;
-        color: #cbd5e6;
-      }
-      .btn-add:hover {
-        background: #2d3a4e;
-        border-color: #5b7a9a;
-        color: white;
-      }
-
-      .btn-remove {
-        background: rgba(239, 68, 68, 0.15);
-        border: 1px solid rgba(239, 68, 68, 0.35);
-        color: #fca5a5;
-        padding: 7px 14px;
-        font-size: 0.78rem;
-      }
-      .btn-remove:hover {
-        background: rgba(239, 68, 68, 0.3);
-      }
-
-      .btn-salvar {
-        width: 100%;
-        margin-top: 28px;
-        padding: 16px;
-        font-size: 0.95rem;
-        background: linear-gradient(135deg, #0ea5e9, #2563eb);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: filter 0.2s;
-      }
-      .btn-salvar:hover {
-        filter: brightness(1.08);
-      }
-      .btn-salvar:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        filter: none;
-      }
-
-      .bloco-preview {
-        position: relative;
-        width: 340px;
-        height: 170px;
-        isolation: isolate;
-      }
-
-      .camada {
-        position: absolute;
-        inset: 0;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        pointer-events: none;
-      }
-
-      .camada-base-fundo {
-        z-index: 5;
-      }
-      .camada[data-posicao="1"],
-      .camada[data-posicao="3"] {
-        z-index: 10;
-      }
-      .camada[data-posicao="2"] {
-        z-index: 20;
-      }
-      .camada-base-frontal {
-        z-index: 30;
-      }
-
+      .bloco-preview,
       .tampa-global {
-        width: 340px;
-        height: 200px;
-        margin-bottom: -15px;
-        z-index: 999;
-        position: relative;
+        width: 100%;
       }
+      .page-header h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
 
-      .status-envio {
-        margin-top: 12px;
-        padding: 12px 16px;
-        border-radius: 10px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        display: none;
-      }
-      .status-envio.sucesso {
-        background: #10281f;
-        border: 1px solid #22c55e;
-        color: #86efac;
-      }
-      .status-envio.erro {
-        background: #2c1a1e;
-        border: 1px solid #ef4444;
-        color: #f9acac;
-      }
-      .status-envio.carregando {
-        background: #0b2a42;
-        border: 1px solid #38bdf8;
-        color: #7dd3fc;
-      }
+<body>
+  <!-- BANNER -->
+  <div class="banner-visualizacao" id="bannerVisu">
+    MODO VISUALIZAÇÃO ATIVO – Apenas leitura. Não é possível criar pedidos.
+  </div>
 
-      .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-      }
+  <nav>
+    <div class="nav-logo">
+      <h1>SMART 4.0 · Planta Digital</h1>
+      <span>SENAI · Timbó-SC</span>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="Inicio.html">Início</a></li>
+      <li><a href="gestor_pedidos.html" class="active">Gestor de Pedidos</a></li>
+      <li><a href="gestor.html">Gestor de Produção</a></li>
+      <li><a href="Dashboard_simples.html">Dashboard</a></li>
+      <li><a href="visualizacaoBancada.html">Acompanhamento</a></li>
+    </ul>
+  </nav>
 
-      @media (max-width: 1200px) {
-        .layout {
-          flex-direction: column;
-        }
-        .painel-preview {
-          width: 100%;
-          position: relative;
-          top: 0;
-        }
-        .top-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-        .mid-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 700px) {
-        .page-content {
-          padding: 20px;
-        }
-        .top-grid,
-        .mid-grid,
-        .lamina-grid {
-          grid-template-columns: 1fr;
-        }
-        .bloco-preview,
-        .tampa-global {
-          width: 100%;
-        }
-        .page-header h2 {
-          font-size: 1.3rem;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <nav>
-      <div class="nav-logo">
-        <h1>SMART 4.0 · Planta Digital</h1>
-        <span>SENAI · Timbó-SC</span>
+  <div class="page-content">
+    <div class="page-header">
+      <div>
+        <h2>Gestor de Pedidos</h2>
+        <div class="sub">Crie e monte pedidos com blocos e lâminas</div>
       </div>
-      <ul class="nav-menu">
-        <li><a href="Inicio.html">Início</a></li>
-        <li><a href="gestor_pedidos.html" class="active">Gestor de Pedidos</a></li>
-        <li><a href="gestor.html">Gestor de Produção</a></li>
-        <li><a href="Dashboard_simples.html">Dashboard</a></li>
-        <li><a href="visualizacaoBancada.html">Acompanhamento</a></li>
-      </ul>
-    </nav>
+    </div>
 
-    <div class="page-content">
-      <div class="page-header">
-        <div>
-          <h2>Gestor de Pedidos</h2>
-          <div class="sub">Crie e monte pedidos com blocos e lâminas</div>
-        </div>
+    <div class="layout">
+      <div class="painel-form">
+        <form id="formPedido">
+          <div class="top-grid">
+            <div class="field">
+              <label>Ordem de Produção</label>
+              <input type="text" id="ordemProducao" placeholder="0001" />
+            </div>
+
+            <div class="field">
+              <label>Tipo do Pedido</label>
+              <select id="tipoPedido">
+                <option value="1">1 Bloco</option>
+                <option value="2">2 Blocos</option>
+                <option value="3">3 Blocos</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Cor da Tampa</label>
+              <select id="corTampa" onchange="atualizarPreview()">
+                <option value="0">Selecione a cor</option>
+                <option value="1">Preto</option>
+                <option value="2">Vermelho</option>
+                <option value="3">Azul</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mid-grid">
+            <div class="field">
+              <label>Posição da Expedição</label>
+              <select id="posicaoExpedicao">
+                <option value="">Carregando posições...</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="blocosContainer"></div>
+
+          <div class="status-envio" id="statusEnvio"></div>
+
+          <button class="btn-salvar" type="submit" id="btnSalvar">
+            Salvar Pedido
+          </button>
+        </form>
       </div>
 
-      <div class="layout">
-        <!-- PAINEL ESQUERDO: FORMULÁRIO -->
-        <div class="painel-form">
-          <form id="formPedido">
-            <div class="top-grid">
-              <div class="field">
-                <label>Ordem de Produção</label>
-                <input type="text" id="ordemProducao" placeholder="0001" />
-              </div>
-
-              <div class="field">
-                <label>Tipo do Pedido</label>
-                <select id="tipoPedido">
-                  <option value="1">1 Bloco</option>
-                  <option value="2">2 Blocos</option>
-                  <option value="3">3 Blocos</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label>Cor da Tampa</label>
-                <select id="corTampa" onchange="atualizarPreview()">
-                  <option value="0">Selecione a cor</option>
-                  <option value="1">Preto</option>
-                  <option value="2">Vermelho</option>
-                  <option value="3">Azul</option>
-                </select>
-              </div>
+      <div class="painel-preview">
+        <div class="preview-card">
+          <div class="preview-title">Visualização do Produto</div>
+          <div class="stack">
+            <div class="tampa-global">
+              <div id="previewTampa" class="camada"></div>
             </div>
-
-            <div class="mid-grid">
-              <div class="field">
-                <label>Posição da Expedição</label>
-                <select id="posicaoExpedicao">
-                  <option value="">Carregando posições...</option>
-                </select>
-              </div>
-            </div>
-
-            <div id="blocosContainer"></div>
-
-            <div class="status-envio" id="statusEnvio"></div>
-
-            <button class="btn-salvar" type="submit" id="btnSalvar">
-              Salvar Pedido
-            </button>
-          </form>
-        </div>
-
-        <!-- PAINEL DIREITO: PREVIEW -->
-        <div class="painel-preview">
-          <div class="preview-card">
-            <div class="preview-title">Visualização do Produto</div>
-            <div class="stack">
-              <div class="tampa-global">
-                <div id="previewTampa" class="camada"></div>
-              </div>
-              <div id="previewStack"></div>
-            </div>
+            <div id="previewStack"></div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      // Marca menu ativo
-      document.querySelectorAll(".nav-menu a").forEach((link) => {
-        const hrefPage = link.getAttribute("href");
-        const currentPage =
-          window.location.pathname.split("/").pop() || "Inicio.html";
-        if (hrefPage === currentPage) {
-          link.classList.add("active");
-        } else {
-          link.classList.remove("active");
+  <script>
+    // ---- MODO VISUALIZAÇÃO ----
+    const TOGGLE_KEY = 'smart40_modo_visualizacao';
+
+    function isModoVisualizacao() {
+      return localStorage.getItem(TOGGLE_KEY) === 'true';
+    }
+
+    function aplicarModoVisualizacao() {
+      const ativo = isModoVisualizacao();
+      const banner = document.getElementById('bannerVisu');
+      if (banner) {
+        banner.classList.toggle('ativo', ativo);
+      }
+      document.body.classList.toggle('modo-visualizacao', ativo);
+
+      const btnSalvar = document.getElementById('btnSalvar');
+      if (btnSalvar) {
+        btnSalvar.disabled = ativo;
+        btnSalvar.textContent = ativo ? '🔒 Bloqueado (Visualização)' : 'Salvar Pedido';
+      }
+
+      // Desabilita campos do formulário
+      document.querySelectorAll('#formPedido input, #formPedido select, #formPedido .btn-add, #formPedido .btn-remove').forEach(el => {
+        if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
+          el.disabled = ativo;
         }
+        // Botões são tratados pelo CSS .modo-visualizacao
+      });
+    }
+
+    window.addEventListener('load', aplicarModoVisualizacao);
+    window.addEventListener('storage', function(e) {
+      if (e.key === TOGGLE_KEY) {
+        aplicarModoVisualizacao();
+        // Recarrega o preview para refletir estado (caso necessário)
+        atualizarPreview();
+      }
+    });
+
+    // Marca menu ativo
+    document.querySelectorAll(".nav-menu a").forEach((link) => {
+      const hrefPage = link.getAttribute("href");
+      const currentPage = window.location.pathname.split("/").pop() || "Inicio.html";
+      if (hrefPage === currentPage) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    });
+
+    // =========================================================================
+    // INICIALIZAÇÃO
+    // =========================================================================
+    const API_BASE = "http://localhost:8088";
+    const tipoPedido = document.getElementById("tipoPedido");
+    const blocosContainer = document.getElementById("blocosContainer");
+    const posicaoSelect = document.getElementById("posicaoExpedicao");
+
+    let posicoesOcupadas = new Set();
+
+    // Carrega as posições ocupadas da expedição e preenche o select
+    async function carregarPosicoesExpedicao() {
+      try {
+        const response = await fetch(`${API_BASE}/api/expedicao/listar`);
+        if (!response.ok) throw new Error("Erro ao buscar expedição");
+        const expedicoes = await response.json();
+
+        posicoesOcupadas = new Set();
+        (expedicoes || []).forEach((exp) => {
+          const pos = exp.posicaoExpedicao;
+          const saiu = exp.saidaEm != null;
+          if (pos != null && !saiu) {
+            posicoesOcupadas.add(pos);
+          }
+        });
+
+        preencherSelectPosicoes();
+      } catch (err) {
+        console.error("Erro ao carregar posições de expedição:", err);
+        posicoesOcupadas = new Set();
+        preencherSelectPosicoes();
+      }
+    }
+
+    function preencherSelectPosicoes() {
+      const select = posicaoSelect;
+      const currentValue = select.value;
+      select.innerHTML = '<option value="">Selecione</option>';
+
+      for (let i = 1; i <= 12; i++) {
+        const option = document.createElement("option");
+        option.value = String(i);
+        option.textContent = `Posição ${i}`;
+        if (posicoesOcupadas.has(i)) {
+          option.disabled = true;
+          option.textContent += " (ocupada)";
+        }
+        select.appendChild(option);
+      }
+
+      if (currentValue && !posicoesOcupadas.has(Number(currentValue))) {
+        select.value = currentValue;
+      } else {
+        select.value = "";
+      }
+    }
+
+    async function atualizarPosicoesExpedicao() {
+      await carregarPosicoesExpedicao();
+    }
+
+    // =========================================================================
+    // BLOCOS E LÂMINAS
+    // =========================================================================
+    function criarBlocos(qtd) {
+      if (qtd > 3) qtd = 3;
+
+      blocosContainer.innerHTML = "";
+
+      for (let i = 1; i <= qtd; i++) {
+        const blocoDiv = document.createElement("div");
+        blocoDiv.className = "bloco";
+        blocoDiv.innerHTML = `
+          <div class="bloco-header">
+            <h2>Bloco ${i}</h2>
+          </div>
+          <div class="bloco-content">
+            <div class="field">
+              <label>Cor do Bloco</label>
+              <select class="corBloco" onchange="atualizarPreview()">
+                <option value="1">Preto</option>
+                <option value="2">Vermelho</option>
+                <option value="3">Azul</option>
+              </select>
+            </div>
+            <div class="laminasContainer"></div>
+            <button type="button" class="btn btn-add" onclick="adicionarLamina(this)">
+              + Adicionar Lâmina
+            </button>
+          </div>
+        `;
+        blocosContainer.appendChild(blocoDiv);
+
+        // Aplica estado de visualização nos novos elementos
+        if (isModoVisualizacao()) {
+          const btnAdd = blocoDiv.querySelector('.btn-add');
+          if (btnAdd) btnAdd.disabled = true;
+        }
+      }
+      atualizarPreview();
+    }
+
+    function adicionarLamina(btn) {
+      if (isModoVisualizacao()) {
+        alert('Modo visualização ativo – não é possível adicionar lâminas.');
+        return;
+      }
+
+      const bloco = btn.closest(".bloco");
+      const container = bloco.querySelector(".laminasContainer");
+      const total = container.querySelectorAll(".lamina-card").length;
+
+      if (total >= 3) {
+        alert("Máximo de 3 lâminas por bloco.");
+        return;
+      }
+
+      const id = Date.now();
+
+      container.insertAdjacentHTML(
+        "beforeend",
+        `
+          <div class="lamina-card" id="lamina-${id}">
+            <div class="lamina-topo">
+              <span>Lâmina ${total + 1}</span>
+              <button type="button" class="btn btn-remove" onclick="removerLamina('${id}')">
+                Remover
+              </button>
+            </div>
+            <div class="lamina-grid">
+              <div class="field">
+                <label>Cor</label>
+                <select class="corLamina" onchange="atualizarPreview()">
+                  <option value="0">Nenhuma</option>
+                  <option value="1">Vermelho</option>
+                  <option value="2">Azul</option>
+                  <option value="3">Amarelo</option>
+                  <option value="4">Verde</option>
+                  <option value="5">Preto</option>
+                  <option value="6">Branco</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Padrão</label>
+                <select class="padraoLamina" onchange="atualizarPreview()">
+                  <option value="0">Nenhum</option>
+                  <option value="1">Casa</option>
+                  <option value="2">Navio</option>
+                  <option value="3">Estrela</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Posição</label>
+                <select class="posicaoLamina" onchange="atualizarPreview()">
+                  <option value="0">Nenhuma</option>
+                  <option value="1">Esquerda</option>
+                  <option value="2">Frente</option>
+                  <option value="3">Direita</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `
+      );
+
+      // Aplica estado de visualização nos novos elementos
+      if (isModoVisualizacao()) {
+        const novaCard = document.getElementById(`lamina-${id}`);
+        if (novaCard) {
+          novaCard.querySelectorAll('select, .btn-remove').forEach(el => {
+            if (el.tagName === 'SELECT') el.disabled = true;
+            if (el.classList.contains('btn-remove')) el.disabled = true;
+          });
+        }
+      }
+
+      atualizarPreview();
+    }
+
+    function removerLamina(id) {
+      if (isModoVisualizacao()) {
+        alert('Modo visualização ativo – não é possível remover lâminas.');
+        return;
+      }
+      document.getElementById(`lamina-${id}`).remove();
+      atualizarPreview();
+    }
+
+    function atualizarOpcoesPosicao(bloco) {
+      const selects = Array.from(bloco.querySelectorAll(".posicaoLamina"));
+      const posicoesOcupadas = selects
+        .map((s) => s.value)
+        .filter((v) => v !== "0");
+
+      selects.forEach((select) => {
+        const valorAtual = select.value;
+        Array.from(select.options).forEach((opt) => {
+          if (opt.value === "0") {
+            opt.disabled = false;
+            return;
+          }
+          opt.disabled = posicoesOcupadas.includes(opt.value) && opt.value !== valorAtual;
+        });
+      });
+    }
+
+    // =========================================================================
+    // PREVIEW
+    // =========================================================================
+    function atualizarPreview() {
+      const previewStack = document.getElementById("previewStack");
+      previewStack.innerHTML = "";
+
+      const corTampa = document.getElementById("corTampa").value;
+      document.getElementById("previewTampa").style.backgroundImage =
+        `url('assets/bloco/rTampa${corTampa}.png')`;
+
+      document.querySelectorAll(".bloco").forEach((bloco, index) => {
+        atualizarOpcoesPosicao(bloco);
+
+        const corBloco = bloco.querySelector(".corBloco").value;
+        const blocoPreview = document.createElement("div");
+        blocoPreview.className = "bloco-preview";
+
+        blocoPreview.innerHTML = `
+          <div class="camada" style="z-index:1; background-image:url('assets/bloco/rBlocoCor${corBloco}.png'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
+          <div class="camada" id="lamina-esquerda-${index}"></div>
+          <div class="camada" id="lamina-frente-${index}"></div>
+          <div class="camada" id="lamina-direita-${index}"></div>
+          <div class="camada" id="padrao-esquerda-${index}"></div>
+          <div class="camada" id="padrao-frente-${index}"></div>
+          <div class="camada" id="padrao-direita-${index}"></div>
+        `;
+
+        previewStack.appendChild(blocoPreview);
+
+        bloco.querySelectorAll(".lamina-card").forEach((card) => {
+          const cor = card.querySelector(".corLamina").value;
+          const padrao = card.querySelector(".padraoLamina").value;
+          const posicao = Number(card.querySelector(".posicaoLamina").value);
+
+          if (posicao === 0) return;
+
+          const nomePosicao = posicao === 1 ? "esquerda" : posicao === 2 ? "frente" : "direita";
+
+          const zLamina = posicao === 1 ? 100 : posicao === 2 ? 200 : 150;
+          const zPadrao = zLamina + 1;
+
+          // LÂMINA
+          const camadaLamina = document.getElementById(`lamina-${nomePosicao}-${index}`);
+          if (camadaLamina) {
+            camadaLamina.style.zIndex = zLamina;
+            camadaLamina.style.backgroundImage = `url('assets/laminas/lamina${posicao}-${cor}.png')`;
+            camadaLamina.style.backgroundSize = "contain";
+            camadaLamina.style.backgroundRepeat = "no-repeat";
+            if (posicao === 1) camadaLamina.style.backgroundPosition = "left center";
+            else if (posicao === 2) camadaLamina.style.backgroundPosition = "center center";
+            else if (posicao === 3) camadaLamina.style.backgroundPosition = "right center";
+          }
+
+          // PADRÃO (não mostra na direita)
+          if (posicao === 3) {
+            const camadaPadrao = document.getElementById(`padrao-${nomePosicao}-${index}`);
+            if (camadaPadrao) {
+              camadaPadrao.style.backgroundImage = "none";
+              camadaPadrao.style.display = "none";
+            }
+            return;
+          }
+
+          const camadaPadrao = document.getElementById(`padrao-${nomePosicao}-${index}`);
+          if (camadaPadrao) {
+            camadaPadrao.style.zIndex = zPadrao;
+            camadaPadrao.style.backgroundSize = "contain";
+            camadaPadrao.style.backgroundRepeat = "no-repeat";
+
+            if (posicao === 1) camadaPadrao.style.backgroundPosition = "left center";
+            else if (posicao === 2) camadaPadrao.style.backgroundPosition = "center center";
+
+            if (Number(padrao) === 0) {
+              camadaPadrao.style.backgroundImage = "none";
+              camadaPadrao.style.display = "none";
+            } else {
+              const caminho = `assets/padroes/padrao${padrao}-${posicao === 1 ? 1 : 2}.png`;
+              camadaPadrao.style.backgroundImage = `url('${caminho}?t=${Date.now()}')`;
+              camadaPadrao.style.display = "block";
+              camadaPadrao.onerror = function() {
+                this.style.display = "none";
+              };
+            }
+          }
+        });
+      });
+    }
+
+    // =========================================================================
+    // VALIDAÇÃO E SUBMIT
+    // =========================================================================
+    function validarPedido(pedido) {
+      if (!pedido.ordemProducao) {
+        return "Informe a Ordem de Produção.";
+      }
+      if (!pedido.corTampa || pedido.corTampa === 0) {
+        return "Selecione a cor da tampa.";
+      }
+      if (pedido.posicaoExpedicao === null || pedido.posicaoExpedicao === undefined) {
+        return "Selecione a posição da expedição.";
+      }
+      if (!pedido.blocos || pedido.blocos.length === 0) {
+        return "O pedido precisa ter ao menos um bloco.";
+      }
+      const blocoSemCor = pedido.blocos.some((b) => !b.corBloco || b.corBloco === 0);
+      if (blocoSemCor) {
+        return "Todo bloco precisa ter uma cor definida.";
+      }
+      return null;
+    }
+
+    async function extrairMensagemErro(response) {
+      let corpo = null;
+      try {
+        corpo = await response.clone().json();
+      } catch (_) {
+        try {
+          corpo = await response.text();
+        } catch (_) {
+          corpo = null;
+        }
+      }
+
+      let detalheBackend = null;
+      if (corpo && typeof corpo === "object") {
+        detalheBackend = corpo.message || corpo.mensagem || corpo.erro || corpo.detail || corpo.title || null;
+        if (!detalheBackend && corpo.errors) {
+          const partes = [];
+          for (const campo in corpo.errors) {
+            const valores = corpo.errors[campo];
+            const msgs = Array.isArray(valores) ? valores : [valores];
+            msgs.forEach((m) => partes.push(`${campo}: ${m}`));
+          }
+          if (partes.length) detalheBackend = partes.join(" · ");
+        }
+      } else if (typeof corpo === "string" && corpo.trim()) {
+        detalheBackend = corpo.trim();
+      }
+
+      const mensagensPorStatus = {
+        400: "Dados do pedido inválidos. Verifique os campos preenchidos.",
+        401: "Sessão expirada ou não autorizada. Faça login novamente.",
+        403: "Você não tem permissão para criar pedidos.",
+        404: "Endpoint de pedidos não encontrado no servidor.",
+        409: "Conflito ao salvar o pedido (ex: ordem de produção já existente).",
+        422: "Não foi possível processar os dados enviados.",
+        500: "Erro interno no servidor ao salvar o pedido.",
+        503: "Servidor indisponível no momento.",
+      };
+
+      const mensagemPadrao = mensagensPorStatus[response.status] ||
+        `Erro HTTP ${response.status} - ${response.statusText || "desconhecido"}.`;
+
+      return detalheBackend ? `${mensagemPadrao} Detalhe: ${detalheBackend}` : mensagemPadrao;
+    }
+
+    function mostrarStatus(mensagem, tipo) {
+      const el = document.getElementById("statusEnvio");
+      el.textContent = mensagem;
+      el.className = `status-envio ${tipo}`;
+      el.style.display = "block";
+      if (tipo !== "carregando") {
+        setTimeout(() => {
+          el.style.display = "none";
+        }, 5000);
+      }
+    }
+
+    // =========================================================================
+    // SUBMIT DO FORMULÁRIO
+    // =========================================================================
+    document.getElementById("formPedido").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (isModoVisualizacao()) {
+        alert('Modo visualização ativo – não é possível criar pedidos.');
+        return;
+      }
+
+      const btnSalvar = document.getElementById("btnSalvar");
+      btnSalvar.disabled = true;
+      btnSalvar.textContent = "Salvando...";
+      mostrarStatus("Salvando pedido...", "carregando");
+
+      const blocos = [];
+      document.querySelectorAll(".bloco").forEach((bloco) => {
+        const laminas = [];
+        bloco.querySelectorAll(".lamina-card").forEach((card) => {
+          laminas.push({
+            cor: Number(card.querySelector(".corLamina").value),
+            padrao: Number(card.querySelector(".padraoLamina").value),
+            posicaoNoBloco: Number(card.querySelector(".posicaoLamina").value),
+          });
+        });
+        blocos.push({
+          corBloco: Number(bloco.querySelector(".corBloco").value),
+          laminas: laminas,
+        });
       });
 
-      // =========================================================================
-      // INICIALIZAÇÃO
-      // =========================================================================
-      const API_BASE = "http://localhost:8088";
-      const tipoPedido = document.getElementById("tipoPedido");
-      const blocosContainer = document.getElementById("blocosContainer");
-      const posicaoSelect = document.getElementById("posicaoExpedicao");
+      const posicaoExpedicaoEl = document.getElementById("posicaoExpedicao");
+      const posicaoEscolhida = posicaoExpedicaoEl.value ? Number(posicaoExpedicaoEl.value) : null;
 
-      let posicoesOcupadas = new Set();
-
-      // Carrega as posições ocupadas da expedição e preenche o select
-      async function carregarPosicoesExpedicao() {
-        try {
-          const response = await fetch(`${API_BASE}/api/expedicao/listar`);
-          if (!response.ok) throw new Error("Erro ao buscar expedição");
+      try {
+        const response = await fetch(`${API_BASE}/api/expedicao/listar`);
+        if (response.ok) {
           const expedicoes = await response.json();
-
-          posicoesOcupadas = new Set();
+          const ocupadas = new Set();
           (expedicoes || []).forEach((exp) => {
             const pos = exp.posicaoExpedicao;
             const saiu = exp.saidaEm != null;
             if (pos != null && !saiu) {
-              posicoesOcupadas.add(pos);
+              ocupadas.add(pos);
             }
           });
-
-          preencherSelectPosicoes();
-        } catch (err) {
-          console.error("Erro ao carregar posições de expedição:", err);
-          posicoesOcupadas = new Set();
-          preencherSelectPosicoes();
-        }
-      }
-
-      function preencherSelectPosicoes() {
-        const select = posicaoSelect;
-        const currentValue = select.value;
-        select.innerHTML = '<option value="">Selecione</option>';
-
-        for (let i = 1; i <= 12; i++) {
-          const option = document.createElement("option");
-          option.value = String(i);
-          option.textContent = `Posição ${i}`;
-          if (posicoesOcupadas.has(i)) {
-            option.disabled = true;
-            option.textContent += " (ocupada)";
-          }
-          select.appendChild(option);
-        }
-
-        if (currentValue && !posicoesOcupadas.has(Number(currentValue))) {
-          select.value = currentValue;
-        } else {
-          select.value = "";
-        }
-      }
-
-      async function atualizarPosicoesExpedicao() {
-        await carregarPosicoesExpedicao();
-      }
-
-      // =========================================================================
-      // BLOCOS E LÂMINAS
-      // =========================================================================
-      function criarBlocos(qtd) {
-        if (qtd > 3) qtd = 3;
-
-        blocosContainer.innerHTML = "";
-
-        for (let i = 1; i <= qtd; i++) {
-          blocosContainer.innerHTML += `
-                <div class="bloco">
-                    <div class="bloco-header">
-                        <h2>Bloco ${i}</h2>
-                    </div>
-                    <div class="bloco-content">
-                        <div class="field">
-                            <label>Cor do Bloco</label>
-                            <select class="corBloco" onchange="atualizarPreview()">
-                                <option value="1">Preto</option>
-                                <option value="2">Vermelho</option>
-                                <option value="3">Azul</option>
-                            </select>
-                        </div>
-                        <div class="laminasContainer"></div>
-                        <button type="button" class="btn btn-add" onclick="adicionarLamina(this)">
-                            + Adicionar Lâmina
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-        atualizarPreview();
-      }
-
-      function adicionarLamina(btn) {
-        const bloco = btn.closest(".bloco");
-        const container = bloco.querySelector(".laminasContainer");
-        const total = container.querySelectorAll(".lamina-card").length;
-
-        if (total >= 3) {
-          alert("Máximo de 3 lâminas por bloco.");
-          return;
-        }
-
-        const id = Date.now();
-
-        container.insertAdjacentHTML(
-          "beforeend",
-          `
-            <div class="lamina-card" id="lamina-${id}">
-                <div class="lamina-topo">
-                    <span>Lâmina ${total + 1}</span>
-                    <button type="button" class="btn btn-remove" onclick="removerLamina('${id}')">
-                        Remover
-                    </button>
-                </div>
-                <div class="lamina-grid">
-                    <div class="field">
-                        <label>Cor</label>
-                        <select class="corLamina" onchange="atualizarPreview()">
-                            <option value="0">Nenhuma</option>
-                            <option value="1">Vermelho</option>
-                            <option value="2">Azul</option>
-                            <option value="3">Amarelo</option>
-                            <option value="4">Verde</option>
-                            <option value="5">Preto</option>
-                            <option value="6">Branco</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>Padrão</label>
-                        <select class="padraoLamina" onchange="atualizarPreview()">
-                            <option value="0">Nenhum</option>
-                            <option value="1">Casa</option>
-                            <option value="2">Navio</option>
-                            <option value="3">Estrela</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>Posição</label>
-                        <select class="posicaoLamina" onchange="atualizarPreview()">
-                            <option value="0">Nenhuma</option>
-                            <option value="1">Esquerda</option>
-                            <option value="2">Frente</option>
-                            <option value="3">Direita</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        `
-        );
-        atualizarPreview();
-      }
-
-      function removerLamina(id) {
-        document.getElementById(`lamina-${id}`).remove();
-        atualizarPreview();
-      }
-
-      function atualizarOpcoesPosicao(bloco) {
-        const selects = Array.from(bloco.querySelectorAll(".posicaoLamina"));
-        const posicoesOcupadas = selects
-          .map((s) => s.value)
-          .filter((v) => v !== "0");
-
-        selects.forEach((select) => {
-          const valorAtual = select.value;
-          Array.from(select.options).forEach((opt) => {
-            if (opt.value === "0") {
-              opt.disabled = false;
-              return;
-            }
-            opt.disabled =
-              posicoesOcupadas.includes(opt.value) && opt.value !== valorAtual;
-          });
-        });
-      }
-
-      // =========================================================================
-      // PREVIEW — PADRÃO DA DIREITA NÃO APARECE
-      // CORRIGIDO: "posicao" agora é convertido para Number logo no início do
-      // loop de cada lâmina. Antes ele ficava como string (vindo de .value do
-      // select) e a comparação `posicao === 3` nunca era verdadeira (string
-      // "3" !== number 3), então o bloco que escondia o padrão da lâmina da
-      // direita nunca executava — o padrão da direita "vazava" e usava o
-      // background-position padrão (center), sobrepondo o padrão da lâmina
-      // da frente (do meio).
-      // =========================================================================
-      function atualizarPreview() {
-        const previewStack = document.getElementById("previewStack");
-        previewStack.innerHTML = "";
-
-        const corTampa = document.getElementById("corTampa").value;
-        document.getElementById(
-          "previewTampa"
-        ).style.backgroundImage = `url('assets/bloco/rTampa${corTampa}.png')`;
-
-        document.querySelectorAll(".bloco").forEach((bloco, index) => {
-          atualizarOpcoesPosicao(bloco);
-
-          const corBloco = bloco.querySelector(".corBloco").value;
-          const blocoPreview = document.createElement("div");
-          blocoPreview.className = "bloco-preview";
-
-          blocoPreview.innerHTML = `
-                <div class="camada" style="z-index:1; background-image:url('assets/bloco/rBlocoCor${corBloco}.png'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
-                <div class="camada" id="lamina-esquerda-${index}"></div>
-                <div class="camada" id="lamina-frente-${index}"></div>
-                <div class="camada" id="lamina-direita-${index}"></div>
-                <div class="camada" id="padrao-esquerda-${index}"></div>
-                <div class="camada" id="padrao-frente-${index}"></div>
-                <div class="camada" id="padrao-direita-${index}"></div>
-            `;
-
-          previewStack.appendChild(blocoPreview);
-
-          bloco.querySelectorAll(".lamina-card").forEach((card) => {
-            const cor = card.querySelector(".corLamina").value;
-            const padrao = card.querySelector(".padraoLamina").value;
-            // CORRIGIDO: conversão explícita para número
-            const posicao = Number(card.querySelector(".posicaoLamina").value);
-
-            if (posicao === 0) return;
-
-            const nomePosicao =
-              posicao === 1 ? "esquerda" : posicao === 2 ? "frente" : "direita";
-
-            const zLamina = posicao === 1 ? 100 : posicao === 2 ? 200 : 150;
-            const zPadrao = zLamina + 1;
-
-            // ---- LÂMINA ----
-            const camadaLamina = document.getElementById(
-              `lamina-${nomePosicao}-${index}`
-            );
-            if (camadaLamina) {
-              camadaLamina.style.zIndex = zLamina;
-              camadaLamina.style.backgroundImage = `url('assets/laminas/lamina${posicao}-${cor}.png')`;
-              camadaLamina.style.backgroundSize = "contain";
-              camadaLamina.style.backgroundRepeat = "no-repeat";
-              if (posicao === 1) {
-                camadaLamina.style.backgroundPosition = "left center";
-              } else if (posicao === 2) {
-                camadaLamina.style.backgroundPosition = "center center";
-              } else if (posicao === 3) {
-                camadaLamina.style.backgroundPosition = "right center";
-              }
-            }
-
-            // ---- PADRÃO ----
-            // SE FOR DIREITA (posicao === 3), NÃO MOSTRA O PADRÃO.
-            // Agora essa comparação realmente funciona, pois "posicao" é
-            // number e não mais string.
-            if (posicao === 3) {
-              const camadaPadrao = document.getElementById(
-                `padrao-${nomePosicao}-${index}`
-              );
-              if (camadaPadrao) {
-                camadaPadrao.style.backgroundImage = "none";
-                camadaPadrao.style.display = "none";
-              }
-              return;
-            }
-
-            // Para ESQUERDA e FRENTE, mostra o padrão normalmente
-            const camadaPadrao = document.getElementById(
-              `padrao-${nomePosicao}-${index}`
-            );
-            if (camadaPadrao) {
-              camadaPadrao.style.zIndex = zPadrao;
-              camadaPadrao.style.backgroundSize = "contain";
-              camadaPadrao.style.backgroundRepeat = "no-repeat";
-
-              if (posicao === 1) {
-                camadaPadrao.style.backgroundPosition = "left center";
-              } else if (posicao === 2) {
-                camadaPadrao.style.backgroundPosition = "center center";
-              }
-
-              if (Number(padrao) === 0) {
-                camadaPadrao.style.backgroundImage = "none";
-                camadaPadrao.style.display = "none";
-              } else {
-                const caminho = `assets/padroes/padrao${padrao}-${
-                  posicao === 1 ? 1 : 2
-                }.png`;
-                camadaPadrao.style.backgroundImage = `url('${caminho}?t=${Date.now()}')`;
-                camadaPadrao.style.display = "block";
-                camadaPadrao.onerror = function () {
-                  this.style.display = "none";
-                };
-              }
-            }
-          });
-        });
-      }
-
-      // =========================================================================
-      // VALIDAÇÃO E SUBMIT
-      // =========================================================================
-      function validarPedido(pedido) {
-        if (!pedido.ordemProducao) {
-          return "Informe a Ordem de Produção.";
-        }
-        if (!pedido.corTampa || pedido.corTampa === 0) {
-          return "Selecione a cor da tampa.";
-        }
-        if (pedido.posicaoExpedicao === null || pedido.posicaoExpedicao === undefined) {
-          return "Selecione a posição da expedição.";
-        }
-        if (!pedido.blocos || pedido.blocos.length === 0) {
-          return "O pedido precisa ter ao menos um bloco.";
-        }
-        const blocoSemCor = pedido.blocos.some(
-          (b) => !b.corBloco || b.corBloco === 0
-        );
-        if (blocoSemCor) {
-          return "Todo bloco precisa ter uma cor definida.";
-        }
-        return null;
-      }
-
-      async function extrairMensagemErro(response) {
-        let corpo = null;
-        try {
-          corpo = await response.clone().json();
-        } catch (_) {
-          try {
-            corpo = await response.text();
-          } catch (_) {
-            corpo = null;
-          }
-        }
-
-        let detalheBackend = null;
-        if (corpo && typeof corpo === "object") {
-          detalheBackend =
-            corpo.message ||
-            corpo.mensagem ||
-            corpo.erro ||
-            corpo.detail ||
-            corpo.title ||
-            null;
-          if (!detalheBackend && corpo.errors) {
-            const partes = [];
-            for (const campo in corpo.errors) {
-              const valores = corpo.errors[campo];
-              const msgs = Array.isArray(valores) ? valores : [valores];
-              msgs.forEach((m) => partes.push(`${campo}: ${m}`));
-            }
-            if (partes.length) detalheBackend = partes.join(" · ");
-          }
-        } else if (typeof corpo === "string" && corpo.trim()) {
-          detalheBackend = corpo.trim();
-        }
-
-        const mensagensPorStatus = {
-          400: "Dados do pedido inválidos. Verifique os campos preenchidos.",
-          401: "Sessão expirada ou não autorizada. Faça login novamente.",
-          403: "Você não tem permissão para criar pedidos.",
-          404: "Endpoint de pedidos não encontrado no servidor.",
-          409: "Conflito ao salvar o pedido (ex: ordem de produção já existente).",
-          422: "Não foi possível processar os dados enviados.",
-          500: "Erro interno no servidor ao salvar o pedido.",
-          503: "Servidor indisponível no momento.",
-        };
-
-        const mensagemPadrao =
-          mensagensPorStatus[response.status] ||
-          `Erro HTTP ${response.status} - ${response.statusText || "desconhecido"}.`;
-
-        return detalheBackend
-          ? `${mensagemPadrao} Detalhe: ${detalheBackend}`
-          : mensagemPadrao;
-      }
-
-      function mostrarStatus(mensagem, tipo) {
-        const el = document.getElementById("statusEnvio");
-        el.textContent = mensagem;
-        el.className = `status-envio ${tipo}`;
-        el.style.display = "block";
-        if (tipo !== "carregando") {
-          setTimeout(() => {
-            el.style.display = "none";
-          }, 5000);
-        }
-      }
-
-      // =========================================================================
-      // SUBMIT DO FORMULÁRIO
-      // =========================================================================
-      document
-        .getElementById("formPedido")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-
-          const btnSalvar = document.getElementById("btnSalvar");
-          btnSalvar.disabled = true;
-          btnSalvar.textContent = "Salvando...";
-          mostrarStatus("Salvando pedido...", "carregando");
-
-          const blocos = [];
-          document.querySelectorAll(".bloco").forEach((bloco) => {
-            const laminas = [];
-            bloco.querySelectorAll(".lamina-card").forEach((card) => {
-              laminas.push({
-                cor: Number(card.querySelector(".corLamina").value),
-                padrao: Number(card.querySelector(".padraoLamina").value),
-                posicaoNoBloco: Number(
-                  card.querySelector(".posicaoLamina").value
-                ),
-              });
-            });
-            blocos.push({
-              corBloco: Number(bloco.querySelector(".corBloco").value),
-              laminas: laminas,
-            });
-          });
-
-          const posicaoExpedicaoEl = document.getElementById("posicaoExpedicao");
-          const posicaoEscolhida = posicaoExpedicaoEl.value
-            ? Number(posicaoExpedicaoEl.value)
-            : null;
-
-          try {
-            const response = await fetch(`${API_BASE}/api/expedicao/listar`);
-            if (response.ok) {
-              const expedicoes = await response.json();
-              const ocupadas = new Set();
-              (expedicoes || []).forEach((exp) => {
-                const pos = exp.posicaoExpedicao;
-                const saiu = exp.saidaEm != null;
-                if (pos != null && !saiu) {
-                  ocupadas.add(pos);
-                }
-              });
-              if (posicaoEscolhida !== null && ocupadas.has(posicaoEscolhida)) {
-                mostrarStatus(
-                  `✘ A posição ${posicaoEscolhida} já está ocupada. Escolha outra.`,
-                  "erro"
-                );
-                btnSalvar.disabled = false;
-                btnSalvar.textContent = "Salvar Pedido";
-                await carregarPosicoesExpedicao();
-                return;
-              }
-            }
-          } catch (err) {
-            console.warn("Não foi possível verificar ocupação da expedição:", err);
-          }
-
-          const pedido = {
-            ordemProducao: document.getElementById("ordemProducao").value.trim(),
-            tipoPedido: Number(tipoPedido.value),
-            corTampa: Number(document.getElementById("corTampa").value),
-            posicaoExpedicao: posicaoEscolhida,
-            dataPedido: new Date().toISOString(),
-            blocos: blocos,
-          };
-
-          const erroValidacao = validarPedido(pedido);
-          if (erroValidacao) {
-            mostrarStatus("✘ " + erroValidacao, "erro");
+          if (posicaoEscolhida !== null && ocupadas.has(posicaoEscolhida)) {
+            mostrarStatus(`✘ A posição ${posicaoEscolhida} já está ocupada. Escolha outra.`, "erro");
             btnSalvar.disabled = false;
             btnSalvar.textContent = "Salvar Pedido";
+            await carregarPosicoesExpedicao();
             return;
           }
-
-          try {
-            const response = await fetch(`${API_BASE}/pedidos`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(pedido),
-            });
-
-            if (!response.ok) {
-              const mensagemErro = await extrairMensagemErro(response);
-              throw new Error(mensagemErro);
-            }
-
-            const data = await response.json();
-            const idSalvo = data.id ?? data.idPedido ?? "—";
-            mostrarStatus(`✔ Pedido #${idSalvo} salvo com sucesso!`, "sucesso");
-            await carregarPosicoesExpedicao();
-          } catch (error) {
-            console.error(error);
-            const mensagemFinal =
-              error instanceof TypeError
-                ? "Não foi possível conectar ao servidor. Verifique o backend."
-                : error.message;
-            mostrarStatus("✘ " + mensagemFinal, "erro");
-          } finally {
-            btnSalvar.disabled = false;
-            btnSalvar.textContent = "Salvar Pedido";
-          }
-        });
-
-      // =========================================================================
-      // INICIALIZAÇÃO FINAL
-      // =========================================================================
-      async function iniciar() {
-        await carregarPosicoesExpedicao();
-        criarBlocos(1);
-        tipoPedido.addEventListener("change", () => {
-          criarBlocos(Number(tipoPedido.value));
-        });
-        setInterval(atualizarPosicoesExpedicao, 30000);
+        }
+      } catch (err) {
+        console.warn("Não foi possível verificar ocupação da expedição:", err);
       }
 
-      iniciar();
-    </script>
-  </body>
+      const pedido = {
+        ordemProducao: document.getElementById("ordemProducao").value.trim(),
+        tipoPedido: Number(tipoPedido.value),
+        corTampa: Number(document.getElementById("corTampa").value),
+        posicaoExpedicao: posicaoEscolhida,
+        dataPedido: new Date().toISOString(),
+        blocos: blocos,
+      };
+
+      const erroValidacao = validarPedido(pedido);
+      if (erroValidacao) {
+        mostrarStatus("✘ " + erroValidacao, "erro");
+        btnSalvar.disabled = false;
+        btnSalvar.textContent = "Salvar Pedido";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/pedidos`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(pedido),
+        });
+
+        if (!response.ok) {
+          const mensagemErro = await extrairMensagemErro(response);
+          throw new Error(mensagemErro);
+        }
+
+        const data = await response.json();
+        const idSalvo = data.id ?? data.idPedido ?? "—";
+        mostrarStatus(`✔ Pedido #${idSalvo} salvo com sucesso!`, "sucesso");
+        await carregarPosicoesExpedicao();
+        // Limpa o formulário após sucesso (opcional)
+        document.getElementById("ordemProducao").value = "";
+        document.getElementById("corTampa").value = "0";
+        document.getElementById("posicaoExpedicao").value = "";
+        criarBlocos(Number(tipoPedido.value));
+        atualizarPreview();
+      } catch (error) {
+        console.error(error);
+        const mensagemFinal = error instanceof TypeError
+          ? "Não foi possível conectar ao servidor. Verifique o backend."
+          : error.message;
+        mostrarStatus("✘ " + mensagemFinal, "erro");
+      } finally {
+        btnSalvar.disabled = false;
+        btnSalvar.textContent = "Salvar Pedido";
+        // Reaplica modo visualização se ativo
+        if (isModoVisualizacao()) {
+          btnSalvar.disabled = true;
+          btnSalvar.textContent = "Bloqueado (Visualização)";
+        }
+      }
+    });
+
+    // =========================================================================
+    // INICIALIZAÇÃO FINAL
+    // =========================================================================
+    async function iniciar() {
+      await carregarPosicoesExpedicao();
+      criarBlocos(1);
+      tipoPedido.addEventListener("change", () => {
+        criarBlocos(Number(tipoPedido.value));
+      });
+      setInterval(atualizarPosicoesExpedicao, 30000);
+
+      // Aplica modo visualização nos elementos já existentes
+      aplicarModoVisualizacao();
+    }
+
+    iniciar();
+  </script>
+</body>
 </html>

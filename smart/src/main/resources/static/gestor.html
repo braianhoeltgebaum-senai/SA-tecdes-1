@@ -1,961 +1,964 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SMART 4.0 · Gestão de Produção</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial,
-          sans-serif;
-        background: #0a0f1a;
-        color: #f8fafc;
-        padding: 0 0 40px 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMART 4.0 · Gestão de Produção</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #0a0f1a;
+      color: #f8fafc;
+      padding: 0 0 40px 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-      /* ==========================================================================
-         NAV PADRÃO SMART 4.0
-         ========================================================================== */
-      nav {
-        width: 100%;
-        background: #111c30;
-        border-bottom: 1px solid #1e293b;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+    /* BANNER */
+    .banner-visualizacao {
+      display: none;
+      background: #facc15;
+      color: #0a0f1a;
+      text-align: center;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #eab308;
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .banner-visualizacao.ativo {
+      display: block;
+    }
+    .banner-visualizacao span {
+      background: #0a0f1a;
+      color: #facc15;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+    }
 
-      .nav-logo {
-        display: flex;
-        flex-direction: column;
-      }
-      .nav-logo h1 {
-        font-size: 1.2rem;
-        color: #38bdf8;
-        font-weight: 700;
-      }
-      .nav-logo span {
-        font-size: 0.75rem;
-        color: #64748b;
-      }
+    nav {
+      width: 100%;
+      background: #111c30;
+      border-bottom: 1px solid #1e293b;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      .nav-menu {
-        display: flex;
-        gap: 20px;
-        list-style: none;
-      }
-      .nav-menu a {
-        color: #94a3b8;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
-        transition: color 0.2s;
-      }
-      .nav-menu a:hover,
-      .nav-menu a.active {
-        color: #38bdf8;
-      }
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-logo h1 {
+      font-size: 1.2rem;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .nav-logo span {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
 
-      /* ==========================================================================
-         CONTEÚDO
-         ========================================================================== */
-      .main-container {
-        width: 100%;
-        max-width: 1200px;
-        padding: 0 20px;
-      }
+    .nav-menu {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-menu a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: #38bdf8;
+    }
 
+    .main-container {
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 20px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 16px;
+    }
+
+    .page-header h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #c0e0ff, #60a5fa);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin: 0;
+    }
+
+    .clp-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .clp-bar label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #64748b;
+      white-space: nowrap;
+    }
+    .clp-bar input {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      width: 200px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .clp-bar input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    .clp-bar input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .clp-status {
+      font-size: 0.78rem;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .filters-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: #111c30;
+      color: #94a3b8;
+      border: 1px solid #1e293b;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .filter-btn:hover {
+      border-color: #38bdf8;
+      color: #f8fafc;
+    }
+    .filter-btn.active {
+      background: #38bdf8;
+      color: #0a0f1a;
+      border-color: #38bdf8;
+    }
+
+    .btn-refresh {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      font-family: inherit;
+    }
+    .btn-refresh:hover {
+      background: #2d3a4e;
+      border-color: #5b7a9a;
+      color: white;
+    }
+
+    .btn-order {
+      background: #111c30;
+      color: #94a3b8;
+      border: 1px solid #1e293b;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-order:hover {
+      border-color: #38bdf8;
+      color: #f8fafc;
+    }
+
+    .grid-pedidos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .card-pedido {
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card-pedido:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.05);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 10px;
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .status-1 {
+      background: rgba(234, 179, 8, 0.1);
+      color: #eab308;
+      border: 1px solid rgba(234, 179, 8, 0.2);
+    }
+    .status-2 {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .status-3 {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .pedido-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    .info-item span {
+      color: #f8fafc;
+      font-weight: 600;
+    }
+
+    .bloco-container {
+      border-top: 1px solid #1e293b;
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bloco-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #38bdf8;
+      margin-bottom: 5px;
+    }
+    .lamina-lista {
+      list-style: none;
+      padding-left: 10px;
+      border-left: 2px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .cor-txt-1 {
+      color: #ffffff !important;
+      font-weight: bold;
+    }
+    .cor-txt-2 {
+      color: #f87171 !important;
+      font-weight: bold;
+    }
+    .cor-txt-3 {
+      color: #60a5fa !important;
+      font-weight: bold;
+    }
+    .cor-txt-4 {
+      color: #4ade80 !important;
+      font-weight: bold;
+    }
+    .cor-txt-5 {
+      color: #fbbf24 !important;
+      font-weight: bold;
+    }
+
+    .btn-card-action {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      margin-top: auto;
+      font-family: inherit;
+    }
+    .btn-producao {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      color: white;
+    }
+    .btn-producao:hover:not(:disabled) {
+      filter: brightness(1.08);
+    }
+    .btn-producao:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
+    .btn-card-status {
+      background: #1e293b;
+      color: #93c5fd;
+      cursor: default;
+    }
+    .btn-card-status.concluido {
+      color: #64748b;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 500;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-box {
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 420px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .modal-box h3 {
+      font-size: 1.1rem;
+      color: #f8fafc;
+    }
+    .modal-box p {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+    .modal-box input {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      width: 100%;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .modal-box input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .btn-modal-cancel {
+      background: #1e293b;
+      color: #94a3b8;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      font-family: inherit;
+    }
+    .btn-modal-cancel:hover {
+      background: #334155;
+      color: #f8fafc;
+    }
+    .btn-modal-confirm {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter 0.2s;
+      font-family: inherit;
+    }
+    .btn-modal-confirm:hover {
+      filter: brightness(1.08);
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 500;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 999;
+      font-family: inherit;
+    }
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    #toast.success {
+      background: #065f46;
+      border: 1px solid #059669;
+      color: #34d399;
+    }
+    #toast.error {
+      background: #991b1b;
+      border: 1px solid #dc2626;
+      color: #fca5a5;
+    }
+    #toast.info {
+      background: #1e3a5f;
+      border: 1px solid #2563eb;
+      color: #93c5fd;
+    }
+
+    .modo-visualizacao .btn-producao {
+      opacity: 0.5 !important;
+      pointer-events: none !important;
+      filter: grayscale(0.8) !important;
+    }
+    .modo-visualizacao #ipCLP {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+    .modo-visualizacao .btn-order,
+    .modo-visualizacao .filter-btn,
+    .modo-visualizacao .btn-refresh {
+      pointer-events: auto !important;
+      opacity: 1 !important;
+    }
+
+    @media (max-width: 700px) {
       .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-bottom: 25px;
-        border-bottom: 1px solid #1e293b;
-        padding-bottom: 16px;
+        flex-direction: column;
+        align-items: stretch;
       }
-
-      .page-header h2 {
-        font-size: 1.6rem;
-        font-weight: 600;
-        background: linear-gradient(135deg, #c0e0ff, #60a5fa);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-        margin: 0;
+      .filters-container {
+        justify-content: center;
       }
-
-      /* BARRA DE IP DO CLP */
       .clp-bar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 10px;
-        padding: 12px 18px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-      }
-      .clp-bar label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #64748b;
-        white-space: nowrap;
+        flex-direction: column;
+        align-items: stretch;
       }
       .clp-bar input {
-        background: #0f172a;
-        border: 1px solid #334155;
-        color: #f8fafc;
-        border-radius: 10px;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        width: 200px;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        font-family: inherit;
-      }
-      .clp-bar input:focus {
-        outline: none;
-        border-color: #38bdf8;
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-      }
-      .clp-status {
-        font-size: 0.78rem;
-        color: #64748b;
-        font-style: italic;
-      }
-
-      /* FILTROS E ORDENAÇÃO */
-      .filters-container {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .filter-btn {
-        background: #111c30;
-        color: #94a3b8;
-        border: 1px solid #1e293b;
-        padding: 8px 16px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: inherit;
-      }
-      .filter-btn:hover {
-        border-color: #38bdf8;
-        color: #f8fafc;
-      }
-      .filter-btn.active {
-        background: #38bdf8;
-        color: #0a0f1a;
-        border-color: #38bdf8;
-      }
-
-      .btn-refresh {
-        background: #1e293b;
-        color: #f8fafc;
-        border: 1px solid #334155;
-        padding: 8px 16px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: background 0.2s, border-color 0.2s, color 0.2s;
-        font-family: inherit;
-      }
-      .btn-refresh:hover {
-        background: #2d3a4e;
-        border-color: #5b7a9a;
-        color: white;
-      }
-
-      .btn-order {
-        background: #111c30;
-        color: #94a3b8;
-        border: 1px solid #1e293b;
-        padding: 8px 16px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: inherit;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .btn-order:hover {
-        border-color: #38bdf8;
-        color: #f8fafc;
-      }
-
-      /* GRID DOS PEDIDOS (CARDS) */
-      .grid-pedidos {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-      }
-
-      .card-pedido {
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 16px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        transition: border-color 0.2s, box-shadow 0.2s;
-      }
-      .card-pedido:hover {
-        border-color: #38bdf8;
-        box-shadow: 0 4px 20px rgba(56, 189, 248, 0.05);
-      }
-
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #1e293b;
-        padding-bottom: 10px;
-      }
-      .card-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #f8fafc;
-      }
-
-      /* Badges de Status */
-      .status-badge {
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 4px 8px;
-        border-radius: 4px;
-        letter-spacing: 0.05em;
-      }
-      .status-1 {
-        background: rgba(234, 179, 8, 0.1);
-        color: #eab308;
-        border: 1px solid rgba(234, 179, 8, 0.2);
-      }
-      .status-2 {
-        background: rgba(59, 130, 246, 0.1);
-        color: #3b82f6;
-        border: 1px solid rgba(59, 130, 246, 0.2);
-      }
-      .status-3 {
-        background: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
-        border: 1px solid rgba(34, 197, 94, 0.2);
-      }
-
-      /* Informações Gerais do Pedido */
-      .pedido-info {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        font-size: 0.85rem;
-        color: #94a3b8;
-      }
-      .info-item span {
-        color: #f8fafc;
-        font-weight: 600;
-      }
-
-      /* Estrutura interna de Blocos */
-      .bloco-container {
-        border-top: 1px solid #1e293b;
-        padding-top: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .bloco-title {
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #38bdf8;
-        margin-bottom: 5px;
-      }
-      .lamina-lista {
-        list-style: none;
-        padding-left: 10px;
-        border-left: 2px solid #1e293b;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        font-size: 0.8rem;
-        color: #94a3b8;
-      }
-
-      /* Cores Dinâmicas para Texto */
-      .cor-txt-1 {
-        color: #ffffff !important;
-        font-weight: bold;
-      }
-      .cor-txt-2 {
-        color: #f87171 !important;
-        font-weight: bold;
-      }
-      .cor-txt-3 {
-        color: #60a5fa !important;
-        font-weight: bold;
-      }
-      .cor-txt-4 {
-        color: #4ade80 !important;
-        font-weight: bold;
-      }
-      .cor-txt-5 {
-        color: #fbbf24 !important;
-        font-weight: bold;
-      }
-
-      /* Botão de Ação do Card */
-      .btn-card-action {
         width: 100%;
-        padding: 10px;
-        border: none;
-        border-radius: 10px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s, opacity 0.2s;
-        margin-top: auto;
-        font-family: inherit;
       }
-      .btn-producao {
-        background: linear-gradient(135deg, #0ea5e9, #2563eb);
-        color: white;
-      }
-      .btn-producao:hover:not(:disabled) {
-        filter: brightness(1.08);
-      }
-      .btn-producao:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BANNER -->
+  <div class="banner-visualizacao" id="bannerVisu">
+    MODO VISUALIZAÇÃO ATIVO – Apenas leitura. Envio para produção bloqueado.
+  </div>
 
-      .btn-card-status {
-        background: #1e293b;
-        color: #93c5fd;
-        cursor: default;
-      }
-      .btn-card-status.concluido {
-        color: #64748b;
-      }
+  <nav>
+    <div class="nav-logo">
+      <h1>SMART 4.0 · Planta Digital</h1>
+      <span>SENAI · Timbó-SC</span>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="Inicio.html">Início</a></li>
+      <li><a href="gestor_pedidos.html">Gestor de Pedidos</a></li>
+      <li><a href="gestor.html">Gestor de Produção</a></li>
+      <li><a href="Dashboard_simples.html">Dashboard</a></li>
+      <li><a href="visualizacaoBancada.html">Acompanhamento</a></li>
+    </ul>
+  </nav>
 
-      /* MODAL DE CONFIRMAÇÃO DE IP */
-      .modal-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 500;
-        justify-content: center;
-        align-items: center;
-      }
-      .modal-overlay.open {
-        display: flex;
-      }
-      .modal-box {
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 16px;
-        padding: 30px;
-        max-width: 420px;
-        width: 90%;
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-      }
-      .modal-box h3 {
-        font-size: 1.1rem;
-        color: #f8fafc;
-      }
-      .modal-box p {
-        font-size: 0.9rem;
-        color: #94a3b8;
-        line-height: 1.5;
-      }
-      .modal-box input {
-        background: #0f172a;
-        border: 1px solid #334155;
-        color: #f8fafc;
-        border-radius: 10px;
-        padding: 10px 14px;
-        font-size: 0.95rem;
-        width: 100%;
-        font-family: inherit;
-        transition: border-color 0.2s, box-shadow 0.2s;
-      }
-      .modal-box input:focus {
-        outline: none;
-        border-color: #38bdf8;
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-      }
+  <div class="main-container">
+    <div class="clp-bar">
+      <label>🔌 IP do CLP da Bancada:</label>
+      <input type="text" id="ipCLP" placeholder="192.168.1.10" />
+      <span class="clp-status">Preenchido aqui, usado ao enviar para produção.</span>
+    </div>
 
-      .modal-actions {
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-      }
-      .btn-modal-cancel {
-        background: #1e293b;
-        color: #94a3b8;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 10px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s, color 0.2s;
-        font-family: inherit;
-      }
-      .btn-modal-cancel:hover {
-        background: #334155;
-        color: #f8fafc;
-      }
-      .btn-modal-confirm {
-        background: #2563eb;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 10px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: filter 0.2s;
-        font-family: inherit;
-      }
-      .btn-modal-confirm:hover {
-        filter: brightness(1.08);
-      }
+    <div class="page-header">
+      <h2>Pedidos Cadastrados</h2>
+      <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap">
+        <div class="filters-container">
+          <button class="filter-btn active" onclick="filtrarStatus('todos', this)">Todos</button>
+          <button class="filter-btn" onclick="filtrarStatus(1, this)">Pendentes</button>
+          <button class="filter-btn" onclick="filtrarStatus(2, this)">Em Produção</button>
+          <button class="filter-btn" onclick="filtrarStatus(3, this)">Concluídos</button>
+        </div>
+        <button class="btn-order" id="btnOrder" onclick="alternarOrdem()">Mais recentes</button>
+        <button class="btn-refresh" onclick="obterPedidos()">Atualizar ↻</button>
+      </div>
+    </div>
 
-      /* TOAST */
-      #toast {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 16px 24px;
-        border-radius: 10px;
-        color: white;
-        font-weight: 500;
-        font-size: 0.9rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-        transform: translateY(100px);
-        opacity: 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        z-index: 999;
-        font-family: inherit;
-      }
-      #toast.show {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      #toast.success {
-        background: #065f46;
-        border: 1px solid #059669;
-        color: #34d399;
-      }
-      #toast.error {
-        background: #991b1b;
-        border: 1px solid #dc2626;
-        color: #fca5a5;
-      }
-      #toast.info {
-        background: #1e3a5f;
-        border: 1px solid #2563eb;
-        color: #93c5fd;
-      }
+    <div id="gridPedidos" class="grid-pedidos"></div>
+  </div>
 
-      @media (max-width: 700px) {
-        .page-header {
-          flex-direction: column;
-          align-items: stretch;
-        }
-        .filters-container {
-          justify-content: center;
-        }
-        .clp-bar {
-          flex-direction: column;
-          align-items: stretch;
-        }
-        .clp-bar input {
-          width: 100%;
-        }
-      }
-    </style>
-  </head>
+  <!-- Modal de confirmação de IP -->
+  <div class="modal-overlay" id="modalIP">
+    <div class="modal-box">
+      <h3>IP do CLP não informado</h3>
+      <p>Informe o endereço IP da bancada para enviar o pedido ao CLP e iniciar a produção.</p>
+      <input type="text" id="modalIpInput" placeholder="Ex: 192.168.1.10" />
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="fecharModal()">Cancelar</button>
+        <button class="btn-modal-confirm" onclick="confirmarEnvioComIP()">Confirmar e Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
   <script>
+    // ---- MODO VISUALIZAÇÃO ----
+    const TOGGLE_KEY = 'smart40_modo_visualizacao';
+
+    function isModoVisualizacao() {
+      return localStorage.getItem(TOGGLE_KEY) === 'true';
+    }
+
+    function aplicarModoVisualizacao() {
+      const ativo = isModoVisualizacao();
+      document.getElementById('bannerVisu').classList.toggle('ativo', ativo);
+      document.body.classList.toggle('modo-visualizacao', ativo);
+      document.getElementById('ipCLP').disabled = ativo;
+      // Os botões de produção serão desabilitados na renderização
+    }
+
+    window.addEventListener('load', aplicarModoVisualizacao);
+    window.addEventListener('storage', function(e) {
+      if (e.key === TOGGLE_KEY) aplicarModoVisualizacao();
+    });
+
+    // ---- Menu ativo ----
     document.querySelectorAll(".nav-menu a").forEach((link) => {
       const hrefPage = link.getAttribute("href");
-      const currentPage =
-        window.location.pathname.split("/").pop() || "Inicio.html";
+      const currentPage = window.location.pathname.split("/").pop() || "Inicio.html";
       if (hrefPage === currentPage) {
         link.classList.add("active");
       } else {
         link.classList.remove("active");
       }
     });
-  </script>
-  <body>
-    <nav>
-      <div class="nav-logo">
-        <h1>SMART 4.0 · Planta Digital</h1>
-        <span>SENAI · Timbó-SC</span>
-      </div>
-      <ul class="nav-menu">
-        <li><a href="Inicio.html">Início</a></li>
-        <li><a href="gestor_pedidos.html">Gestor de Pedidos</a></li>
-        <li><a href="gestor.html">Gestor de Produção</a></li>
-        <li><a href="Dashboard_simples.html">Dashboard</a></li>
-        <li><a href="visualizacaoBancada.html">Acompanhamento</a></li>
-      </ul>
-    </nav>
 
-    <div class="main-container">
-      <div class="clp-bar">
-        <label>🔌 IP do CLP da Bancada:</label>
-        <input type="text" id="ipCLP" placeholder="192.168.1.10" />
-        <span class="clp-status"
-          >Preenchido aqui, usado ao enviar para produção.</span
-        >
-      </div>
+    // ---- Lógica original (com adaptações para modo visualização) ----
+    const API = "http://localhost:8088/pedidos";
+    const POLLING_MS = 8000;
 
-      <div class="page-header">
-        <h2>Pedidos Cadastrados</h2>
-        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap">
-          <div class="filters-container">
-            <button
-              class="filter-btn active"
-              onclick="filtrarStatus('todos', this)"
-            >
-              Todos
-            </button>
-            <button class="filter-btn" onclick="filtrarStatus(1, this)">
-              Pendentes
-            </button>
-            <button class="filter-btn" onclick="filtrarStatus(2, this)">
-              Em Produção
-            </button>
-            <button class="filter-btn" onclick="filtrarStatus(3, this)">
-              Concluídos
-            </button>
-          </div>
-          <button class="btn-order" id="btnOrder" onclick="alternarOrdem()">
-            Mais recentes
-          </button>
-          <button class="btn-refresh" onclick="obterPedidos()">
-            Atualizar ↻
-          </button>
-        </div>
-      </div>
+    let todosPedidos = [];
+    let filtroAtivo = "todos";
+    let pedidoPendenteCLP = null;
+    let ordemAtual = "recentes";
 
-      <div id="gridPedidos" class="grid-pedidos"></div>
-    </div>
+    const mapaStatus = {
+      1: { nome: "Pendente", classe: "status-1" },
+      2: { nome: "Em Produção", classe: "status-2" },
+      3: { nome: "Concluído", classe: "status-3" },
+    };
+    const mapaTipo = {
+      1: "Simples",
+      2: "Duplo",
+      3: "Triplo",
+    };
+    const mapaCores = {
+      0: { nome: "Vazio", classe: "" },
+      1: { nome: "Preto", classe: "cor-txt-1" },
+      2: { nome: "Vermelho", classe: "cor-txt-2" },
+      3: { nome: "Azul", classe: "cor-txt-3" },
+    };
+    const mapaCoresLaminas = {
+      1: { nome: "Vermelho", classe: "cor-txt-2" },
+      2: { nome: "Azul", classe: "cor-txt-3" },
+      3: { nome: "Amarelo", classe: "cor-txt-5" },
+      4: { nome: "Verde", classe: "cor-txt-4" },
+      5: { nome: "Preto", classe: "cor-txt-1" },
+      6: { nome: "Branco", classe: "cor-txt-1" },
+    };
+    const mapaPadrao = {
+      0: "Nenhum",
+      1: "Casa",
+      2: "Navio",
+      3: "Estrela",
+    };
 
-    <!-- Modal de confirmação de IP -->
-    <div class="modal-overlay" id="modalIP">
-      <div class="modal-box">
-        <h3>⚠️ IP do CLP não informado</h3>
-        <p>
-          Informe o endereço IP da bancada para enviar o pedido ao CLP e iniciar
-          a produção.
-        </p>
-        <input type="text" id="modalIpInput" placeholder="Ex: 192.168.1.10" />
-        <div class="modal-actions">
-          <button class="btn-modal-cancel" onclick="fecharModal()">
-            Cancelar
-          </button>
-          <button class="btn-modal-confirm" onclick="confirmarEnvioComIP()">
-            Confirmar e Enviar
-          </button>
-        </div>
-      </div>
-    </div>
+    const dadosMockFallback = [
+      {
+        id: 1,
+        ordemProducao: "OP101",
+        tipoPedido: 2,
+        corTampa: 2,
+        statusPedido: 1,
+        dataPedido: "2026-07-06T10:00:00.000Z",
+        blocos: [
+          {
+            corBloco: 2,
+            estoque: { id: 3 },
+            laminas: [
+              { cor: 2, padrao: 1, posicaoNoBloco: 1 },
+              { cor: 3, padrao: 2, posicaoNoBloco: 2 },
+              { cor: 4, padrao: 0, posicaoNoBloco: 3 },
+            ],
+          },
+          {
+            corBloco: 3,
+            estoque: { id: 4 },
+            laminas: [
+              { cor: 4, padrao: 3, posicaoNoBloco: 1 },
+              { cor: 1, padrao: 0, posicaoNoBloco: 2 },
+            ],
+          },
+        ],
+      },
+      {
+        id: 2,
+        ordemProducao: "OP102",
+        tipoPedido: 1,
+        corTampa: 3,
+        statusPedido: 2,
+        dataPedido: "2026-07-06T09:00:00.000Z",
+        blocos: [
+          {
+            corBloco: 1,
+            estoque: { id: 12 },
+            laminas: [
+              { cor: 3, padrao: 0, posicaoNoBloco: 1 },
+              { cor: 5, padrao: 2, posicaoNoBloco: 2 },
+            ],
+          },
+        ],
+      },
+      {
+        id: 3,
+        ordemProducao: "OP103",
+        tipoPedido: 3,
+        corTampa: 1,
+        statusPedido: 3,
+        dataPedido: "2026-07-05T22:00:00.000Z",
+        blocos: [
+          {
+            corBloco: 2,
+            estoque: { id: 1 },
+            laminas: [],
+          },
+        ],
+      },
+    ];
 
-    <div id="toast"></div>
+    document.addEventListener("DOMContentLoaded", () => {
+      obterPedidos();
+      setInterval(obterPedidos, POLLING_MS);
+    });
 
-    <script>
-      const API = "http://localhost:8088/pedidos";
-      const POLLING_MS = 8000;
+    async function obterPedidos() {
+      try {
+        const response = await fetch(API);
+        if (response.ok) {
+          const dados = await response.json();
+          todosPedidos = dados.map((p) => ({
+            ...p,
+            id: p.id ?? p.idPedido ?? p.Id ?? p.IdPedido,
+          }));
+        } else {
+          utilizarFallback("Resposta inválida do servidor.");
+        }
+      } catch (error) {
+        utilizarFallback("Servidor offline ou inacessível.");
+      }
+      renderizarCards();
+    }
 
-      let todosPedidos = [];
-      let filtroAtivo = "todos";
-      let pedidoPendenteCLP = null;
-      let ordemAtual = "recentes"; // 'recentes' ou 'antigos'
+    function utilizarFallback(motivo) {
+      console.warn(`Usando dados simulados (Fallback). Motivo: ${motivo}`);
+      todosPedidos = dadosMockFallback;
+      exibirToast("Exibindo dados de teste (Backend desconectado)", "error");
+    }
 
-      const mapaStatus = {
-        1: { nome: "Pendente", classe: "status-1" },
-        2: { nome: "Em Produção", classe: "status-2" },
-        3: { nome: "Concluído", classe: "status-3" },
-      };
-      const mapaTipo = {
-        1: "Simples",
-        2: "Duplo",
-        3: "Triplo",
-      };
-      const mapaCores = {
-        0: { nome: "Vazio", classe: "" },
-        1: { nome: "Preto", classe: "cor-txt-1" },
-        2: { nome: "Vermelho", classe: "cor-txt-2" },
-        3: { nome: "Azul", classe: "cor-txt-3" },
-      };
-      const mapaCoresLaminas = {
-        1: { nome: "Vermelho", classe: "cor-txt-2" },
-        2: { nome: "Azul", classe: "cor-txt-3" },
-        3: { nome: "Amarelo", classe: "cor-txt-5" },
-        4: { nome: "Verde", classe: "cor-txt-4" },
-        5: { nome: "Preto", classe: "cor-txt-1" },
-        6: { nome: "Branco", classe: "cor-txt-1" },
-      };
-      const mapaPadrao = {
-        0: "Nenhum",
-        1: "Casa",
-        2: "Navio",
-        3: "Estrela",
-      };
+    async function enviarParaProducao(idPedido) {
+      if (isModoVisualizacao()) {
+        alert('Modo visualização ativo – não é possível enviar para produção.');
+        return;
+      }
+      const ip = document.getElementById("ipCLP").value.trim();
+      if (!ip) {
+        pedidoPendenteCLP = idPedido;
+        document.getElementById("modalIpInput").value = "";
+        document.getElementById("modalIP").classList.add("open");
+        return;
+      }
+      await executarEnvioProducao(idPedido, ip);
+    }
 
-      const dadosMockFallback = [
-        {
-          id: 1,
-          ordemProducao: "OP101",
-          tipoPedido: 2,
-          corTampa: 2,
-          statusPedido: 1,
-          dataPedido: "2026-07-06T10:00:00.000Z",
-          blocos: [
-            {
-              corBloco: 2,
-              estoque: { id: 3 },
-              laminas: [
-                { cor: 2, padrao: 1, posicaoNoBloco: 1 },
-                { cor: 3, padrao: 2, posicaoNoBloco: 2 },
-                { cor: 4, padrao: 0, posicaoNoBloco: 3 },
-              ],
-            },
-            {
-              corBloco: 3,
-              estoque: { id: 4 },
-              laminas: [
-                { cor: 4, padrao: 3, posicaoNoBloco: 1 },
-                { cor: 1, padrao: 0, posicaoNoBloco: 2 },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          ordemProducao: "OP102",
-          tipoPedido: 1,
-          corTampa: 3,
-          statusPedido: 2,
-          dataPedido: "2026-07-06T09:00:00.000Z",
-          blocos: [
-            {
-              corBloco: 1,
-              estoque: { id: 12 },
-              laminas: [
-                { cor: 3, padrao: 0, posicaoNoBloco: 1 },
-                { cor: 5, padrao: 2, posicaoNoBloco: 2 },
-              ],
-            },
-          ],
-        },
-        {
-          id: 3,
-          ordemProducao: "OP103",
-          tipoPedido: 3,
-          corTampa: 1,
-          statusPedido: 3,
-          dataPedido: "2026-07-05T22:00:00.000Z",
-          blocos: [
-            {
-              corBloco: 2,
-              estoque: { id: 1 },
-              laminas: [],
-            },
-          ],
-        },
-      ];
+    async function executarEnvioProducao(idPedido, ip) {
+      if (isModoVisualizacao()) {
+        alert('Modo visualização ativo – não é possível enviar para produção.');
+        return;
+      }
+      const btn = document.getElementById(`btn-producao-${idPedido}`);
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Enviando ao CLP...";
+      }
+      try {
+        exibirToast("Comunicando com o CLP...", "info");
+        const urlIniciar = `${API}/${idPedido}/iniciar?ip=${encodeURIComponent(ip)}`;
+        const resCLP = await fetch(urlIniciar, { method: "POST" });
 
-      document.addEventListener("DOMContentLoaded", () => {
+        if (!resCLP.ok) {
+          const erroCLP = await resCLP.text();
+          throw new Error(`Erro na comunicação com o CLP: ${erroCLP}`);
+        }
+
+        const index = todosPedidos.findIndex((p) => p.id === idPedido);
+        if (index !== -1) todosPedidos[index].statusPedido = 2;
+        renderizarCards();
+
+        exibirToast(`✔ Pedido #${idPedido} enviado ao CLP (${ip}) — Em Produção!`, "success");
+
         obterPedidos();
-        setInterval(obterPedidos, POLLING_MS);
+      } catch (error) {
+        console.error(error);
+        exibirToast("✘ " + error.message, "error");
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "▶ Enviar para Produção";
+        }
+      }
+    }
+
+    function confirmarEnvioComIP() {
+      if (isModoVisualizacao()) {
+        alert('Modo visualização ativo – não é possível enviar para produção.');
+        return;
+      }
+      const ip = document.getElementById("modalIpInput").value.trim();
+      if (!ip) {
+        alert("Informe o IP do CLP.");
+        return;
+      }
+      document.getElementById("ipCLP").value = ip;
+      fecharModal();
+      executarEnvioProducao(pedidoPendenteCLP, ip);
+      pedidoPendenteCLP = null;
+    }
+
+    function fecharModal() {
+      document.getElementById("modalIP").classList.remove("open");
+    }
+
+    function alternarOrdem() {
+      ordemAtual = ordemAtual === "recentes" ? "antigos" : "recentes";
+      const btn = document.getElementById("btnOrder");
+      btn.textContent = ordemAtual === "recentes" ? "Mais recentes" : "Mais antigos";
+      renderizarCards();
+    }
+
+    function renderizarCards() {
+      const grid = document.getElementById("gridPedidos");
+      grid.innerHTML = "";
+
+      let pedidosFiltrados = todosPedidos.filter((p) => {
+        if (filtroAtivo === "todos") return true;
+        return Number(p.statusPedido) === Number(filtroAtivo);
       });
 
-      async function obterPedidos() {
-        try {
-          const response = await fetch(API);
-          if (response.ok) {
-            const dados = await response.json();
-            todosPedidos = dados.map((p) => ({
-              ...p,
-              id: p.id ?? p.idPedido ?? p.Id ?? p.IdPedido,
-            }));
-          } else {
-            utilizarFallback("Resposta inválida do servidor.");
-          }
-        } catch (error) {
-          utilizarFallback("Servidor offline ou inacessível.");
+      if (pedidosFiltrados.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px 0;">Nenhum pedido encontrado para este status.</p>`;
+        return;
+      }
+
+      pedidosFiltrados.sort((a, b) => {
+        const dataA = a.dataPedido ? new Date(a.dataPedido) : new Date(a.id);
+        const dataB = b.dataPedido ? new Date(b.dataPedido) : new Date(b.id);
+        if (ordemAtual === "recentes") {
+          return dataB - dataA;
+        } else {
+          return dataA - dataB;
         }
-        renderizarCards();
-      }
+      });
 
-      function utilizarFallback(motivo) {
-        console.warn(`Usando dados simulados (Fallback). Motivo: ${motivo}`);
-        todosPedidos = dadosMockFallback;
-        exibirToast("Exibindo dados de teste (Backend desconectado)", "error");
-      }
+      const ativo = isModoVisualizacao();
 
-      async function enviarParaProducao(idPedido) {
-        const ip = document.getElementById("ipCLP").value.trim();
-        if (!ip) {
-          pedidoPendenteCLP = idPedido;
-          document.getElementById("modalIpInput").value = "";
-          document.getElementById("modalIP").classList.add("open");
-          return;
-        }
-        await executarEnvioProducao(idPedido, ip);
-      }
+      pedidosFiltrados.forEach((pedido) => {
+        const statusNum = Number(pedido.statusPedido);
+        const statusInfo = mapaStatus[statusNum] || { nome: "Desconhecido", classe: "status-1" };
+        const tampaInfo = mapaCores[Number(pedido.corTampa)] || { nome: "Não definida", classe: "" };
 
-      async function executarEnvioProducao(idPedido, ip) {
-        const btn = document.getElementById(`btn-producao-${idPedido}`);
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = "Enviando ao CLP...";
-        }
-        try {
-          exibirToast("Comunicando com o CLP...", "info");
-          const urlIniciar = `${API}/${idPedido}/iniciar?ip=${encodeURIComponent(
-            ip
-          )}`;
-          const resCLP = await fetch(urlIniciar, { method: "POST" });
+        const expedicao = pedido.posicaoExpedicao ? `Posição ${pedido.posicaoExpedicao}` : "Não definida";
 
-          if (!resCLP.ok) {
-            const erroCLP = await resCLP.text();
-            throw new Error(`Erro na comunicação com o CLP: ${erroCLP}`);
-          }
-
-          const index = todosPedidos.findIndex((p) => p.id === idPedido);
-          if (index !== -1) todosPedidos[index].statusPedido = 2;
-          renderizarCards();
-
-          exibirToast(
-            `✔ Pedido #${idPedido} enviado ao CLP (${ip}) — Em Produção!`,
-            "success"
-          );
-
-          obterPedidos();
-        } catch (error) {
-          console.error(error);
-          exibirToast("✘ " + error.message, "error");
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "▶ Enviar para Produção";
-          }
-        }
-      }
-
-      function confirmarEnvioComIP() {
-        const ip = document.getElementById("modalIpInput").value.trim();
-        if (!ip) {
-          alert("Informe o IP do CLP.");
-          return;
-        }
-        document.getElementById("ipCLP").value = ip;
-        fecharModal();
-        executarEnvioProducao(pedidoPendenteCLP, ip);
-        pedidoPendenteCLP = null;
-      }
-
-      function fecharModal() {
-        document.getElementById("modalIP").classList.remove("open");
-      }
-
-      function alternarOrdem() {
-        ordemAtual = ordemAtual === "recentes" ? "antigos" : "recentes";
-        const btn = document.getElementById("btnOrder");
-        btn.textContent =
-          ordemAtual === "recentes" ? "Mais recentes" : "Mais antigos";
-        renderizarCards();
-      }
-
-      function renderizarCards() {
-        const grid = document.getElementById("gridPedidos");
-        grid.innerHTML = "";
-
-        // Filtra
-        let pedidosFiltrados = todosPedidos.filter((p) => {
-          if (filtroAtivo === "todos") return true;
-          return Number(p.statusPedido) === Number(filtroAtivo);
-        });
-
-        if (pedidosFiltrados.length === 0) {
-          grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px 0;">Nenhum pedido encontrado para este status.</p>`;
-          return;
-        }
-
-        // Ordena
-        pedidosFiltrados.sort((a, b) => {
-          const dataA = a.dataPedido ? new Date(a.dataPedido) : new Date(a.id);
-          const dataB = b.dataPedido ? new Date(b.dataPedido) : new Date(b.id);
-          if (ordemAtual === "recentes") {
-            return dataB - dataA; // mais recentes primeiro
-          } else {
-            return dataA - dataB; // mais antigos primeiro
-          }
-        });
-
-        pedidosFiltrados.forEach((pedido) => {
-          const statusNum = Number(pedido.statusPedido);
-          const statusInfo = mapaStatus[statusNum] || {
-            nome: "Desconhecido",
-            classe: "status-1",
-          };
-          const tampaInfo = mapaCores[Number(pedido.corTampa)] || {
-            nome: "Não definida",
-            classe: "",
-          };
-
-          const expedicao = pedido.posicaoExpedicao
-            ? `Posição ${pedido.posicaoExpedicao}`
-            : "Não definida";
-
-          let blocosHTML = "";
-          if (pedido.blocos && pedido.blocos.length > 0) {
-            pedido.blocos.forEach((bloco, idx) => {
-              const corBlocoInfo = mapaCores[Number(bloco.corBloco)] || {
-                nome: "Indefinida",
-                classe: "",
-              };
-              let laminasHTML = "";
-              if (bloco.laminas && bloco.laminas.length > 0) {
-                bloco.laminas.forEach((lamina, lamIdx) => {
-                  const corLaminaInfo = mapaCoresLaminas[
-                    Number(lamina.cor)
-                  ] || { nome: "Indefinida", classe: "" };
-                  const padraoText =
-                    mapaPadrao[Number(lamina.padrao)] || "Nenhum";
-                  const posicaoLamText =
-                    ["—", "Esquerda", "Frente", "Direita"][
-                      Number(lamina.posicaoNoBloco)
-                    ] || "—";
-                  laminasHTML += `
-                                    <li>
-                                        Lâmina ${lamIdx + 1}:
-                                        Cor <span class="${
-                                          corLaminaInfo.classe
-                                        }">${corLaminaInfo.nome}</span>,
-                                        Padrão: <span>${padraoText}</span>,
-                                        Posição: <span>${posicaoLamText}</span>
-                                    </li>
-                                `;
-                });
-              } else {
-                laminasHTML = `<li><i>Nenhuma lâmina acoplada</i></li>`;
-              }
-              blocosHTML += `
-                            <div class="bloco-card-detalhe">
-                                <div class="bloco-title">Bloco ${
-                                  idx + 1
-                                } — Cor: <span class="${corBlocoInfo.classe}">${
-                corBlocoInfo.nome
-              }</span></div>
-                                <div style="font-size: 0.75rem; margin-bottom: 5px; color: #64748b;">Posição Estoque: ${
-                                  bloco.estoque?.id || "Não alocado"
-                                }</div>
-                                <ul class="lamina-lista">${laminasHTML}</ul>
-                            </div>
-                        `;
-            });
-          }
-
-          let acaoBotaoHTML = "";
-          if (statusNum === 1) {
-            acaoBotaoHTML = `
-                        <button
-                            id="btn-producao-${pedido.id}"
-                            class="btn-card-action btn-producao"
-                            onclick="enviarParaProducao(${pedido.id})"
-                        >
-                            ▶ Enviar para Produção
-                        </button>
-                    `;
-          } else if (statusNum === 2) {
-            acaoBotaoHTML = `
-                        <button class="btn-card-action btn-card-status" disabled>
-                            ⏳ Em produção — acompanhamento automático
-                        </button>
-                    `;
-          } else {
-            acaoBotaoHTML = `
-                        <button class="btn-card-action btn-card-status concluido" disabled>
-                            ✔ Concluído e enviado para Expedição
-                        </button>
-                    `;
-          }
-
-          const card = document.createElement("div");
-          card.className = "card-pedido";
-          card.innerHTML = `
-                    <div class="card-header">
-                        <div class="card-title">Pedido: #${pedido.id}</div>
-                        <span class="status-badge ${statusInfo.classe}">${
-            statusInfo.nome
-          }</span>
-                    </div>
-                    <div class="pedido-info">
-                        <div class="info-item">Ordem: <span>${
-                          pedido.ordemProducao || "N/A"
-                        }</span></div>
-                        <div class="info-item">Tipo: <span>${
-                          mapaTipo[Number(pedido.tipoPedido)] || "Simples"
-                        }</span></div>
-                        <div class="info-item">Tampa: <span class="${
-                          tampaInfo.classe
-                        }">${tampaInfo.nome}</span></div>
-                        <div class="info-item">Expedição: <span style="color:#38bdf8;">${expedicao}</span></div>
-                    </div>
-                    <div class="bloco-container">${blocosHTML}</div>
-                    ${acaoBotaoHTML}
+        let blocosHTML = "";
+        if (pedido.blocos && pedido.blocos.length > 0) {
+          pedido.blocos.forEach((bloco, idx) => {
+            const corBlocoInfo = mapaCores[Number(bloco.corBloco)] || { nome: "Indefinida", classe: "" };
+            let laminasHTML = "";
+            if (bloco.laminas && bloco.laminas.length > 0) {
+              bloco.laminas.forEach((lamina, lamIdx) => {
+                const corLaminaInfo = mapaCoresLaminas[Number(lamina.cor)] || { nome: "Indefinida", classe: "" };
+                const padraoText = mapaPadrao[Number(lamina.padrao)] || "Nenhum";
+                const posicaoLamText = ["—", "Esquerda", "Frente", "Direita"][Number(lamina.posicaoNoBloco)] || "—";
+                laminasHTML += `
+                  <li>
+                    Lâmina ${lamIdx + 1}:
+                    Cor <span class="${corLaminaInfo.classe}">${corLaminaInfo.nome}</span>,
+                    Padrão: <span>${padraoText}</span>,
+                    Posição: <span>${posicaoLamText}</span>
+                  </li>
                 `;
-          grid.appendChild(card);
-        });
-      }
+              });
+            } else {
+              laminasHTML = `<li><i>Nenhuma lâmina acoplada</i></li>`;
+            }
+            blocosHTML += `
+              <div class="bloco-card-detalhe">
+                <div class="bloco-title">Bloco ${idx + 1} — Cor: <span class="${corBlocoInfo.classe}">${corBlocoInfo.nome}</span></div>
+                <div style="font-size: 0.75rem; margin-bottom: 5px; color: #64748b;">Posição Estoque: ${bloco.estoque?.id || "Não alocado"}</div>
+                <ul class="lamina-lista">${laminasHTML}</ul>
+              </div>
+            `;
+          });
+        }
 
-      function filtrarStatus(status, elemento) {
-        filtroAtivo = status;
-        document
-          .querySelectorAll(".filter-btn")
-          .forEach((btn) => btn.classList.remove("active"));
-        elemento.classList.add("active");
-        renderizarCards();
-      }
+        let acaoBotaoHTML = "";
+        if (statusNum === 1) {
+          acaoBotaoHTML = `
+            <button
+              id="btn-producao-${pedido.id}"
+              class="btn-card-action btn-producao"
+              onclick="enviarParaProducao(${pedido.id})"
+              ${ativo ? 'disabled' : ''}
+            >
+              ${ativo ? 'Bloqueado' : '▶ Enviar para Produção'}
+            </button>
+          `;
+        } else if (statusNum === 2) {
+          acaoBotaoHTML = `
+            <button class="btn-card-action btn-card-status" disabled>
+              ⏳ Em produção — acompanhamento automático
+            </button>
+          `;
+        } else {
+          acaoBotaoHTML = `
+            <button class="btn-card-action btn-card-status concluido" disabled>
+              ✔ Concluído e enviado para Expedição
+            </button>
+          `;
+        }
 
-      function exibirToast(mensagem, tipo) {
-        const toast = document.getElementById("toast");
-        toast.className = "show " + tipo;
-        toast.innerText = mensagem;
-        setTimeout(() => {
-          toast.className = "";
-        }, 3500);
-      }
-    </script>
-  </body>
+        const card = document.createElement("div");
+        card.className = "card-pedido";
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-title">Pedido: #${pedido.id}</div>
+            <span class="status-badge ${statusInfo.classe}">${statusInfo.nome}</span>
+          </div>
+          <div class="pedido-info">
+            <div class="info-item">Ordem: <span>${pedido.ordemProducao || "N/A"}</span></div>
+            <div class="info-item">Tipo: <span>${mapaTipo[Number(pedido.tipoPedido)] || "Simples"}</span></div>
+            <div class="info-item">Tampa: <span class="${tampaInfo.classe}">${tampaInfo.nome}</span></div>
+            <div class="info-item">Expedição: <span style="color:#38bdf8;">${expedicao}</span></div>
+          </div>
+          <div class="bloco-container">${blocosHTML}</div>
+          ${acaoBotaoHTML}
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filtrarStatus(status, elemento) {
+      filtroAtivo = status;
+      document.querySelectorAll(".filter-btn").forEach((btn) => btn.classList.remove("active"));
+      elemento.classList.add("active");
+      renderizarCards();
+    }
+
+    function exibirToast(mensagem, tipo) {
+      const toast = document.getElementById("toast");
+      toast.className = "show " + tipo;
+      toast.innerText = mensagem;
+      setTimeout(() => {
+        toast.className = "";
+      }, 3500);
+    }
+  </script>
+</body>
 </html>

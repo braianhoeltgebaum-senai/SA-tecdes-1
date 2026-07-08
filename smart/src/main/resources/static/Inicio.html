@@ -1,742 +1,795 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SMART 4.0 · Planta Digital</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMART 4.0 · Planta Digital</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      body {
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial,
-          sans-serif;
-        background: #0a0f1a;
-        color: #f8fafc;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #0a0f1a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-      a {
-        text-decoration: none;
-        color: inherit;
-      }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-      /* ==========================================================================
-     NAV PADRÃO SMART 4.0 — mesma regra em todas as páginas do sistema
-     ========================================================================== */
+    /* BANNER DE MODO VISUALIZAÇÃO */
+    .banner-visualizacao {
+      display: none;
+      background: #facc15;
+      color: #0a0f1a;
+      text-align: center;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #eab308;
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .banner-visualizacao.ativo {
+      display: block;
+    }
+    .banner-visualizacao span {
+      background: #0a0f1a;
+      color: #facc15;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+    }
+
+    nav {
+      width: 100%;
+      background: #111c30;
+      border-bottom: 1px solid #1e293b;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-logo h1 {
+      font-size: 1.2rem;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .nav-logo span {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-menu a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: #38bdf8;
+    }
+
+    .hero {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 64px 24px 40px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      background: #0b2a42;
+      border: 1px solid #1e293b;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 22px;
+    }
+    .eyebrow .pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 6px #4ade80;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+      }
+    }
+
+    .hero h1 {
+      font-size: 2.4rem;
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 18px;
+      color: #f8fafc;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(135deg, #c0e0ff, #38bdf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: #94a3b8;
+      max-width: 480px;
+      margin-bottom: 30px;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      background: #111c30;
+      padding: 6px 16px;
+      border-radius: 40px;
+      border: 1px solid #1e293b;
+      width: fit-content;
+    }
+    .toggle-container label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    .toggle-container input[type="checkbox"] {
+      width: 40px;
+      height: 22px;
+      appearance: none;
+      background: #1e293b;
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+      flex-shrink: 0;
+    }
+    .toggle-container input[type="checkbox"]::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: #f8fafc;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle-container input[type="checkbox"]:checked {
+      background: #38bdf8;
+    }
+    .toggle-container input[type="checkbox"]:checked::after {
+      transform: translateX(18px);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease, background 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      color: white;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.08);
+    }
+    .btn-ghost {
+      background: #111c30;
+      border: 1px solid #1e293b;
+      color: #f8fafc;
+    }
+    .btn-primary.bloqueado {
+      opacity: 0.5;
+      pointer-events: none;
+      filter: grayscale(0.5);
+    }
+
+    .hero-visual {
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 22px;
+    }
+    .visual-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .visual-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.05em;
+    }
+    .live-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #4ade80;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .live-tag .pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s infinite;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .mini-stat {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .mini-stat .num {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .mini-stat .lbl {
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .mini-stat.c-blue .num {
+      color: #38bdf8;
+    }
+    .mini-stat.c-amber .num {
+      color: #fad015;
+    }
+    .mini-stat.c-green .num {
+      color: #4ade80;
+    }
+    .mini-stat.c-slate .num {
+      color: #f8fafc;
+    }
+
+    .grid-bar {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .grid-bar + .grid-bar {
+      margin-top: 10px;
+    }
+    .grid-bar-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-bottom: 10px;
+    }
+    .cells {
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+      gap: 4px;
+    }
+    .cell {
+      aspect-ratio: 1;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .cell.p {
+      background: rgba(239, 68, 68, 0.55);
+      border-color: rgba(239, 68, 68, 0.7);
+    }
+    .cell.b {
+      background: rgba(56, 189, 248, 0.5);
+      border-color: rgba(56, 189, 248, 0.7);
+    }
+    .cell.o {
+      background: rgba(34, 197, 94, 0.5);
+      border-color: rgba(34, 197, 94, 0.7);
+    }
+    .cell.k {
+      background: rgba(148, 163, 184, 0.35);
+      border-color: rgba(148, 163, 184, 0.55);
+    }
+
+    .section {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 10px 24px 64px;
+    }
+    .section-head {
+      margin-bottom: 22px;
+    }
+    .section-head h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    .section-head p {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin: 4px 0 0;
+    }
+
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .module-card {
+      background: #111c30;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease,
+        transform 0.18s ease;
+    }
+    .module-card:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.08);
+      transform: translateY(-2px);
+    }
+    .icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+    }
+    .icon-wrap svg {
+      width: 21px;
+      height: 21px;
+    }
+    .module-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .module-card p {
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #94a3b8;
+      flex: 1;
+    }
+    .module-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .module-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.15s ease;
+    }
+    .module-card:hover .module-link svg {
+      transform: translateX(3px);
+    }
+
+    footer {
+      border-top: 1px solid #1e293b;
+      padding: 22px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #64748b;
+      font-size: 0.72rem;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 980px) {
       nav {
-        width: 100%;
-        background: #111c30;
-        border-bottom: 1px solid #1e293b;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .nav-logo {
-        display: flex;
-        flex-direction: column;
-      }
-      .nav-logo h1 {
-        font-size: 1.2rem;
-        color: #38bdf8;
-        font-weight: 700;
-      }
-      .nav-logo span {
-        font-size: 0.75rem;
-        color: #64748b;
-      }
-
-      .nav-menu {
-        display: flex;
-        gap: 20px;
-        list-style: none;
-      }
-      .nav-menu a {
-        color: #94a3b8;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
-        transition: color 0.2s;
-      }
-      .nav-menu a:hover,
-      .nav-menu a.active {
-        color: #38bdf8;
-      }
-      /* ========================================================================== */
-
-      /* ---------- HERO ---------- */
-      .hero {
-        max-width: 1200px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 64px 24px 40px;
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        gap: 40px;
-        align-items: center;
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #38bdf8;
-        background: #0b2a42;
-        border: 1px solid #1e293b;
-        padding: 6px 14px;
-        border-radius: 100px;
-        margin-bottom: 22px;
-      }
-      .eyebrow .pulse {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #4ade80;
-        box-shadow: 0 0 6px #4ade80;
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        0% {
-          box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55);
-        }
-        70% {
-          box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
-        }
-        100% {
-          box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
-        }
-      }
-
-      .hero h1 {
-        font-size: 2.4rem;
-        line-height: 1.15;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        margin-bottom: 18px;
-        color: #f8fafc;
-      }
-      .hero h1 .grad {
-        background: linear-gradient(135deg, #c0e0ff, #38bdf8);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-      .hero p {
-        font-size: 0.95rem;
-        line-height: 1.65;
-        color: #94a3b8;
-        max-width: 480px;
-        margin-bottom: 30px;
-      }
-
-      .hero-actions {
-        display: flex;
-        gap: 12px;
+        padding: 15px 20px;
         flex-wrap: wrap;
-      }
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 22px;
-        border-radius: 10px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        border: 1px solid transparent;
-        cursor: pointer;
-        transition: transform 0.15s ease, filter 0.15s ease,
-          background 0.2s ease;
-      }
-      .btn:hover {
-        transform: translateY(-1px);
-      }
-      .btn-primary {
-        background: linear-gradient(135deg, #0ea5e9, #2563eb);
-        color: white;
-      }
-      .btn-primary:hover {
-        filter: brightness(1.08);
-      }
-      .btn-ghost {
-        background: #111c30;
-        border: 1px solid #1e293b;
-        color: #f8fafc;
-      }
-
-      /* ---------- HERO VISUAL ---------- */
-      .hero-visual {
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 20px;
-        padding: 22px;
-      }
-      .visual-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-      }
-      .visual-title {
-        font-size: 0.72rem;
-        font-weight: 700;
-        color: #94a3b8;
-        letter-spacing: 0.05em;
-      }
-      .live-tag {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.68rem;
-        font-weight: 700;
-        color: #4ade80;
-        background: rgba(34, 197, 94, 0.1);
-        border: 1px solid rgba(34, 197, 94, 0.3);
-        padding: 4px 10px;
-        border-radius: 100px;
-      }
-      .live-tag .pulse {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #4ade80;
-        animation: pulse 2s infinite;
-      }
-
-      .mini-stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
-        margin-bottom: 14px;
       }
-      .mini-stat {
-        background: #0f172a;
-        border: 1px solid #1e293b;
-        border-radius: 12px;
-        padding: 14px 16px;
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 40px 20px 24px;
       }
-      .mini-stat .num {
-        font-size: 1.4rem;
-        font-weight: 700;
+      .hero h1 {
+        font-size: 1.9rem;
       }
-      .mini-stat .lbl {
-        font-size: 0.7rem;
-        color: #64748b;
-        margin-top: 2px;
-      }
-      .mini-stat.c-blue .num {
-        color: #38bdf8;
-      }
-      .mini-stat.c-amber .num {
-        color: #facc15;
-      }
-      .mini-stat.c-green .num {
-        color: #4ade80;
-      }
-      .mini-stat.c-slate .num {
-        color: #f8fafc;
-      }
-
-      .grid-bar {
-        background: #0f172a;
-        border: 1px solid #1e293b;
-        border-radius: 12px;
-        padding: 14px 16px;
-      }
-      .grid-bar + .grid-bar {
-        margin-top: 10px;
-      }
-      .grid-bar-head {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.7rem;
-        color: #64748b;
-        margin-bottom: 10px;
-      }
-      .cells {
-        display: grid;
-        grid-template-columns: repeat(14, 1fr);
-        gap: 4px;
-      }
-      .cell {
-        aspect-ratio: 1;
-        border-radius: 3px;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-      .cell.p {
-        background: rgba(239, 68, 68, 0.55);
-        border-color: rgba(239, 68, 68, 0.7);
-      }
-      .cell.b {
-        background: rgba(56, 189, 248, 0.5);
-        border-color: rgba(56, 189, 248, 0.7);
-      }
-      .cell.o {
-        background: rgba(34, 197, 94, 0.5);
-        border-color: rgba(34, 197, 94, 0.7);
-      }
-      .cell.k {
-        background: rgba(148, 163, 184, 0.35);
-        border-color: rgba(148, 163, 184, 0.55);
-      }
-
-      /* ---------- MÓDULOS ---------- */
       .section {
-        max-width: 1200px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 10px 24px 64px;
+        padding: 10px 20px 48px;
       }
-      .section-head {
-        margin-bottom: 22px;
-      }
-      .section-head h2 {
-        font-size: 1.35rem;
-        font-weight: 600;
-        margin: 0;
-      }
-      .section-head p {
-        font-size: 0.82rem;
-        color: #64748b;
-        margin: 4px 0 0;
-      }
-
       .modules {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
+        grid-template-columns: 1fr;
       }
-      .module-card {
-        background: #111c30;
-        border: 1px solid #1e293b;
-        border-radius: 16px;
-        padding: 22px;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease,
-          transform 0.18s ease;
-      }
-      .module-card:hover {
-        border-color: #38bdf8;
-        box-shadow: 0 4px 20px rgba(56, 189, 248, 0.08);
-        transform: translateY(-2px);
-      }
-      .icon-wrap {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #0f172a;
-        border: 1px solid #1e293b;
-      }
-      .icon-wrap svg {
-        width: 21px;
-        height: 21px;
-      }
-      .module-card h3 {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #f8fafc;
-      }
-      .module-card p {
-        font-size: 0.82rem;
-        line-height: 1.55;
-        color: #94a3b8;
-        flex: 1;
-      }
-      .module-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.8rem;
-        font-weight: 700;
-        color: #38bdf8;
-      }
-      .module-link svg {
-        width: 14px;
-        height: 14px;
-        transition: transform 0.15s ease;
-      }
-      .module-card:hover .module-link svg {
-        transform: translateX(3px);
-      }
-
-      /* ---------- FOOTER ---------- */
       footer {
-        border-top: 1px solid #1e293b;
-        padding: 22px 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: #64748b;
-        font-size: 0.72rem;
-        max-width: 1200px;
+        padding: 18px 20px;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+      .toggle-container {
         width: 100%;
-        margin: 0 auto;
+        justify-content: center;
       }
+    }
+  </style>
+</head>
+<body>
+  <!-- BANNER DE MODO VISUALIZAÇÃO -->
+  <div class="banner-visualizacao" id="bannerVisu">
+    MODO VISUALIZAÇÃO ATIVO – Apenas leitura. Interações com CLP e criação de pedidos estão bloqueadas.
+  </div>
 
-      @media (max-width: 980px) {
-        nav {
-          padding: 15px 20px;
-          flex-wrap: wrap;
-          gap: 10px;
-        }
-        .hero {
-          grid-template-columns: 1fr;
-          padding: 40px 20px 24px;
-        }
-        .hero h1 {
-          font-size: 1.9rem;
-        }
-        .section {
-          padding: 10px 20px 48px;
-        }
-        .modules {
-          grid-template-columns: 1fr;
-        }
-        footer {
-          padding: 18px 20px;
-          flex-direction: column;
-          gap: 8px;
-          align-items: flex-start;
+  <nav>
+    <div class="nav-logo">
+      <h1>SMART 4.0 · Planta Digital</h1>
+      <span>SENAI · Timbó-SC</span>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="Inicio.html">Início</a></li>
+      <li><a href="gestor_pedidos.html">Gestor de Pedidos</a></li>
+      <li><a href="gestor.html">Gestor de Produção</a></li>
+      <li><a href="Dashboard_simples.html">Dashboard</a></li>
+      <li><a href="visualizacaoBancada.html">Acompanhamento</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">
+        <span class="pulse"></span> Linha conectada em tempo real
+      </div>
+      <h1>
+        A planta inteira,<br /><span class="grad">visível em uma tela.</span>
+      </h1>
+      <p>
+        O SMART 4.0 acompanha cada ordem de produção do pedido até a
+        expedição, integrando estoque, montagem e status da linha em tempo
+        real.
+      </p>
+
+      <div class="toggle-container">
+        <label>
+          <input type="checkbox" id="toggleVisualizacao" />
+          Modo Visualização (somente leitura)
+        </label>
+      </div>
+
+      <div class="hero-actions">
+        <a href="gestor_pedidos.html" class="btn btn-primary" id="btnCriarPedido">
+          Criar novo pedido
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+        </a>
+        <a href="visualizacaoBancada.html" class="btn btn-ghost">Ver acompanhamento</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="visual-head">
+        <span class="visual-title">ESTOQUE &amp; EXPEDIÇÃO</span>
+        <span class="live-tag"><span class="pulse"></span>AO VIVO</span>
+      </div>
+
+      <div class="mini-stats">
+        <div class="mini-stat c-slate">
+          <div class="num" id="miniTotal">--</div>
+          <div class="lbl">Total de pedidos</div>
+        </div>
+        <div class="mini-stat c-amber">
+          <div class="num" id="miniPendentes">--</div>
+          <div class="lbl">Pendentes</div>
+        </div>
+        <div class="mini-stat c-blue">
+          <div class="num" id="miniProducao">--</div>
+          <div class="lbl">Em produção</div>
+        </div>
+        <div class="mini-stat c-green">
+          <div class="num" id="miniConcluidos">--</div>
+          <div class="lbl">Concluídos</div>
+        </div>
+      </div>
+
+      <div class="grid-bar">
+        <div class="grid-bar-head">
+          <span>ESTOQUE DE BLOCOS</span><span id="miniEstoqueContador">0/28</span>
+        </div>
+        <div class="cells" id="miniEstoqueCells"></div>
+      </div>
+
+      <div class="grid-bar">
+        <div class="grid-bar-head">
+          <span>EXPEDIÇÃO</span><span id="miniExpContador">0/12</span>
+        </div>
+        <div class="cells" id="miniExpCells"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Módulos do sistema</h2>
+      <p>Acesse rapidamente cada etapa do processo produtivo.</p>
+    </div>
+
+    <div class="modules">
+      <a href="gestor_pedidos.html" class="module-card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </div>
+        <h3>Criar Pedido</h3>
+        <p>Monte a ordem de produção informando tipo, cor da tampa, blocos e lâminas antes de enviar para a linha.</p>
+        <span class="module-link">Abrir formulário
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+        </span>
+      </a>
+
+      <a href="gestor.html" class="module-card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h10" />
+          </svg>
+        </div>
+        <h3>Gestor de Produção</h3>
+        <p>Acompanhe todas as ordens registradas, envie pedidos ao CLP e controle o andamento de cada um.</p>
+        <span class="module-link">Abrir gestor
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+        </span>
+      </a>
+
+      <a href="visualizacaoBancada.html" class="module-card">
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h4l3 8 4-16 3 8h4" />
+          </svg>
+        </div>
+        <h3>Acompanhamento</h3>
+        <p>Veja em tempo real a ocupação do estoque de blocos e da expedição, com dados atualizados via API.</p>
+        <span class="module-link">Abrir acompanhamento
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span>SMART 4.0 · Planta Digital</span>
+    <span>SENAI · TIMBÓ-SC</span>
+  </footer>
+
+  <script>
+    // ---- MODO VISUALIZAÇÃO ----
+    const TOGGLE_KEY = 'smart40_modo_visualizacao';
+
+    function isModoVisualizacao() {
+      return localStorage.getItem(TOGGLE_KEY) === 'true';
+    }
+
+    function aplicarModoVisualizacao() {
+      const ativo = isModoVisualizacao();
+      document.getElementById('bannerVisu').classList.toggle('ativo', ativo);
+      document.getElementById('toggleVisualizacao').checked = ativo;
+      const btnCriar = document.getElementById('btnCriarPedido');
+      if (btnCriar) {
+        if (ativo) {
+          btnCriar.classList.add('bloqueado');
+          btnCriar.title = 'Modo visualização ativo – não é possível criar pedidos';
+        } else {
+          btnCriar.classList.remove('bloqueado');
+          btnCriar.title = '';
         }
       }
-    </style>
-  </head>
-  <script>
-    // Marca automaticamente o item do menu correspondente à página atual
+    }
+
+    document.getElementById('toggleVisualizacao').addEventListener('change', function() {
+      const checked = this.checked;
+      localStorage.setItem(TOGGLE_KEY, String(checked));
+      location.reload(); // Recarrega para aplicar em todas as abas e sincronizar
+    });
+
+    window.addEventListener('load', aplicarModoVisualizacao);
+    window.addEventListener('storage', function(e) {
+      if (e.key === TOGGLE_KEY) {
+        aplicarModoVisualizacao();
+      }
+    });
+
+    // ---- Marca menu ativo ----
     document.querySelectorAll(".nav-menu a").forEach((link) => {
       const hrefPage = link.getAttribute("href");
-      const currentPage =
-        window.location.pathname.split("/").pop() || "Inicio.html";
+      const currentPage = window.location.pathname.split("/").pop() || "Inicio.html";
       if (hrefPage === currentPage) {
         link.classList.add("active");
       } else {
         link.classList.remove("active");
       }
     });
-  </script>
-  <body>
-    <nav>
-      <div class="nav-logo">
-        <h1>SMART 4.0 · Planta Digital</h1>
-        <span>SENAI · Timbó-SC</span>
-      </div>
-      <ul class="nav-menu">
-        <li><a href="Inicio.html">Início</a></li>
-        <li><a href="gestor_pedidos.html">Gestor de Pedidos</a></li>
-        <li><a href="gestor.html">Gestor de Produção</a></li>
-        <li><a href="Dashboard_simples.html">Dashboard</a></li>
-        <li><a href="visualizacaoBancada.html">Acompanhamento</a></li>
-      </ul>
-    </nav>
 
-    <section class="hero">
-      <div>
-        <div class="eyebrow">
-          <span class="pulse"></span> Linha conectada em tempo real
-        </div>
-        <h1>
-          A planta inteira,<br /><span class="grad">visível em uma tela.</span>
-        </h1>
-        <p>
-          O SMART 4.0 acompanha cada ordem de produção do pedido até a
-          expedição, integrando estoque, montagem e status da linha em tempo
-          real.
-        </p>
-        <div class="hero-actions">
-          <a href="gestor_pedidos.html" class="btn btn-primary">
-            Criar novo pedido
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-            >
-              <path d="M5 12h14M13 5l7 7-7 7" />
-            </svg>
-          </a>
-          <a href="visualizacaoBancada.html" class="btn btn-ghost"
-            >Ver acompanhamento</a
-          >
-        </div>
-      </div>
+    // ---- Dados reais para o mini-dashboard da home ----
+    const API_BASE_HOME = "http://localhost:8088";
 
-      <div class="hero-visual">
-        <div class="visual-head">
-          <span class="visual-title">ESTOQUE &amp; EXPEDIÇÃO</span>
-          <span class="live-tag"><span class="pulse"></span>AO VIVO</span>
-        </div>
+    async function fetchAPIHome(endpoint) {
+      const res = await fetch(`${API_BASE_HOME}${endpoint}`, {
+        headers: { Accept: "application/json" },
+      });
+      if (res.status === 204) return [];
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) return res.json();
+      return null;
+    }
 
-        <div class="mini-stats">
-          <div class="mini-stat c-slate">
-            <div class="num" id="miniTotal">--</div>
-            <div class="lbl">Total de pedidos</div>
-          </div>
-          <div class="mini-stat c-amber">
-            <div class="num" id="miniPendentes">--</div>
-            <div class="lbl">Pendentes</div>
-          </div>
-          <div class="mini-stat c-blue">
-            <div class="num" id="miniProducao">--</div>
-            <div class="lbl">Em produção</div>
-          </div>
-          <div class="mini-stat c-green">
-            <div class="num" id="miniConcluidos">--</div>
-            <div class="lbl">Concluídos</div>
-          </div>
-        </div>
+    async function carregarMiniStats() {
+      try {
+        const pedidos = await fetchAPIHome("/pedidos");
+        document.getElementById("miniTotal").textContent = pedidos.length;
+        document.getElementById("miniPendentes").textContent =
+          pedidos.filter((p) => p.statusPedido === 1).length;
+        document.getElementById("miniProducao").textContent =
+          pedidos.filter((p) => p.statusPedido === 2).length;
+        document.getElementById("miniConcluidos").textContent =
+          pedidos.filter((p) => p.statusPedido === 3).length;
+      } catch (err) {
+        console.error("[Home] Erro ao carregar pedidos:", err);
+        ["miniTotal", "miniPendentes", "miniProducao", "miniConcluidos"].forEach((id) =>
+          (document.getElementById(id).textContent = "—")
+        );
+      }
+    }
 
-        <div class="grid-bar">
-          <div class="grid-bar-head">
-            <span>ESTOQUE DE BLOCOS</span
-            ><span id="miniEstoqueContador">0/28</span>
-          </div>
-          <div class="cells" id="miniEstoqueCells">
-            <!-- preenchido via JS -->
-          </div>
-        </div>
+    async function carregarMiniEstoque() {
+      const container = document.getElementById("miniEstoqueCells");
+      const contador = document.getElementById("miniEstoqueContador");
+      try {
+        const items = await fetchAPIHome("/api/estoque/listar");
 
-        <div class="grid-bar">
-          <div class="grid-bar-head">
-            <span>EXPEDIÇÃO</span><span id="miniExpContador">0/12</span>
-          </div>
-          <div class="cells" id="miniExpCells">
-            <!-- preenchido via JS -->
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>Módulos do sistema</h2>
-        <p>Acesse rapidamente cada etapa do processo produtivo.</p>
-      </div>
-
-      <div class="modules">
-        <a href="gestor_pedidos.html" class="module-card">
-          <div class="icon-wrap">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#38bdf8"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-          </div>
-          <h3>Criar Pedido</h3>
-          <p>
-            Monte a ordem de produção informando tipo, cor da tampa, blocos e
-            lâminas antes de enviar para a linha.
-          </p>
-          <span class="module-link"
-            >Abrir formulário
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-            >
-              <path d="M5 12h14M13 5l7 7-7 7" />
-            </svg>
-          </span>
-        </a>
-
-        <a href="gestor.html" class="module-card">
-          <div class="icon-wrap">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#3b82f6"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M4 6h16M4 12h16M4 18h10" />
-            </svg>
-          </div>
-          <h3>Gestor de Produção</h3>
-          <p>
-            Acompanhe todas as ordens registradas, envie pedidos ao CLP e
-            controle o andamento de cada um.
-          </p>
-          <span class="module-link"
-            >Abrir gestor
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-            >
-              <path d="M5 12h14M13 5l7 7-7 7" />
-            </svg>
-          </span>
-        </a>
-
-        <a href="visualizacaoBancada.html" class="module-card">
-          <div class="icon-wrap">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#4ade80"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M3 12h4l3 8 4-16 3 8h4" />
-            </svg>
-          </div>
-          <h3>Acompanhamento</h3>
-          <p>
-            Veja em tempo real a ocupação do estoque de blocos e da expedição,
-            com dados atualizados via API.
-          </p>
-          <span class="module-link"
-            >Abrir acompanhamento
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-            >
-              <path d="M5 12h14M13 5l7 7-7 7" />
-            </svg>
-          </span>
-        </a>
-      </div>
-    </section>
-
-    <footer>
-      <span>SMART 4.0 · Planta Digital</span>
-      <span>SENAI · TIMBÓ-SC</span>
-    </footer>
-
-    <script>
-      // ─── Dados reais para o mini-dashboard da home ────────────────────────────
-      const API_BASE_HOME = "http://localhost:8088";
-
-      async function fetchAPIHome(endpoint) {
-        const res = await fetch(`${API_BASE_HOME}${endpoint}`, {
-          headers: { Accept: "application/json" },
+        const mapa = new Map();
+        (items || []).forEach((item) => {
+          if (item.posicaoEstoque != null) {
+            mapa.set(item.posicaoEstoque, item.cor ?? 0);
+          }
         });
-        if (res.status === 204) return [];
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const contentType = res.headers.get("content-type") || "";
-        if (contentType.includes("application/json")) return res.json();
-        return null;
-      }
 
-      async function carregarMiniStats() {
-        try {
-          const pedidos = await fetchAPIHome("/pedidos");
-          document.getElementById("miniTotal").textContent = pedidos.length;
-          document.getElementById("miniPendentes").textContent =
-            pedidos.filter((p) => p.statusPedido === 1).length;
-          document.getElementById("miniProducao").textContent =
-            pedidos.filter((p) => p.statusPedido === 2).length;
-          document.getElementById("miniConcluidos").textContent =
-            pedidos.filter((p) => p.statusPedido === 3).length;
-        } catch (err) {
-          console.error("[Home] Erro ao carregar pedidos:", err);
-          [
-            "miniTotal",
-            "miniPendentes",
-            "miniProducao",
-            "miniConcluidos",
-          ].forEach((id) => (document.getElementById(id).textContent = "—"));
+        let ocupadas = 0;
+        let html = "";
+        for (let pos = 1; pos <= 28; pos++) {
+          const cor = mapa.get(pos) ?? 0;
+          let classe = "";
+          if (cor === 1) classe = "k";
+          if (cor === 2) classe = "p";
+          if (cor === 3) classe = "b";
+          if (cor !== 0) ocupadas++;
+          html += `<div class="cell ${classe}"></div>`;
         }
+        container.innerHTML = html;
+        contador.textContent = `${ocupadas}/28`;
+      } catch (err) {
+        console.error("[Home] Erro ao carregar estoque:", err);
+        contador.textContent = "—/28";
       }
+    }
 
-      async function carregarMiniEstoque() {
-        const container = document.getElementById("miniEstoqueCells");
-        const contador = document.getElementById("miniEstoqueContador");
-        try {
-          const items = await fetchAPIHome("/api/estoque/listar");
+    async function carregarMiniExpedicao() {
+      const container = document.getElementById("miniExpCells");
+      const contador = document.getElementById("miniExpContador");
+      try {
+        const expedicoes = await fetchAPIHome("/api/expedicao/listar");
 
-          const mapa = new Map();
-          (items || []).forEach((item) => {
-            if (item.posicaoEstoque != null) {
-              mapa.set(item.posicaoEstoque, item.cor ?? 0);
-            }
-          });
-
-          let ocupadas = 0;
-          let html = "";
-          for (let pos = 1; pos <= 28; pos++) {
-            const cor = mapa.get(pos) ?? 0;
-            let classe = "";
-            if (cor === 1) classe = "k"; // preto
-            if (cor === 2) classe = "p"; // vermelho
-            if (cor === 3) classe = "b"; // azul
-            if (cor !== 0) ocupadas++;
-            html += `<div class="cell ${classe}"></div>`;
+        const posOcupadas = new Set();
+        (expedicoes || []).forEach((exp) => {
+          if (exp.posicaoExpedicao != null && exp.saidaEm == null) {
+            posOcupadas.add(exp.posicaoExpedicao);
           }
-          container.innerHTML = html;
-          contador.textContent = `${ocupadas}/28`;
-        } catch (err) {
-          console.error("[Home] Erro ao carregar estoque:", err);
-          contador.textContent = "—/28";
+        });
+
+        let html = "";
+        for (let i = 1; i <= 12; i++) {
+          const ocupado = posOcupadas.has(i);
+          html += `<div class="cell ${ocupado ? "o" : ""}"></div>`;
         }
+        container.innerHTML = html;
+        contador.textContent = `${posOcupadas.size}/12`;
+      } catch (err) {
+        console.error("[Home] Erro ao carregar expedição:", err);
+        contador.textContent = "—/12";
       }
+    }
 
-      async function carregarMiniExpedicao() {
-        const container = document.getElementById("miniExpCells");
-        const contador = document.getElementById("miniExpContador");
-        try {
-          const expedicoes = await fetchAPIHome("/api/expedicao/listar");
+    function carregarTudoHome() {
+      carregarMiniStats();
+      carregarMiniEstoque();
+      carregarMiniExpedicao();
+    }
 
-          const posOcupadas = new Set();
-          (expedicoes || []).forEach((exp) => {
-            if (exp.posicaoExpedicao != null && exp.saidaEm == null) {
-              posOcupadas.add(exp.posicaoExpedicao);
-            }
-          });
-
-          let html = "";
-          for (let i = 1; i <= 12; i++) {
-            const ocupado = posOcupadas.has(i);
-            html += `<div class="cell ${ocupado ? "o" : ""}"></div>`;
-          }
-          container.innerHTML = html;
-          contador.textContent = `${posOcupadas.size}/12`;
-        } catch (err) {
-          console.error("[Home] Erro ao carregar expedição:", err);
-          contador.textContent = "—/12";
-        }
-      }
-
-      function carregarTudoHome() {
-        carregarMiniStats();
-        carregarMiniEstoque();
-        carregarMiniExpedicao();
-      }
-
-      carregarTudoHome();
-      setInterval(carregarTudoHome, 15000); // atualiza a cada 15s
-    </script>
-  </body>
+    carregarTudoHome();
+    setInterval(carregarTudoHome, 15000);
+  </script>
+</body>
 </html>
